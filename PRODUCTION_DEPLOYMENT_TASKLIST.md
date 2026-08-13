@@ -1,6 +1,6 @@
 # Production Deployment Task List
 
-Last updated: 2026-08-13
+Last updated: 2026-08-14
 
 ## Target architecture
 
@@ -53,9 +53,12 @@ the final go/no-go gate is complete.
 - [x] Scan the complete history for secrets after the rewrite. The fresh-clone
       credential-pattern scan found no credential values; legacy development
       seed passwords must still be removed or rotated during Phase 3.
-- [x] Keep the GitHub repository private. Authenticated Git transport can read
-      the repository while an anonymous GitHub API request returns `404`.
-- [ ] Enable MFA for GitHub and branch protection for the production branch.
+- [ ] Return the GitHub repository to private before production. It was made
+      temporarily public on 2026-08-14 so the connected GitHub reader could
+      inspect the sanitized repository; public access must not remain enabled.
+- [ ] Enable MFA for both GitHub accounts and branch protection for `main`.
+      Branch protection is currently absent and can only be configured by the
+      personal-repository owner, `Nikhil270703`.
 - [ ] Do not allow automatic production deployments from untrusted branches.
 
 History rewriting and force-pushing are destructive coordination operations.
@@ -64,11 +67,12 @@ They require explicit authorization immediately before execution.
 Phase 2 rewrite record: the inspected clean root commit was force-pushed to
 `main` as `8235e2ab525b0f57eff0a2f6b4496673f2b138e5`. An independent fresh clone
 contained one root commit, no forbidden historical paths, and no matches for
-the credential-value patterns used in the scan. GitHub repository visibility,
-MFA, branch protection, and deployment-branch policy remain unchecked because
-the connected GitHub app has no access to this repository and the local `gh`
-credential is invalid. Repository privacy was independently confirmed through
-the authenticated-versus-anonymous access check described above.
+the credential-value patterns used in the scan. On 2026-08-14, local GitHub CLI
+access was restored for `Developerr86` with Write permission. The repository
+was then made temporarily public, which gave the connected GitHub reader
+read-only access. MFA, owner-only branch protection, final private visibility,
+old-clone confirmation, and deployment-branch policy remain pre-production
+gates.
 
 ## 3. Rotate credentials
 
