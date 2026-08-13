@@ -41,21 +41,32 @@ the final go/no-go gate is complete.
 
 ## 2. Sanitize and protect the repository
 
-- [ ] Review and commit the existing security changes intentionally.
-- [ ] Confirm `.env`, `.runtime`, `data`, `.wwebjs_auth`, dumps, backups, logs,
+- [x] Review and commit the existing security changes intentionally.
+- [x] Confirm `.env`, `.runtime`, `data`, `.wwebjs_auth`, dumps, backups, logs,
       `node_modules`, and `dist` are ignored.
-- [ ] Make a protected repository backup before rewriting history.
-- [ ] Purge `backend/.wwebjs_auth` and `data/db` from the complete Git history.
-- [ ] Inspect the rewritten history before replacing the remote history.
+- [x] Make a protected repository backup before rewriting history.
+- [x] Purge `backend/.wwebjs_auth` and `data/db` from the complete Git history.
+- [x] Inspect the rewritten history before replacing the remote history.
 - [ ] Coordinate the force-push and require every old clone to be deleted or
-      freshly cloned.
-- [ ] Scan the complete history for secrets after the rewrite.
+      freshly cloned. Remote `main` was replaced on 2026-08-14; confirmation
+      that no other old clones remain is still required.
+- [x] Scan the complete history for secrets after the rewrite. The fresh-clone
+      credential-pattern scan found no credential values; legacy development
+      seed passwords must still be removed or rotated during Phase 3.
 - [ ] Keep the GitHub repository private.
 - [ ] Enable MFA for GitHub and branch protection for the production branch.
 - [ ] Do not allow automatic production deployments from untrusted branches.
 
 History rewriting and force-pushing are destructive coordination operations.
 They require explicit authorization immediately before execution.
+
+Phase 2 rewrite record: the inspected clean root commit was force-pushed to
+`main` as `8235e2ab525b0f57eff0a2f6b4496673f2b138e5`. An independent fresh clone
+contained one root commit, no forbidden historical paths, and no matches for
+the credential-value patterns used in the scan. GitHub repository visibility,
+MFA, branch protection, and deployment-branch policy remain unchecked because
+the connected GitHub app has no access to this repository and the local `gh`
+credential is invalid.
 
 ## 3. Rotate credentials
 
