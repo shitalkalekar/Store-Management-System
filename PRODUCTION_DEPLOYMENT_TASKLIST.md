@@ -53,7 +53,8 @@ the final go/no-go gate is complete.
 - [x] Scan the complete history for secrets after the rewrite. The fresh-clone
       credential-pattern scan found no credential values; legacy development
       seed passwords must still be removed or rotated during Phase 3.
-- [ ] Keep the GitHub repository private.
+- [x] Keep the GitHub repository private. Authenticated Git transport can read
+      the repository while an anonymous GitHub API request returns `404`.
 - [ ] Enable MFA for GitHub and branch protection for the production branch.
 - [ ] Do not allow automatic production deployments from untrusted branches.
 
@@ -66,7 +67,8 @@ contained one root commit, no forbidden historical paths, and no matches for
 the credential-value patterns used in the scan. GitHub repository visibility,
 MFA, branch protection, and deployment-branch policy remain unchecked because
 the connected GitHub app has no access to this repository and the local `gh`
-credential is invalid.
+credential is invalid. Repository privacy was independently confirmed through
+the authenticated-versus-anonymous access check described above.
 
 ## 3. Rotate credentials
 
