@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const env = require('../config/env');
 
 const isStrongPassword = (password) => typeof password === 'string' &&
-  password.length >= 12 && password.length <= 128 &&
+  password.length >= 16 && password.length <= 128 &&
   /[A-Z]/.test(password) && /[a-z]/.test(password) && /[0-9]/.test(password);
 
 const signToken = (subject, authType, claims, expiresIn) => jwt.sign(

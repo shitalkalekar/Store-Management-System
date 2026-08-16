@@ -47,21 +47,22 @@ the final go/no-go gate is complete.
 - [x] Make a protected repository backup before rewriting history.
 - [x] Purge `backend/.wwebjs_auth` and `data/db` from the complete Git history.
 - [x] Inspect the rewritten history before replacing the remote history.
-- [ ] Coordinate the force-push and require every old clone to be deleted or
-      freshly cloned. Remote `main` was replaced on 2026-08-14; confirmation
-      that no other old clones remain is still required.
+- [x] Coordinate the force-push and require every old clone to be deleted or
+      freshly cloned. Remote `main` was replaced on 2026-08-14; the user
+      confirmed on 2026-08-16 that no old clones remain.
 - [x] Scan the complete history for secrets after the rewrite. The fresh-clone
       credential-pattern scan found no credential values; legacy development
-      seed passwords must still be removed or rotated during Phase 3.
-- [ ] Return the GitHub repository to private before production. It was made
-      temporarily public on 2026-08-14 so the connected GitHub reader could
-      inspect the sanitized repository; public access must not remain enabled.
+      seed passwords were removed during Phase 3.
+- [x] Return the GitHub repository to private before production. GitHub CLI
+      verified `visibility: PRIVATE` on 2026-08-16.
 - [x] Enable branch protection for `main`. GitHub's branch API reported
       `protected: true` on 2026-08-16, and PR #1 reported `REVIEW_REQUIRED`
       with merging blocked.
 - [x] Enable MFA for both GitHub accounts. MFA for `Nikhil270703` and
       `Developerr86` was confirmed by the user on 2026-08-16.
-- [ ] Do not allow automatic production deployments from untrusted branches.
+- [x] Do not allow automatic production deployments from untrusted branches.
+      No deployment integrations or GitHub Actions workflows exist yet; the
+      Render and Cloudflare setup tasks below restrict production to `main`.
 
 History rewriting and force-pushing are destructive coordination operations.
 They require explicit authorization immediately before execution.
@@ -75,18 +76,26 @@ was then made temporarily public, which gave the connected GitHub reader
 read-only access. GitHub's branch API confirmed protection for `main` on
 2026-08-16, and PR #1 confirmed that a review is required before merging. MFA
 for both GitHub accounts was user-confirmed because GitHub does not expose
-another personal account's MFA state to this collaborator. Final private
-visibility, old-clone confirmation, and deployment-branch policy remain
-pre-production gates.
+another personal account's MFA state to this collaborator. GitHub CLI then
+verified private visibility, and the user confirmed that no old clones remain.
+Phase 2 was completed on 2026-08-16.
 
 ## 3. Rotate credentials
 
-- [ ] Generate a new JWT secret with at least 64 random characters.
+- [ ] Generate a new JWT secret with at least 64 random characters. Run
+      `cd backend && npm run secret:generate` only when it can be stored
+      directly in the password manager and Render; never record it here.
 - [ ] Rotate MongoDB, Razorpay, Meta/WhatsApp, SMTP/SMS, and gateway credentials
-      that may ever have existed in source control or imported data.
+      that may ever have existed in source control or imported data. The
+      owner-only procedure is documented in `PRODUCTION_CREDENTIAL_ROTATION.md`.
 - [ ] Revoke and re-pair any WhatsApp browser session that was committed.
-- [ ] Replace all development administrator/staff/customer passwords.
-- [ ] Give the owner a unique password of at least 16 characters.
+- [x] Replace all development administrator/staff/customer passwords. Obsolete
+      credential-bearing seed/reset scripts were removed, and the tracked code
+      scan found no remaining hardcoded password or credential fallback
+      literals.
+- [ ] Give the owner a unique password of at least 16 characters. The backend
+      now enforces 16 characters for owner password changes and auto-seeding;
+      the production account still needs its owner-chosen value.
 - [ ] Store credentials in a password manager and platform secret stores.
 - [ ] Enable MFA on GitHub, Cloudflare, Render, Atlas, Razorpay, and Meta.
 - [ ] Never reuse the application password for an infrastructure account.
@@ -186,6 +195,8 @@ A backup is not verified until it has been restored successfully.
 ## 10. Configure Render Free
 
 - [ ] Connect the private repository and create a Web Service.
+- [ ] Set the production branch to `main`; do not enable production deploys
+      from feature branches or pull-request previews.
 - [ ] Root directory: `backend`.
 - [ ] Runtime: Node.js; region: Singapore where available.
 - [ ] Build command: `npm ci --omit=dev`.
@@ -219,6 +230,8 @@ WHATSAPP_ENABLED=false
 
 - [ ] Enable Cloudflare account MFA.
 - [ ] Create a Pages project from the private repository.
+- [ ] Set the production branch to `main` and keep preview deployments
+      isolated from production secrets and data.
 - [ ] Root directory: `frontend`.
 - [ ] Build command: `npm run build`.
 - [ ] Output directory: `dist`.
