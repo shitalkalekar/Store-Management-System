@@ -4,15 +4,21 @@ const branchSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
+    minlength: 2,
+    maxlength: 100
   },
   address: {
     type: String,
-    required: true
+    required: true,
+    trim: true,
+    maxlength: 500
   },
   contact: {
     type: String,
-    required: true
+    required: true,
+    trim: true,
+    maxlength: 30
   },
   createdAt: {
     type: Date,

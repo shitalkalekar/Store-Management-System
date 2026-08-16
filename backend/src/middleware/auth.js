@@ -17,7 +17,7 @@ const setContext = (req, principal, overrides = {}) => {
     userId: principal.id,
     role: principal.role,
     permissions: overrides.permissions || permissionsForRole(principal.role),
-    requestId: req.header('X-Request-Id') || `local-${Date.now()}`,
+    requestId: req.id,
   };
 };
 

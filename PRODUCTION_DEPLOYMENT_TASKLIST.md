@@ -129,17 +129,23 @@ Phase 4 was completed on 2026-08-16.
 
 ## 5. Prepare the backend
 
-- [ ] Listen on `0.0.0.0` and Render's injected `PORT` in production.
-- [ ] Add graceful `SIGTERM`/`SIGINT` handling for HTTP and MongoDB shutdown.
-- [ ] Keep `/health` minimal and add a database-aware readiness check.
-- [ ] Keep Helmet, strict CORS, generic production errors, request limits,
+- [x] Listen on `0.0.0.0` and Render's injected `PORT` in production.
+- [x] Add graceful `SIGTERM`/`SIGINT` handling for HTTP and MongoDB shutdown.
+- [x] Keep `/health` minimal and add a database-aware readiness check.
+- [x] Keep Helmet, strict CORS, generic production errors, request limits,
       ObjectId validation, dangerous MongoDB key rejection, and rate limiting.
-- [ ] Validate every inventory, billing, order, payment, and settings field.
-- [ ] Add maximum lengths to customer names, addresses, notes, and searches.
-- [ ] Ensure passwords, hashes, provider secrets, and authorization headers are
+- [x] Validate every inventory, billing, order, payment, and settings field.
+- [x] Add maximum lengths to customer names, addresses, notes, and searches.
+- [x] Ensure passwords, hashes, provider secrets, and authorization headers are
       never included in responses, exports, or logs.
-- [ ] Add request IDs and redact customer-sensitive fields from logs.
-- [ ] Run syntax checks and `npm audit --omit=dev --audit-level=high`.
+- [x] Add request IDs and redact customer-sensitive fields from logs.
+- [x] Run syntax checks and `npm audit --omit=dev --audit-level=high`.
+
+Phase 5 was completed on 2026-08-16. Verification included a clean production
+dependency install, four passing backend security tests, syntax checks for all
+backend JavaScript, production host/port assertions, and an audit with zero
+reported vulnerabilities. The disabled browser-session WhatsApp dependency was
+removed because its Puppeteer chain accounted for all production advisories.
 
 ## 6. Handle scheduled jobs safely
 

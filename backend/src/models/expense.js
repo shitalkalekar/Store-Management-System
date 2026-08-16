@@ -9,7 +9,8 @@ const expenseSchema = new mongoose.Schema({
   amount: {
     type: Number,
     required: true,
-    min: 0.01
+    min: 0.01,
+    max: 1000000000
   },
   date: {
     type: Date,
@@ -17,11 +18,14 @@ const expenseSchema = new mongoose.Schema({
   },
   notes: {
     type: String,
-    default: ''
+    default: '',
+    trim: true,
+    maxlength: 1000
   },
   receiptImage: {
     type: String, // Base64 DataURI
-    default: ''
+    default: '',
+    maxlength: 750000
   },
   branch: {
     type: mongoose.Schema.Types.ObjectId,

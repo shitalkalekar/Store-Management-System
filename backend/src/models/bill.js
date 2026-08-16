@@ -4,7 +4,9 @@ const billSchema = new mongoose.Schema({
   invoiceNumber: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
+    trim: true,
+    maxlength: 100
   },
   order: {
     type: mongoose.Schema.Types.ObjectId,
@@ -25,12 +27,14 @@ const billSchema = new mongoose.Schema({
     quantity: {
       type: Number,
       required: true,
-      min: 1
+      min: 1,
+      max: 10000
     },
     price: {
       type: Number,
       required: true,
-      min: 0
+      min: 0,
+      max: 1000000000
     },
     cgst: {
       type: Number,
@@ -48,7 +52,8 @@ const billSchema = new mongoose.Schema({
   subtotal: {
     type: Number,
     required: true,
-    min: 0
+    min: 0,
+    max: 1000000000
   },
   cgstTotal: {
     type: Number,
@@ -65,7 +70,8 @@ const billSchema = new mongoose.Schema({
   totalAmount: {
     type: Number,
     required: true,
-    min: 0
+    min: 0,
+    max: 1000000000
   },
   isGstApplicable: {
     type: Boolean,
@@ -88,7 +94,8 @@ const billSchema = new mongoose.Schema({
   },
   paymentOrderId: {
     type: String,
-    default: null
+    default: null,
+    maxlength: 200
   },
   paymentStatus: {
     type: String,
@@ -100,5 +107,7 @@ const billSchema = new mongoose.Schema({
     default: Date.now
   }
 });
+
+billSchema.path('items').validate((items) => items.length > 0 && items.length <= 100, 'Bill must contain 1 to 100 items');
 
 module.exports = mongoose.model('Bill', billSchema);

@@ -1,8 +1,9 @@
 require('dotenv').config();
 const app = require('./src/app');
-const { connectDb } = require('./src/config/db');
+const { connectDb, disconnectDb } = require('./src/config/db');
 const env = require('./src/config/env');
 const { initCron } = require('./src/services/cronService');
+const logger = require('./src/services/logger');
 
 const autoSeed = async () => {
   try {
@@ -40,6 +41,37 @@ const autoSeed = async () => {
   }
 };
 
+let server;
+let shuttingDown = false;
+
+const shutdown = async (signal) => {
+  if (shuttingDown) return;
+  shuttingDown = true;
+  logger.write('info', 'server_shutdown_started', { signal });
+
+  const forceExit = setTimeout(() => {
+    logger.write('error', 'server_shutdown_timeout');
+    process.exit(1);
+  }, 10000);
+  forceExit.unref();
+
+  try {
+    if (server) {
+      await new Promise((resolve, reject) => server.close((err) => err ? reject(err) : resolve()));
+    }
+    await disconnectDb();
+    clearTimeout(forceExit);
+    logger.write('info', 'server_shutdown_complete');
+    process.exit(0);
+  } catch (err) {
+    logger.write('error', 'server_shutdown_failed', logger.errorDetails(err));
+    process.exit(1);
+  }
+};
+
+process.once('SIGTERM', () => void shutdown('SIGTERM'));
+process.once('SIGINT', () => void shutdown('SIGINT'));
+
 (async () => {
   try {
     env.assertSafeConfiguration();
@@ -48,11 +80,12 @@ const autoSeed = async () => {
     if (env.WHATSAPP_ENABLED) require('./src/services/whatsappClient');
     initCron();
     
-    app.listen(env.PORT, env.HOST, () => {
+    server = app.listen(env.PORT, env.HOST, () => {
       console.log('[shop-management] backend listening on http://' + env.HOST + ':' + env.PORT);
     });
   } catch (err) {
-    console.error('Server startup failed:', err.message);
+    logger.write('error', 'server_startup_failed', logger.errorDetails(err));
+    await disconnectDb().catch(() => {});
     process.exit(1);
   }
 })();

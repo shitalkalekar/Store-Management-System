@@ -1,5 +1,6 @@
 const PDFDocument = require('pdfkit');
 const QRCode = require('qrcode');
+const logger = require('./logger');
 
 exports.generateBillPDF = async (bill, res, pageSize = 'A4', template = 'CLASSIC_MEMO_BOOK', setting = null) => {
   let docOptions = { margin: 30 };
@@ -34,7 +35,7 @@ exports.generateBillPDF = async (bill, res, pageSize = 'A4', template = 'CLASSIC
     const upiUri = `upi://pay?pa=${accountNo}@upi&pn=${encodeURIComponent(companyName)}&am=${(bill.totalAmount || 0).toFixed(2)}&cu=INR`;
     qrBuffer = await QRCode.toBuffer(upiUri, { margin: 1, width: 140 });
   } catch (err) {
-    console.error('Failed to generate QR code for PDF:', err);
+    logger.write('error', 'pdf_qr_generation_failed', logger.errorDetails(err));
   }
 
   // ==================== TEMPLATE 1: CLASSIC RETAIL MEMO BOOK (EXACT MATCH TO PHOTO) ====================

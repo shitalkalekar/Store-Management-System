@@ -8,7 +8,9 @@ const stockHistorySchema = new mongoose.Schema({
   },
   quantity: {
     type: Number,
-    required: true
+    required: true,
+    min: 0,
+    max: 10000000
   },
   type: {
     type: String,
@@ -17,7 +19,9 @@ const stockHistorySchema = new mongoose.Schema({
   },
   reason: {
     type: String,
-    default: 'sale'
+    default: 'sale',
+    trim: true,
+    maxlength: 500
   },
   timestamp: {
     type: Date,

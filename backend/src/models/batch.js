@@ -9,7 +9,8 @@ const batchSchema = new mongoose.Schema({
   batchNumber: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
+    maxlength: 100
   },
   expiryDate: {
     type: Date,
@@ -23,17 +24,20 @@ const batchSchema = new mongoose.Schema({
     type: Number,
     required: true,
     default: 0,
-    min: 0
+    min: 0,
+    max: 10000000
   },
   purchasePrice: {
     type: Number,
     default: 0,
-    min: 0
+    min: 0,
+    max: 1000000000
   },
   retailPrice: {
     type: Number,
     default: 0,
-    min: 0
+    min: 0,
+    max: 1000000000
   },
   vendor: {
     type: mongoose.Schema.Types.ObjectId,

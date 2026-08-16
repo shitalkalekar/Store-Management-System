@@ -15,23 +15,27 @@ const purchaseOrderSchema = new mongoose.Schema({
     quantity: {
       type: Number,
       required: true,
-      min: 1
+      min: 1,
+      max: 10000000
     },
     costPrice: {
       type: Number,
       required: true,
-      min: 0
+      min: 0,
+      max: 1000000000
     },
     receivedQuantity: {
       type: Number,
       default: 0,
-      min: 0
+      min: 0,
+      max: 10000000
     }
   }],
   totalCost: {
     type: Number,
     required: true,
-    min: 0
+    min: 0,
+    max: 1000000000
   },
   expectedDeliveryDate: {
     type: Date,
@@ -43,13 +47,13 @@ const purchaseOrderSchema = new mongoose.Schema({
     default: 'Pending'
   },
   receivingHistory: [{
-    receivedBy: { type: String, default: 'Admin' },
+    receivedBy: { type: String, default: 'Admin', maxlength: 100 },
     date: { type: Date, default: Date.now },
     items: [{
       product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
       quantity: { type: Number, default: 0 },
-      location: { type: String, default: '' },
-      remarks: { type: String, default: '' }
+      location: { type: String, default: '', maxlength: 200 },
+      remarks: { type: String, default: '', maxlength: 1000 }
     }]
   }],
   branch: {
@@ -62,5 +66,7 @@ const purchaseOrderSchema = new mongoose.Schema({
     default: Date.now
   }
 });
+
+purchaseOrderSchema.path('items').validate((items) => items.length > 0 && items.length <= 100, 'Purchase order must contain 1 to 100 items');
 
 module.exports = mongoose.model('PurchaseOrder', purchaseOrderSchema);
