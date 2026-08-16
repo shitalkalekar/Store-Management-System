@@ -27,8 +27,8 @@ const env = {
 };
 
 env.assertSafeConfiguration = () => {
-  if (env.JWT_SECRET.length < 32) {
-    throw new Error('JWT_SECRET must be configured with at least 32 characters');
+  if (env.JWT_SECRET.length < 64) {
+    throw new Error('JWT_SECRET must be configured with at least 64 characters');
   }
   if (env.NODE_ENV === 'production') {
     if (env.AUTO_SEED) throw new Error('AUTO_SEED must be disabled in production');
@@ -38,8 +38,8 @@ env.assertSafeConfiguration = () => {
     if (env.CORS_ORIGINS.length === 0) throw new Error('CORS_ORIGINS must be configured in production');
   }
   if (env.AUTO_SEED) {
-    if (!env.INITIAL_ADMIN_EMAIL || !env.INITIAL_ADMIN_MOBILE || env.INITIAL_ADMIN_PASSWORD.length < 12) {
-      throw new Error('AUTO_SEED requires INITIAL_ADMIN_EMAIL, INITIAL_ADMIN_MOBILE, and a 12+ character INITIAL_ADMIN_PASSWORD');
+    if (!env.INITIAL_ADMIN_EMAIL || !env.INITIAL_ADMIN_MOBILE || env.INITIAL_ADMIN_PASSWORD.length < 16) {
+      throw new Error('AUTO_SEED requires INITIAL_ADMIN_EMAIL, INITIAL_ADMIN_MOBILE, and a 16+ character INITIAL_ADMIN_PASSWORD');
     }
   }
 };
