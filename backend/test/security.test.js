@@ -13,6 +13,7 @@ const User = require('../src/models/user');
 const JobRun = require('../src/models/jobRun');
 const { inspectValue } = require('../src/middleware/requestSecurity');
 const { redact } = require('../src/services/logger');
+const env = require('../src/config/env');
 const { getTriggerDate, processCandidates } = require('../src/services/recurringOrderService');
 const Notification = require('../src/models/notification');
 
@@ -46,6 +47,14 @@ test('request security rejects malformed identifiers and oversized collections',
   assert.equal(inspectValue({ customerId: 'not-an-object-id' }), 'Invalid resource identifier');
   assert.equal(inspectValue({ items: Array(201).fill('x') }), 'Request contains too many items');
   assert.equal(inspectValue({ search: 'x'.repeat(750001) }), 'Request text is too long');
+});
+
+test('MongoDB URI database parsing is explicit and credential-safe', () => {
+  assert.equal(
+    env.getMongoDatabaseName('mongodb+srv://user:secret@example.mongodb.net/tammewar_pharmacy_prod?retryWrites=true'),
+    'tammewar_pharmacy_prod',
+  );
+  assert.equal(env.getMongoDatabaseName('not-a-mongodb-uri'), '');
 });
 
 test('structured log redaction removes secrets, credentials, and customer fields', () => {

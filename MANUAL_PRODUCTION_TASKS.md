@@ -32,6 +32,27 @@ secret, password, recovery code, or connection string into this repository.
       GitHub password, infrastructure passwords, database password, and JWT
       secret are all distinct.
 
+## Phase 7 — required before migration
+
+- [ ] **M-10 — Atlas ownership and MFA:** In the production Atlas organization,
+      configure two MFA methods for each administrator and enable the
+      organization-wide Require MFA control.
+- [ ] **M-11 — Dedicated Free cluster:** Create project
+      `tammewar-pharmacy-production` and Free/M0 cluster
+      `tammewar-pharmacy-prod`, preferably AWS Singapore, with no sample data
+      and termination protection enabled when available.
+- [ ] **M-12 — Least-privilege application user:** Create `tammewar_app` with
+      only `readWrite` on `tammewar_pharmacy_prod`, restricted to the production
+      cluster where available. Store its generated password only in the team
+      password manager and later in Render.
+- [ ] **M-13 — Network and alerts:** Temporarily allowlist only the trusted
+      migration device, never `0.0.0.0/0`; configure available Logical Size,
+      Connections, and administrative-change notifications. Add Render's full
+      service-specific outbound CIDR list during Phase 10.
+- [ ] **M-14 — Access verification:** Inject the Atlas URI from the password
+      manager and run `cd backend && npm.cmd run atlas:verify`. Retain the
+      non-secret success output in the private operations record.
+
 ## Confirmed controls
 
 - [x] GitHub MFA is enabled for `Nikhil270703` and `Developerr86`.

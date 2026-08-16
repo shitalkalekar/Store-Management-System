@@ -8,6 +8,10 @@ async function connectDb() {
     maxPoolSize: 20,
     minPoolSize: env.NODE_ENV === 'production' ? 2 : 0,
   });
+  if (mongoose.connection.name !== env.MONGO_DB_NAME) {
+    await mongoose.disconnect();
+    throw new Error('Connected MongoDB database does not match MONGO_DB_NAME');
+  }
   console.log('[db] connected successfully');
   return mongoose.connection;
 }

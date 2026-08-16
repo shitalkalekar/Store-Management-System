@@ -1,11 +1,19 @@
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const parsedPort = Number(process.env.PORT || 4009);
+const getMongoDatabaseName = (uri) => {
+  try {
+    return decodeURIComponent(new URL(uri).pathname.replace(/^\//, '').split('/')[0] || '');
+  } catch (_err) {
+    return '';
+  }
+};
 
 const env = {
   NODE_ENV,
   HOST: process.env.HOST || (NODE_ENV === 'production' ? '0.0.0.0' : '127.0.0.1'),
   PORT: parsedPort,
-  MONGO_URI: process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/student_information_system',
+  MONGO_URI: process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/result_analysis_db',
+  MONGO_DB_NAME: process.env.MONGO_DB_NAME || 'result_analysis_db',
   JWT_SECRET: process.env.JWT_SECRET || '',
   JWT_ISSUER: process.env.JWT_ISSUER || 'tammewar-pharmacy',
   JWT_AUDIENCE: process.env.JWT_AUDIENCE || 'tammewar-pharmacy-api',
@@ -43,6 +51,22 @@ env.assertSafeConfiguration = () => {
     if (env.ONLINE_RESTORE_ENABLED) throw new Error('Online database restore must be disabled in production');
     if (env.INTERNAL_AUTH_ENABLED) throw new Error('Internal multi-tenant auth cannot be enabled until every pharmacy model is tenant-scoped');
     if (env.CORS_ORIGINS.length === 0) throw new Error('CORS_ORIGINS must be configured in production');
+    if (!process.env.MONGO_URI || !env.MONGO_URI.startsWith('mongodb+srv://')) {
+      throw new Error('Production MONGO_URI must be an Atlas mongodb+srv connection string');
+    }
+    const mongoUrl = new URL(env.MONGO_URI);
+    if (mongoUrl.searchParams.get('retryWrites') !== 'true' || mongoUrl.searchParams.get('w') !== 'majority') {
+      throw new Error('Production MONGO_URI must enable retryWrites=true and w=majority');
+    }
+    if (!process.env.MONGO_DB_NAME || !/^[a-z][a-z0-9_]{2,62}$/.test(env.MONGO_DB_NAME)) {
+      throw new Error('MONGO_DB_NAME must be an explicit lowercase production database name');
+    }
+    if (['admin', 'config', 'local', 'test', 'development', 'result_analysis_db'].includes(env.MONGO_DB_NAME)) {
+      throw new Error('MONGO_DB_NAME must identify the dedicated production database');
+    }
+    if (getMongoDatabaseName(env.MONGO_URI) !== env.MONGO_DB_NAME) {
+      throw new Error('MONGO_URI must target the configured MONGO_DB_NAME');
+    }
   }
   if (env.AUTO_SEED) {
     if (!env.INITIAL_ADMIN_EMAIL || !env.INITIAL_ADMIN_MOBILE || env.INITIAL_ADMIN_PASSWORD.length < 16) {
@@ -50,5 +74,7 @@ env.assertSafeConfiguration = () => {
     }
   }
 };
+
+env.getMongoDatabaseName = getMongoDatabaseName;
 
 module.exports = env;
