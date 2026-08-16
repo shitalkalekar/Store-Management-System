@@ -13,7 +13,7 @@ export default function Documents({ mode = 'list' }) {
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState({ show: false, type: '', message: '' });
   
-  const userRole = localStorage.getItem('sis_user_role') || 'admin';
+  const userRole = 'admin';
 
   useEffect(() => {
     fetchCourses();

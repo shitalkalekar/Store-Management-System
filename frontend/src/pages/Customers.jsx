@@ -3,6 +3,7 @@ import api from '../services/api';
 import * as XLSX from 'xlsx';
 import Toast from '../components/Toast.jsx';
 import BulkImportModal from '../components/BulkImportModal.jsx';
+import { downloadAuthenticatedFile } from '../utils/authenticatedDownload.js';
 import {
   validateName,
   sanitizeNameInput,
@@ -547,9 +548,16 @@ export default function Customers() {
               </div>
               <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                 <button 
-                  onClick={() => {
-                    const token = localStorage.getItem('sis_jwt_token');
-                    window.open(`${api.defaults.baseURL}/reports/ledger?customerId=${profileCustomer._id}&pdf=true&token=${token}`, '_blank');
+                  onClick={async () => {
+                    try {
+                      await downloadAuthenticatedFile(
+                        `/reports/ledger?customerId=${profileCustomer._id}&pdf=true`,
+                        `Customer_Statement_${profileCustomer.name}.pdf`,
+                      );
+                    } catch (err) {
+                      console.error('Customer statement download failed:', err);
+                      setError('Failed to download the customer statement');
+                    }
                   }}
                   style={{ padding: '8px 16px', background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '6px', fontWeight: '600', cursor: 'pointer', fontSize: '12px' }}
                 >

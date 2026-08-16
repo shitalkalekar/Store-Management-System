@@ -3,6 +3,7 @@ import api from '../services/api';
 import * as XLSX from 'xlsx';
 import DateFilter from '../components/DateFilter.jsx';
 import Toast from '../components/Toast.jsx';
+import { downloadAuthenticatedFile, openAuthenticatedFile } from '../utils/authenticatedDownload.js';
 
 export default function Bills() {
   const [bills, setBills] = useState([]);
@@ -253,29 +254,24 @@ export default function Bills() {
   // Direct File Download Handler
   const handleDownloadPDF = async (bill) => {
     try {
-      const url = `${api.defaults.baseURL}/bills/${bill._id}/pdf`;
-      const response = await fetch(url);
-      const blob = await response.blob();
-      const blobUrl = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = blobUrl;
-      link.setAttribute('download', `Invoice_${bill.invoiceNumber}.pdf`);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
+      await downloadAuthenticatedFile(`/bills/${bill._id}/pdf`, `Invoice_${bill.invoiceNumber}.pdf`);
     } catch (err) {
-      console.error('Direct download fallback:', err);
-      window.open(`${api.defaults.baseURL}/bills/${bill._id}/pdf`, '_blank');
+      console.error('Invoice download failed:', err);
+      setError('Failed to download the invoice PDF');
     }
   };
 
-  const handlePrintPDF = (id) => {
-    const url = `${api.defaults.baseURL}/bills/${id}/pdf`;
-    window.open(url, '_blank');
+  const handlePrintPDF = async (id) => {
+    try {
+      await openAuthenticatedFile(`/bills/${id}/pdf`);
+    } catch (err) {
+      console.error('Invoice preview failed:', err);
+      setError('Failed to open the invoice PDF');
+    }
   };
 
   const handleShareWhatsAppWeb = (bill) => {
-    const text = `Dear ${bill.customer?.name || 'Customer'},\nHere is your invoice ${bill.invoiceNumber} for Rs. ${bill.totalAmount.toFixed(2)}.\nDownload Tax Invoice PDF: ${api.defaults.baseURL}/bills/${bill._id}/pdf`;
+    const text = `Dear ${bill.customer?.name || 'Customer'},\nHere is your invoice ${bill.invoiceNumber} for Rs. ${bill.totalAmount.toFixed(2)}. Please contact the pharmacy for a copy of the tax invoice.`;
     const formattedMobile = (bill.customer?.mobile || '').replace(/\D/g, '');
     const url = `https://wa.me/${formattedMobile.startsWith('91') ? '' : '91'}${formattedMobile}?text=${encodeURIComponent(text)}`;
     window.open(url, '_blank');
