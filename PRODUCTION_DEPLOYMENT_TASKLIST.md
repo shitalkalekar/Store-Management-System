@@ -173,6 +173,13 @@ build on 2026-08-16.
 
 ## 7. Create MongoDB Atlas M0
 
+Repository preparation for Phase 7 was completed on 2026-08-16: production now
+requires an explicit database name, verifies the connected database at startup,
+and provides `npm run atlas:verify` to test exact-role and cross-database access.
+The account-console work remains M-10 through M-14 in
+`MANUAL_PRODUCTION_TASKS.md` and is a blocker before Phase 8. Follow
+`ATLAS_FREE_SETUP_RUNBOOK.md`.
+
 - [ ] Create a dedicated production Atlas project and enable account MFA.
 - [ ] Create one M0 Free cluster near Render, preferably Singapore.
 - [ ] Use a production-specific database name.
