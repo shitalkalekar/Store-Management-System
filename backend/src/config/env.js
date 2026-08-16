@@ -1,9 +1,10 @@
 const NODE_ENV = process.env.NODE_ENV || 'development';
+const parsedPort = Number(process.env.PORT || 4009);
 
 const env = {
   NODE_ENV,
-  HOST: process.env.HOST || '127.0.0.1',
-  PORT: Number(process.env.PORT) || 4009,
+  HOST: process.env.HOST || (NODE_ENV === 'production' ? '0.0.0.0' : '127.0.0.1'),
+  PORT: parsedPort,
   MONGO_URI: process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/student_information_system',
   JWT_SECRET: process.env.JWT_SECRET || '',
   JWT_ISSUER: process.env.JWT_ISSUER || 'tammewar-pharmacy',
@@ -27,11 +28,17 @@ const env = {
 };
 
 env.assertSafeConfiguration = () => {
+  if (!Number.isInteger(env.PORT) || env.PORT < 1 || env.PORT > 65535) {
+    throw new Error('PORT must be an integer between 1 and 65535');
+  }
   if (env.JWT_SECRET.length < 64) {
     throw new Error('JWT_SECRET must be configured with at least 64 characters');
   }
   if (env.NODE_ENV === 'production') {
+    if (!process.env.PORT) throw new Error('PORT must be supplied by the production platform');
+    if (env.HOST !== '0.0.0.0') throw new Error('HOST must be 0.0.0.0 in production');
     if (env.AUTO_SEED) throw new Error('AUTO_SEED must be disabled in production');
+    if (env.WHATSAPP_ENABLED) throw new Error('Legacy local WhatsApp must be disabled in production');
     if (env.PAYMENTS_ALLOW_MOCK) throw new Error('Mock payments must be disabled in production');
     if (env.ONLINE_RESTORE_ENABLED) throw new Error('Online database restore must be disabled in production');
     if (env.INTERNAL_AUTH_ENABLED) throw new Error('Internal multi-tenant auth cannot be enabled until every pharmacy model is tenant-scoped');

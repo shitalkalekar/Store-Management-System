@@ -4,6 +4,7 @@ const Order = require('../models/order');
 const Payment = require('../models/payment');
 const crypto = require('crypto');
 const env = require('../config/env');
+const logger = require('../services/logger');
 
 // Safe fallback for Razorpay
 let razorpayInstance = null;
@@ -80,7 +81,7 @@ exports.createPaymentLink = async (req, res) => {
     }
 
   } catch (error) {
-    console.error('Create Payment Link Error:', error);
+    logger.write('error', 'payment_link_failed', logger.errorDetails(error, req.id));
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
@@ -144,7 +145,8 @@ exports.verifyPayment = async (req, res) => {
         // WhatsApp Webhook call could go here...
         const { sendWhatsAppPaymentReceipt } = require('../services/notificationService');
         if (sendWhatsAppPaymentReceipt) {
-          sendWhatsAppPaymentReceipt(payment._id).catch(err => console.error("WP API error", err));
+          sendWhatsAppPaymentReceipt(payment._id)
+            .catch((err) => logger.write('error', 'payment_receipt_notification_failed', logger.errorDetails(err, req.id)));
         }
 
         return res.status(200).json({ message: 'Payment verified successfully', payment });
@@ -156,7 +158,7 @@ exports.verifyPayment = async (req, res) => {
     }
 
   } catch (error) {
-    console.error('Verify Payment Error:', error);
+    logger.write('error', 'payment_verification_failed', logger.errorDetails(error, req.id));
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };

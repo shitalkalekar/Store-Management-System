@@ -26,7 +26,7 @@ exports.login = async (req, res) => {
       return res.status(400).json({ error: 'Email and password are required' });
     }
 
-    const user = await User.findOne({ email: email.trim().toLowerCase() });
+    const user = await User.findOne({ email: email.trim().toLowerCase() }).select('+password');
     if (!user || user.role !== 'admin') {
       return res.status(401).json({ error: 'Invalid email or password' });
     }

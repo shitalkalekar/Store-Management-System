@@ -4,30 +4,40 @@ const customerSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
+    minlength: 2,
+    maxlength: 100
   },
   mobile: {
     type: String,
     required: true,
     unique: true,
-    trim: true
+    trim: true,
+    match: /^\d{10}$/
   },
   address: {
     type: String,
-    required: true
+    required: true,
+    trim: true,
+    maxlength: 500
   },
   gstNumber: {
     type: String,
     trim: true,
-    default: ''
+    default: '',
+    maxlength: 15
   },
   notes: {
     type: String,
-    default: ''
+    default: '',
+    trim: true,
+    maxlength: 1000
   },
   state: {
     type: String,
-    default: 'Maharashtra'
+    default: 'Maharashtra',
+    trim: true,
+    maxlength: 100
   },
   branch: {
     type: mongoose.Schema.Types.ObjectId,
@@ -36,11 +46,15 @@ const customerSchema = new mongoose.Schema({
   },
   defaultRecurringDays: {
     type: Number,
-    default: 0
+    default: 0,
+    min: 0,
+    max: 365
   },
   creditLimit: {
     type: Number,
-    default: 0
+    default: 0,
+    min: 0,
+    max: 1000000000
   },
   createdAt: {
     type: Date,

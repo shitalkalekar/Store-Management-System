@@ -1,16 +1,20 @@
 const express = require('express');
 const helmet = require('helmet');
-const morgan = require('morgan');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const routes = require('./routes');
 const env = require('./config/env');
+const { isDbReady } = require('./config/db');
+const logger = require('./services/logger');
+const { assignRequestId, enforceRequestShape } = require('./middleware/requestSecurity');
 
 const app = express();
 if (env.TRUST_PROXY) app.set('trust proxy', env.TRUST_PROXY === 'true' ? 1 : env.TRUST_PROXY);
 
 app.disable('x-powered-by');
 app.use(helmet());
+app.use(assignRequestId);
+app.use(logger.requestLogger);
 app.use(cors({
   origin(origin, callback) {
     if (!origin || env.CORS_ORIGINS.includes(origin)) return callback(null, true);
@@ -18,12 +22,12 @@ app.use(cors({
   },
   credentials: false,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Authorization', 'Content-Type', 'X-Internal-Token', 'X-Request-Id'],
+  allowedHeaders: ['Authorization', 'Content-Type', 'X-Request-Id'],
   maxAge: 600,
 }));
 
 app.use(express.json({ limit: '1mb', strict: true }));
-app.use(morgan(env.NODE_ENV === 'production' ? 'combined' : 'tiny'));
+app.use(enforceRequestShape);
 
 // A number of legacy controllers build their own 500 responses. Ensure none of
 // those responses expose database or provider error details in production.
@@ -81,15 +85,19 @@ app.use('/result-analysis/auth/login', authLimiter);
 app.use('/result-analysis/auth/customer/login', authLimiter);
 app.use('/result-analysis/payments', paymentLimiter);
 
-// public health check (used by service-discovery)
-app.get('/health', (_req, res) => res.json({ ok: true, module: 'result-analysis' }));
+// Liveness intentionally reveals no dependency or deployment details.
+app.get('/health', (_req, res) => res.json({ ok: true }));
+app.get('/ready', (_req, res) => {
+  const ready = isDbReady();
+  return res.status(ready ? 200 : 503).json({ ready });
+});
 
-// all real routes are gateway-only and tenant/context aware
+// All application routes below require the owner token.
 app.use('/result-analysis', routes);
 
 app.use((req, res) => res.status(404).json({ error: 'Not found' }));
-app.use((err, _req, res, _next) => {
-  console.error('[result-analysis]', err.message);
+app.use((err, req, res, _next) => {
+  logger.write('error', 'request_error', logger.errorDetails(err, req.id));
   const status = err.status || 500;
   const message = status >= 500 && env.NODE_ENV === 'production' ? 'Internal server error' : (err.message || 'Server error');
   res.status(status).json({ error: message });

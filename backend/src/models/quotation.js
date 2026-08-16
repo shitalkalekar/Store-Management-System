@@ -15,18 +15,21 @@ const quotationSchema = new mongoose.Schema({
     quantity: {
       type: Number,
       required: true,
-      min: 1
+      min: 1,
+      max: 10000
     },
     price: {
       type: Number,
       required: true,
-      min: 0
+      min: 0,
+      max: 1000000000
     }
   }],
   totalAmount: {
     type: Number,
     required: true,
-    min: 0
+    min: 0,
+    max: 1000000000
   },
   validUntil: {
     type: Date,
@@ -42,5 +45,7 @@ const quotationSchema = new mongoose.Schema({
     default: Date.now
   }
 });
+
+quotationSchema.path('items').validate((items) => items.length > 0 && items.length <= 100, 'Quotation must contain 1 to 100 items');
 
 module.exports = mongoose.model('Quotation', quotationSchema);

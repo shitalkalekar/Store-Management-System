@@ -15,12 +15,14 @@ const orderSchema = new mongoose.Schema({
     quantity: {
       type: Number,
       required: true,
-      min: 1
+      min: 1,
+      max: 10000
     },
     price: {
       type: Number,
       required: true,
-      min: 0
+      min: 0,
+      max: 1000000000
     },
     vendor: {
       type: mongoose.Schema.Types.ObjectId,
@@ -31,7 +33,8 @@ const orderSchema = new mongoose.Schema({
   totalAmount: {
     type: Number,
     required: true,
-    min: 0
+    min: 0,
+    max: 1000000000
   },
   deliveryDate: {
     type: Date,
@@ -105,11 +108,15 @@ const orderSchema = new mongoose.Schema({
     max: 5
   },
   feedbackComment: {
-    type: String
+    type: String,
+    trim: true,
+    maxlength: 1000
   },
   remarks: {
     type: String,
-    default: ''
+    default: '',
+    trim: true,
+    maxlength: 1000
   },
   assignmentHistory: [{
     assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: 'Employee' },
@@ -126,7 +133,9 @@ const orderSchema = new mongoose.Schema({
   },
   recurringIntervalDays: {
     type: Number,
-    default: 30
+    default: 30,
+    min: 1,
+    max: 365
   },
   recurringSourceOrder: {
     type: mongoose.Schema.Types.ObjectId,
@@ -151,5 +160,7 @@ const orderSchema = new mongoose.Schema({
     default: Date.now
   }
 });
+
+orderSchema.path('items').validate((items) => items.length > 0 && items.length <= 100, 'Order must contain 1 to 100 items');
 
 module.exports = mongoose.model('Order', orderSchema);

@@ -8,11 +8,15 @@ const stockAdjustmentSchema = new mongoose.Schema({
   },
   oldQty: {
     type: Number,
-    required: true
+    required: true,
+    min: 0,
+    max: 10000000
   },
   newQty: {
     type: Number,
-    required: true
+    required: true,
+    min: 0,
+    max: 10000000
   },
   adjustedBy: {
     type: mongoose.Schema.Types.ObjectId,
@@ -22,7 +26,8 @@ const stockAdjustmentSchema = new mongoose.Schema({
   reason: {
     type: String,
     required: true,
-    trim: true // e.g. damage, loss, recount, audit
+    trim: true,
+    maxlength: 500
   },
   timestamp: {
     type: Date,

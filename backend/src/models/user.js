@@ -7,13 +7,15 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
     lowercase: true,
-    trim: true
+    trim: true,
+    maxlength: 254
   },
   password: {
     type: String,
     required: true,
     minlength: 16,
-    maxlength: 128
+    maxlength: 128,
+    select: false
   },
   role: {
     type: String,
@@ -22,11 +24,15 @@ const userSchema = new mongoose.Schema({
   },
   name: {
     type: String,
-    required: true
+    required: true,
+    trim: true,
+    maxlength: 100
   },
   mobile: {
     type: String,
-    required: true
+    required: true,
+    trim: true,
+    match: /^\d{10}$/
   },
   status: {
     type: String,
@@ -38,6 +44,13 @@ const userSchema = new mongoose.Schema({
     default: Date.now
   }
 });
+
+const removePassword = (_doc, value) => {
+  delete value.password;
+  return value;
+};
+userSchema.set('toJSON', { transform: removePassword });
+userSchema.set('toObject', { transform: removePassword });
 
 // Pre-save hook to hash password
 userSchema.pre('save', async function (next) {

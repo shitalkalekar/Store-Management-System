@@ -20,7 +20,8 @@ const paymentSchema = new mongoose.Schema({
   amountPaid: {
     type: Number,
     required: true,
-    min: 0.01
+    min: 0.01,
+    max: 1000000000
   },
   paymentMode: {
     type: String,
@@ -36,7 +37,9 @@ const paymentSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    default: 'Ledger Settlement'
+    default: 'Ledger Settlement',
+    trim: true,
+    maxlength: 100
   },
   date: {
     type: Date,
@@ -44,11 +47,15 @@ const paymentSchema = new mongoose.Schema({
   },
   referenceNumber: {
     type: String,
-    default: ''
+    default: '',
+    trim: true,
+    maxlength: 100
   },
   notes: {
     type: String,
-    default: ''
+    default: '',
+    trim: true,
+    maxlength: 1000
   }
 }, { timestamps: true });
 

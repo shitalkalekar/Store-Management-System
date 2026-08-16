@@ -15,6 +15,7 @@ const Vendor = require('../models/vendor');
 const Setting = require('../models/setting');
 const auditService = require('../services/auditService');
 const env = require('../config/env');
+const logger = require('../services/logger');
 
 const pick = (source, fields) => Object.fromEntries(
   fields.filter((field) => Object.prototype.hasOwnProperty.call(source, field)).map((field) => [field, source[field]])
@@ -550,10 +551,10 @@ exports.createPurchaseOrder = async (req, res) => {
             type: 'text',
             text: { body: msg }
           })
-        }).catch(err => console.error('Failed to send WhatsApp to vendor:', err)); // Fire and forget
+        }).catch((err) => logger.write('error', 'vendor_notification_failed', logger.errorDetails(err, req.id)));
       }
     } catch (waErr) {
-      console.error('WhatsApp notification error:', waErr);
+      logger.write('error', 'vendor_notification_failed', logger.errorDetails(waErr, req.id));
     }
     // =================================================================
 
@@ -756,7 +757,7 @@ exports.receivePurchaseOrder = async (req, res) => {
 
     res.json({ message: `Purchase Order received successfully (${po.status})! 📦`, po: updatedPo });
   } catch (err) {
-    console.error('Receive PO error:', err);
+    logger.write('error', 'purchase_receive_failed', logger.errorDetails(err, req.id));
     res.status(500).json({ error: err.message });
   }
 };
@@ -1082,7 +1083,7 @@ exports.bulkImportExcel = async (req, res) => {
             currentStock: Number(row.currentStock) || 0,
             lowStockThreshold: Number(row.lowStockThreshold) || 10,
             linkedVendor: vendor._id,
-            hsnCode: row.hsnCode || 'HSN3004'
+            hsnCode: row.hsnCode || '3004'
           });
           await product.save();
           insertedCount++;
@@ -1358,7 +1359,7 @@ exports.bulkImportExcel = async (req, res) => {
 
         const name = (row['Product Name'] || row.name || '').toString().trim();
         const category = (row['Category'] || row.category || '').toString().trim();
-        const hsnCode = (row['HSN'] || row['HSN Code'] || row.hsnCode || 'HSN3004').toString().trim();
+        const hsnCode = (row['HSN'] || row['HSN Code'] || row.hsnCode || '3004').toString().trim();
         const unit = (row['Unit'] || row.unit || '').toString().trim();
         const purchasePrice = Number(row['Purchase Price'] || row.purchasePrice || 0);
         const retailPrice = Number(row['Retail Price'] || row.price || row.retailPrice || 0);
@@ -1562,7 +1563,7 @@ exports.bulkImportExcel = async (req, res) => {
       failedRecords
     });
   } catch (err) {
-    console.error('bulkImportExcel error:', err);
+    logger.write('error', 'bulk_import_failed', logger.errorDetails(err, req.id));
     res.status(500).json({ error: err.message });
   }
 };

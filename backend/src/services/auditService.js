@@ -1,4 +1,5 @@
 const AuditLog = require('../models/auditLog');
+const { redact } = require('./logger');
 
 exports.logAction = async (userId, action, entity, entityId, diff = '') => {
   try {
@@ -7,7 +8,9 @@ exports.logAction = async (userId, action, entity, entityId, diff = '') => {
       action,
       entity,
       entityId,
-      diff: typeof diff === 'object' ? JSON.stringify(diff) : diff
+      diff: typeof diff === 'object'
+        ? JSON.stringify(redact(diff, { customerData: true }))
+        : redact(diff, { customerData: true })
     });
     await log.save();
     console.log(`[audit-log] Logged: User(${userId || 'System'}) did "${action}" on ${entity}(${entityId})`);

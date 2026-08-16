@@ -13,6 +13,7 @@ const Employee = require('../models/employee');
 const pdfService = require('../services/pdfService');
 const notificationService = require('../services/notificationService');
 const whatsappClient = require('../services/whatsappClient');
+const logger = require('../services/logger');
 
 const pick = (source, fields) => Object.fromEntries(
   fields.filter((field) => Object.prototype.hasOwnProperty.call(source, field)).map((field) => [field, source[field]])
@@ -459,7 +460,7 @@ exports.createProduct = async (req, res) => {
       currentStock: currentStock ? Number(currentStock) : 0, 
       lowStockThreshold: lowStockThreshold ? Number(lowStockThreshold) : 10, 
       linkedVendor,
-      hsnCode: hsnCode || 'HSN3004',
+      hsnCode: hsnCode || '3004',
       branchId: targetBranchId,
       hasExpiryTracking: hasExpiryTracking !== undefined ? hasExpiryTracking : true
     });
@@ -591,7 +592,7 @@ exports.bulkQuickStockIn = async (req, res) => {
 
     res.json({ message: `Successfully added stock for ${updatedProducts.length} item(s)!`, updatedCount: updatedProducts.length });
   } catch (err) {
-    console.error('Bulk Quick Stock In error:', err);
+    logger.write('error', 'bulk_stock_in_failed', logger.errorDetails(err, req.id));
     res.status(500).json({ error: err.message });
   }
 };
@@ -726,7 +727,7 @@ exports.quickExpressIssue = async (req, res) => {
     });
 
   } catch (err) {
-    console.error('Quick express issue error:', err);
+    logger.write('error', 'quick_issue_failed', logger.errorDetails(err, req.id));
     res.status(500).json({ error: err.message });
   }
 };
@@ -817,7 +818,8 @@ exports.createOrder = async (req, res) => {
     // Trigger WhatsApp notification for order creation
     if (custDoc && custDoc.mobile) {
       const orderRef = `ORD-${order._id.toString().substring(18).toUpperCase()}`;
-      notificationService.sendOrderCreated(custDoc.mobile, orderRef, totalAmount).catch(e => console.error(e));
+      notificationService.sendOrderCreated(custDoc.mobile, orderRef, totalAmount)
+        .catch((err) => logger.write('error', 'order_notification_failed', logger.errorDetails(err, req.id)));
     }
 
     res.status(201).json(order);
@@ -934,7 +936,7 @@ exports.assignOrderStaff = async (req, res) => {
 
     res.json(updatedOrder);
   } catch (err) {
-    console.error('Assign staff error:', err);
+    logger.write('error', 'assign_staff_failed', logger.errorDetails(err, req.id));
     res.status(500).json({ error: err.message });
   }
 };
@@ -1062,9 +1064,11 @@ exports.updateOrderStatus = async (req, res) => {
     if (order.customer && order.customer.mobile) {
       const orderRef = `ORD-${order._id.toString().substring(18).toUpperCase()}`;
       if (status === 'Out for Delivery' && oldStatus !== 'Out for Delivery') {
-        notificationService.sendOutForDelivery(order.customer.mobile, orderRef).catch(e => console.error(e));
+        notificationService.sendOutForDelivery(order.customer.mobile, orderRef)
+          .catch((err) => logger.write('error', 'delivery_notification_failed', logger.errorDetails(err, req.id)));
       } else if (status === 'Delivered' && oldStatus !== 'Delivered') {
-        notificationService.sendOrderDelivered(order.customer.mobile, orderRef).catch(e => console.error(e));
+        notificationService.sendOrderDelivered(order.customer.mobile, orderRef)
+          .catch((err) => logger.write('error', 'delivered_notification_failed', logger.errorDetails(err, req.id)));
       }
     }
 
@@ -1530,7 +1534,8 @@ exports.recordPayment = async (req, res) => {
     // Try sending payment receipt via whatsapp
     const cust = await Customer.findById(bill.customer);
     if (cust && cust.mobile) {
-      notificationService.sendPaymentReceived(cust.mobile, amountPaid).catch(e => console.error(e));
+      notificationService.sendPaymentReceived(cust.mobile, amountPaid)
+        .catch((err) => logger.write('error', 'payment_notification_failed', logger.errorDetails(err, req.id)));
     }
 
     // Update bill payment status
@@ -1672,13 +1677,13 @@ exports.sendWhatsappMessage = async (req, res) => {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error('WhatsApp API Error:', data);
+      logger.write('error', 'whatsapp_provider_rejected', { requestId: req.id });
       return res.status(response.status).json({ error: data.error?.message || 'Failed to send WhatsApp message' });
     }
 
     res.json({ success: true, data });
   } catch (err) {
-    console.error('WhatsApp Error:', err);
+    logger.write('error', 'whatsapp_request_failed', logger.errorDetails(err, req.id));
     res.status(500).json({ error: err.message });
   }
 };
@@ -2050,7 +2055,7 @@ exports.getCustomerLedgersSummary = async (req, res) => {
 
     res.json(ledgers);
   } catch (err) {
-    console.error('getCustomerLedgersSummary error:', err);
+    logger.write('error', 'ledger_summary_failed', logger.errorDetails(err, req.id));
     res.status(500).json({ error: err.message });
   }
 };
@@ -2082,7 +2087,7 @@ exports.recordLedgerPayment = async (req, res) => {
 
     res.status(201).json({ success: true, payment });
   } catch (err) {
-    console.error('recordLedgerPayment error:', err);
+    logger.write('error', 'ledger_payment_failed', logger.errorDetails(err, req.id));
     res.status(500).json({ error: err.message });
   }
 };
