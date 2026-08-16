@@ -1108,16 +1108,6 @@ exports.bulkImportExcel = async (req, res) => {
   }
 };
 
-exports.triggerRecurringScan = async (req, res) => {
-  try {
-    const cronService = require('../services/cronService');
-    await cronService.runRecurringOrdersJob();
-    res.json({ message: 'Recurring orders auto-creation scan executed successfully! 🔁' });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
-
 exports.sendQuotationWhatsapp = async (req, res) => {
   try {
     const Quotation = require('../models/quotation'); // Make sure we have it imported

@@ -2,7 +2,6 @@ require('dotenv').config();
 const app = require('./src/app');
 const { connectDb, disconnectDb } = require('./src/config/db');
 const env = require('./src/config/env');
-const { initCron } = require('./src/services/cronService');
 const logger = require('./src/services/logger');
 
 const autoSeed = async () => {
@@ -78,7 +77,6 @@ process.once('SIGINT', () => void shutdown('SIGINT'));
     await connectDb();
     if (env.AUTO_SEED) await autoSeed();
     if (env.WHATSAPP_ENABLED) require('./src/services/whatsappClient');
-    initCron();
     
     server = app.listen(env.PORT, env.HOST, () => {
       console.log('[shop-management] backend listening on http://' + env.HOST + ':' + env.PORT);

@@ -94,8 +94,6 @@ router.put('/purchases/:id/receive', advancedShopController.receivePurchaseOrder
 router.put('/products/:id/adjust-manual', advancedShopController.manualAdjustProductStock);
 router.get('/products/reorder-list', advancedShopController.getReorderList);
 router.get('/products/:id/stock-logs', advancedShopController.getProductStockLog);
-router.post('/products/run-recurring-scan', advancedShopController.triggerRecurringScan);
-
 router.post('/expenses', advancedShopController.createExpense);
 router.get('/expenses', advancedShopController.getExpenses);
 router.delete('/expenses/:id', auth.requireAdmin, advancedShopController.deleteExpense);

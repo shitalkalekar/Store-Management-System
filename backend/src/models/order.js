@@ -146,6 +146,11 @@ const orderSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  recurringProcessingAt: {
+    type: Date,
+    default: null,
+    select: false
+  },
   paymentOrderId: {
     type: String,
     default: null

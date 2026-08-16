@@ -1,7 +1,3 @@
-const fs = require('fs');
-const path = require('path');
-const cron = require('node-cron');
-
 // Import models
 const User = require('../models/user');
 const Customer = require('../models/customer');
@@ -19,6 +15,7 @@ const StockAdjustment = require('../models/stockAdjustment');
 const Expense = require('../models/expense');
 const Setting = require('../models/setting');
 const AuditLog = require('../models/auditLog');
+const JobRun = require('../models/jobRun');
 
 // Fetches all database contents and returns a serialized JSON object
 const generateDatabaseDump = async () => {
@@ -38,39 +35,9 @@ const generateDatabaseDump = async () => {
     stockAdjustments: await StockAdjustment.find({}),
     expenses: await Expense.find({}),
     settings: await Setting.find({}).select('-whatsappToken'),
-    auditLogs: await AuditLog.find({})
+    auditLogs: await AuditLog.find({}),
+    jobRuns: await JobRun.find({}).select('-lastError')
   };
-};
-
-// Writes the database dump to a local JSON backup file
-const performBackup = async () => {
-  console.log('[backup-service] Starting scheduled database backup...');
-  try {
-    const data = await generateDatabaseDump();
-    const backupDir = path.join(__dirname, '../../backups');
-    
-    if (!fs.existsSync(backupDir)) {
-      fs.mkdirSync(backupDir, { recursive: true });
-    }
-
-    const timestamp = new Date().toISOString().replace(/T/, '_').replace(/:/g, '-').split('.')[0];
-    const filename = `backup_${timestamp}.json`;
-    const filePath = path.join(backupDir, filename);
-
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-    console.log(`[backup-service] Backup completed successfully. Saved locally: ${filePath}`);
-
-    // Mock S3/Google Drive upload check
-    const CLOUD_PROVIDER = process.env.CLOUD_BACKUP_PROVIDER; // s3 | drive
-    if (CLOUD_PROVIDER) {
-      console.log(`[backup-service] Cloud backup credentials detected. Mock-uploading ${filename} to ${CLOUD_PROVIDER.toUpperCase()}...`);
-      console.log(`[backup-service] Cloud upload completed successfully.`);
-    } else {
-      console.log('[backup-service] Cloud storage credentials not fully set. Skip uploading to cloud (Saved Locally).');
-    }
-  } catch (err) {
-    console.error('[backup-service] Backup run failed:', err.message);
-  }
 };
 
 // Restore database from dump object
@@ -94,6 +61,7 @@ const restoreDatabaseDump = async (dump) => {
   await Expense.deleteMany({});
   await Setting.deleteMany({});
   await AuditLog.deleteMany({});
+  await JobRun.deleteMany({});
 
   // Restore collections
   if (dump.branches) await Branch.insertMany(dump.branches);
@@ -111,21 +79,12 @@ const restoreDatabaseDump = async (dump) => {
   if (dump.expenses) await Expense.insertMany(dump.expenses);
   if (dump.settings) await Setting.insertMany(dump.settings);
   if (dump.auditLogs) await AuditLog.insertMany(dump.auditLogs);
+  if (dump.jobRuns) await JobRun.insertMany(dump.jobRuns);
 
   console.log('[backup-service] Database restore execution completed.');
 };
 
-const initBackupCron = () => {
-  // Runs every day at 02:00 AM
-  cron.schedule('0 2 * * *', () => {
-    performBackup();
-  });
-  console.log('[backup-service] Nightly backup cron scheduler initialized successfully.');
-};
-
 module.exports = {
-  initBackupCron,
-  performBackup,
   generateDatabaseDump,
   restoreDatabaseDump
 };

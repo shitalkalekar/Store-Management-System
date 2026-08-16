@@ -149,17 +149,27 @@ removed because its Puppeteer chain accounted for all production advisories.
 
 ## 6. Handle scheduled jobs safely
 
-- [ ] Remove the SQLite backup cron from the Render web process.
-- [ ] Never rely on Render Free's filesystem for backups or application data.
-- [ ] Identify recurring-order and reminder jobs that are truly required.
-- [ ] Disable nonessential jobs for the initial release.
-- [ ] Prefer an owner-triggered manual action for low-frequency jobs initially.
-- [ ] If external scheduling is introduced, make every job idempotent.
-- [ ] Persist last-run, result, and error state in MongoDB.
-- [ ] Display the last successful run to the owner.
+- [x] Remove the SQLite backup cron from the Render web process.
+- [x] Never rely on Render Free's filesystem for backups or application data.
+- [x] Identify recurring-order and reminder jobs that are truly required.
+- [x] Disable nonessential jobs for the initial release.
+- [x] Prefer an owner-triggered manual action for low-frequency jobs initially.
+- [x] If external scheduling is introduced, make every job idempotent.
+- [x] Persist last-run, result, and error state in MongoDB.
+- [x] Display the last successful run to the owner.
 
 Render Free sleeps after 15 minutes without inbound traffic. Scheduled code does
 not run while the service is asleep, and missed executions are not replayed.
+
+Phase 6 was completed on 2026-08-16. The web process has no cron/timer jobs and
+no filesystem backup writer. Delivery reminders and unattended messaging are
+disabled for launch. Recurring orders remain an owner-triggered, MongoDB-claimed
+idempotent action with persisted run state and dashboard visibility. External
+scheduling was not introduced; its optional post-launch review is tracked as
+M-09 in `MANUAL_PRODUCTION_TASKS.md`. See `PRODUCTION_JOB_POLICY.md`.
+Verification included six passing backend tests, backend syntax checks, clean
+backend and frontend dependency audits, and a successful production frontend
+build on 2026-08-16.
 
 ## 7. Create MongoDB Atlas M0
 
