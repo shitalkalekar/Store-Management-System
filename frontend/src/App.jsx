@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useRuntime } from './services/runtime.js';
-import { initApi } from './services/api.js';
-import api from './services/api.js';
+import api, { AUTH_EXPIRED_EVENT, clearAccessToken } from './services/api.js';
 import {
   LayoutDashboard,
   TrendingUp,
@@ -48,7 +46,6 @@ import AuditLogs from './pages/AuditLogs.jsx';
 import CustomerLedgers from './pages/CustomerLedgers.jsx';
 
 export default function App() {
-  const ctx = useRuntime();
   const [user, setUser] = useState(null);
   const [activePage, setActivePage] = useState('dashboard');
   const [checkingAuth, setCheckingAuth] = useState(true);
@@ -57,22 +54,10 @@ export default function App() {
   const [branches, setBranches] = useState([]);
   const [selectedBranch, setSelectedBranch] = useState(localStorage.getItem('selected_branch_id') || '');
 
-  // Initialize API and handle Host Context authentication on mount
+  // Authentication is memory-only. Refreshing the page requires a new login,
+  // and any credentials left by older builds are removed on startup.
   useEffect(() => {
-    if (ctx) {
-      initApi(ctx);
-      if (ctx.user && ctx.user.role?.includes('admin')) {
-        setUser({
-          id: ctx.user.id || 'dev',
-          name: ctx.user.name || 'Core Administrator',
-          role: 'admin'
-        });
-        setCheckingAuth(false);
-        return;
-      }
-    }
-
-    // Standalone flow: Session-only authentication (no auto-login after browser refresh F5)
+    clearAccessToken();
     sessionStorage.removeItem('sis_jwt_token');
     sessionStorage.removeItem('sis_user_role');
     sessionStorage.removeItem('sis_user_name');
@@ -81,7 +66,11 @@ export default function App() {
     localStorage.removeItem('sis_user_name');
     setUser(null);
     setCheckingAuth(false);
-  }, [ctx]);
+
+    const handleExpiredAuth = () => setUser(null);
+    window.addEventListener(AUTH_EXPIRED_EVENT, handleExpiredAuth);
+    return () => window.removeEventListener(AUTH_EXPIRED_EVENT, handleExpiredAuth);
+  }, []);
 
   // Load branches list on admin login
   useEffect(() => {
@@ -98,6 +87,7 @@ export default function App() {
   };
 
   const handleLogout = () => {
+    clearAccessToken();
     sessionStorage.removeItem('sis_jwt_token');
     sessionStorage.removeItem('sis_user_role');
     sessionStorage.removeItem('sis_user_name');

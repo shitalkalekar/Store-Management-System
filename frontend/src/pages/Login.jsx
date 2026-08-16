@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import api from '../services/api';
+import api, { setAccessToken } from '../services/api';
 import './Login.css';
 
 export default function Login({ onLoginSuccess }) {
@@ -8,10 +8,12 @@ export default function Login({ onLoginSuccess }) {
   
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [canRetry, setCanRetry] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setCanRetry(false);
     
     if (!email || !password) {
       setError('Please fill in email and password.');
@@ -23,17 +25,19 @@ export default function Login({ onLoginSuccess }) {
       const response = await api.post('/auth/login', { email, password });
       const { token, user } = response.data;
       
-      // Store token and user details in session storage (session-only)
-      sessionStorage.setItem('sis_jwt_token', token);
-      sessionStorage.setItem('sis_user_role', user.role);
-      sessionStorage.setItem('sis_user_name', user.name);
-      
-      setTimeout(() => {
-        onLoginSuccess(user);
-      }, 500);
+      setAccessToken(token);
+      onLoginSuccess(user);
     } catch (err) {
       console.error(err);
-      setError(err.response?.data?.error || 'Invalid credentials or connection error');
+      if (err.response?.status === 401) {
+        setError('The email or password is incorrect.');
+      } else if (!err.response || err.code === 'ECONNABORTED' || err.code === 'ERR_NETWORK') {
+        setError('The pharmacy server may be waking up. Wait a moment, then retry the connection.');
+        setCanRetry(true);
+      } else {
+        setError(err.response?.data?.error || 'Unable to sign in right now. Please retry.');
+        setCanRetry(true);
+      }
       setLoading(false);
     }
   };
@@ -96,7 +100,7 @@ export default function Login({ onLoginSuccess }) {
             disabled={loading}
             style={{ width: '100%', padding: '12px', background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
           >
-            {loading ? 'Authenticating...' : 'Sign In'}
+            {loading ? 'Connecting securely...' : canRetry ? 'Retry connection' : 'Sign In'}
           </button>
         </form>
       </div>

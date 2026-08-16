@@ -15,7 +15,7 @@ export default function StudentApplications() {
   const [searchQuery, setSearchQuery] = useState('');
   
   // To handle role-based remarks
-  const userRole = localStorage.getItem('sis_user_role') || 'admin';
+  const userRole = 'admin';
 
   useEffect(() => {
     fetchApplications();

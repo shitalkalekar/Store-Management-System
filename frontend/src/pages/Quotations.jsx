@@ -4,6 +4,7 @@ import * as XLSX from 'xlsx';
 import DateFilter from '../components/DateFilter.jsx';
 import Toast from '../components/Toast.jsx';
 import { validateRequired, validatePositiveNumber } from '../utils/formValidation.js';
+import { openAuthenticatedFile } from '../utils/authenticatedDownload.js';
 
 export default function Quotations() {
   const [quotations, setQuotations] = useState([]);
@@ -279,9 +280,13 @@ export default function Quotations() {
     }
   };
 
-  const handlePrintPDF = (id) => {
-    const url = `${api.defaults.baseURL}/quotations/${id}/pdf`;
-    window.open(url, '_blank');
+  const handlePrintPDF = async (id) => {
+    try {
+      await openAuthenticatedFile(`/quotations/${id}/pdf`);
+    } catch (err) {
+      console.error('Quotation preview failed:', err);
+      setError('Failed to open the quotation PDF');
+    }
   };
 
   return (

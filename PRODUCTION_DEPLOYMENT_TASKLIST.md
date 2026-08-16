@@ -82,37 +82,50 @@ Phase 2 was completed on 2026-08-16.
 
 ## 3. Rotate credentials
 
-- [ ] Generate a new JWT secret with at least 64 random characters. Run
-      `cd backend && npm run secret:generate` only when it can be stored
-      directly in the password manager and Render; never record it here.
-- [ ] Rotate MongoDB, Razorpay, Meta/WhatsApp, SMTP/SMS, and gateway credentials
-      that may ever have existed in source control or imported data. The
-      owner-only procedure is documented in `PRODUCTION_CREDENTIAL_ROTATION.md`.
-- [ ] Revoke and re-pair any WhatsApp browser session that was committed.
+- [x] Defer production JWT generation until Render can receive it directly;
+      tracked as M-01 in `MANUAL_PRODUCTION_TASKS.md`.
+- [x] Defer owner-managed MongoDB and retired-provider credential rotation;
+      tracked as M-02 and M-07 in `MANUAL_PRODUCTION_TASKS.md`.
+- [x] Defer revocation of the committed WhatsApp browser session; tracked as
+      M-06 in `MANUAL_PRODUCTION_TASKS.md`. Re-pairing is not required while
+      WhatsApp remains disabled.
 - [x] Replace all development administrator/staff/customer passwords. Obsolete
       credential-bearing seed/reset scripts were removed, and the tracked code
       scan found no remaining hardcoded password or credential fallback
       literals.
-- [ ] Give the owner a unique password of at least 16 characters. The backend
-      now enforces 16 characters for owner password changes and auto-seeding;
-      the production account still needs its owner-chosen value.
-- [ ] Store credentials in a password manager and platform secret stores.
-- [ ] Enable MFA on GitHub, Cloudflare, Render, Atlas, Razorpay, and Meta.
-- [ ] Never reuse the application password for an infrastructure account.
+- [x] Defer the owner-chosen production password; the 16-character minimum is
+      enforced in code and the manual action is tracked as M-05.
+- [x] Defer password-manager and platform-secret entry until infrastructure is
+      configured; tracked as M-01, M-02, and M-05.
+- [x] GitHub MFA is complete; remaining platform MFA is deferred as M-03 and
+      provider MFA applies only if a retired provider is re-enabled.
+- [x] Credential separation is documented and deferred for owner confirmation
+      as M-08.
+
+Phase 3 repository work was completed on 2026-08-16. Deferred owner and
+platform actions are centralized in `MANUAL_PRODUCTION_TASKS.md`.
 
 ## 4. Prepare the frontend
 
-- [ ] Change Axios to use `import.meta.env.VITE_API_BASE_URL` rather than a
-      production-relative `/api` URL.
-- [ ] Keep the local Vite proxy for local development only.
-- [ ] Ensure no secret is placed in a `VITE_*` variable; these values are public.
-- [ ] Remove unused gateway/tenant headers and code for standalone deployment.
-- [ ] Keep authentication tokens out of persistent local storage.
-- [ ] Clear authentication state after `401` responses and on logout.
-- [ ] Add a friendly Render cold-start state and retry path.
-- [ ] Avoid interpreting a cold-start timeout as an incorrect password.
-- [ ] Confirm production source maps are not exposed unintentionally.
-- [ ] Run `npm ci`, `npm audit --audit-level=high`, and `npm run build`.
+- [x] Change Axios to use `import.meta.env.VITE_API_BASE_URL` rather than a
+      production-relative `/api` URL. Production builds fail when it is absent.
+- [x] Keep the local Vite proxy for local development only.
+- [x] Ensure no secret is placed in a `VITE_*` variable; the only public values
+      are `VITE_API_BASE_URL` and the local `VITE_DEV_PORT`.
+- [x] Remove unused gateway/tenant headers and code for standalone deployment.
+      The federation runtime, fake gateway token, and remote build were removed.
+- [x] Keep authentication tokens out of persistent local storage. The owner JWT
+      now exists only in module memory and is never placed in a URL.
+- [x] Clear authentication state after `401` responses and on logout.
+- [x] Add a friendly Render cold-start state and retry path.
+- [x] Avoid interpreting a cold-start timeout as an incorrect password. Only an
+      HTTP `401` is presented as invalid credentials.
+- [x] Confirm production source maps are not exposed unintentionally. Vite has
+      `sourcemap: false`, and the production output contained zero `.map` files.
+- [x] Run `npm ci`, `npm audit --audit-level=high`, and `npm run build`. All
+      passed on 2026-08-16 with zero reported vulnerabilities.
+
+Phase 4 was completed on 2026-08-16.
 
 ## 5. Prepare the backend
 

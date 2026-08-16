@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import * as XLSX from 'xlsx';
-import { useRuntime } from '../services/runtime';
 
 export default function StudentPromotion() {
-  const ctx = useRuntime();
   const canEdit = true; // Enabled for all users in this module for testing
 
   const [students, setStudents] = useState([]);

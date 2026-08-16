@@ -1,41 +1,45 @@
 import axios from 'axios';
 
-let apiBase = '/api';
-let gatewayHeaders = {};
+export const AUTH_EXPIRED_EVENT = 'tammewar:auth-expired';
+
+const configuredApiBase = import.meta.env.VITE_API_BASE_URL?.trim();
+const apiBase = configuredApiBase || (import.meta.env.DEV ? '/api' : '');
+
+if (!apiBase) {
+  throw new Error('VITE_API_BASE_URL must be configured for production builds');
+}
+
+let accessToken = null;
+
+export const setAccessToken = (token) => {
+  accessToken = typeof token === 'string' && token ? token : null;
+};
+
+export const clearAccessToken = () => {
+  accessToken = null;
+};
 
 const api = axios.create({
-  baseURL: apiBase
+  baseURL: apiBase,
+  timeout: 60000,
 });
 
-// Interceptor to inject tokens dynamically
 api.interceptors.request.use((config) => {
-  // 1. If we are running in standalone mode (no gateway token), look for MERN JWT token
-  if (!gatewayHeaders.authToken) {
-    const token = sessionStorage.getItem('sis_jwt_token');
-    if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
-    }
-  }
-
-  // 2. If we have host gateway headers, attach them
-  if (gatewayHeaders.authToken) {
-    config.headers['X-Internal-Token'] = gatewayHeaders.authToken;
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
   }
   return config;
-}, (error) => {
-  return Promise.reject(error);
 });
 
-// Initialize with host environment context
-export const initApi = (runtimeCtx) => {
-  if (runtimeCtx) {
-    if (runtimeCtx.apiBaseUrl) {
-      api.defaults.baseURL = runtimeCtx.apiBaseUrl;
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      clearAccessToken();
+      window.dispatchEvent(new Event(AUTH_EXPIRED_EVENT));
     }
-    gatewayHeaders = {
-      authToken: runtimeCtx.authToken,
-    };
-  }
-};
+    return Promise.reject(error);
+  },
+);
 
 export default api;

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, PieChart, Pie, Legend } from 'recharts';
 import Toast from '../components/Toast.jsx';
+import { downloadAuthenticatedFile, openAuthenticatedFile } from '../utils/authenticatedDownload.js';
 
 export default function Dashboard({ role, onNavigate }) {
   const [stats, setStats] = useState(null);
@@ -276,6 +277,20 @@ export default function Dashboard({ role, onNavigate }) {
     const mobile = (bill.customer?.mobile || '').replace(/\D/g, '');
     const url = `https://wa.me/${mobile.startsWith('91') ? '' : '91'}${mobile}?text=${encodeURIComponent(text)}`;
     window.open(url, '_blank');
+  };
+
+  const handleGeneratedBillPdf = async (bill, download) => {
+    if (!bill) return;
+    try {
+      if (download) {
+        await downloadAuthenticatedFile(`/bills/${bill._id}/pdf`, `Invoice_${bill.invoiceNumber}.pdf`);
+      } else {
+        await openAuthenticatedFile(`/bills/${bill._id}/pdf`);
+      }
+    } catch (err) {
+      console.error('Generated invoice PDF failed:', err);
+      setError('Failed to open the generated invoice PDF');
+    }
   };
 
   const fetchNotifications = async () => {
@@ -1593,13 +1608,13 @@ export default function Dashboard({ role, onNavigate }) {
               <span style={{ fontSize: '14px', fontWeight: '800', color: '#b91c1c' }}>🎉 Item Issued &amp; Receipt Generated!</span>
               <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                 <button 
-                  onClick={() => window.open(`${api.defaults.baseURL}/bills/${generatedBillModal._id}/pdf?download=true`, '_blank')} 
+                  onClick={() => handleGeneratedBillPdf(generatedBillModal, true)}
                   style={{ background: '#2563eb', color: '#ffffff', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
                 >
                   💾 Save PDF
                 </button>
                 <button 
-                  onClick={() => window.open(`${api.defaults.baseURL}/bills/${generatedBillModal._id}/pdf`, '_blank')} 
+                  onClick={() => handleGeneratedBillPdf(generatedBillModal, false)}
                   style={{ background: '#b91c1c', color: '#ffffff', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }}
                 >
                   🖨️ Open / Print

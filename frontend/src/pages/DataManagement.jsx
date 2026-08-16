@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import api from '../services/api';
+import { downloadAuthenticatedFile } from '../utils/authenticatedDownload.js';
 
 export default function DataManagement() {
   const [success, setSuccess] = useState('');
@@ -11,33 +12,18 @@ export default function DataManagement() {
   const [csvText, setCsvText] = useState('');
   const [importResults, setImportResults] = useState(null);
 
-  const handleDownloadBackup = () => {
-    // Triggers direct browser download of the backup file
-    const token = localStorage.getItem('token');
-    const backupUrl = `${api.defaults.baseURL}/data/backup?token=${token}`;
-    
-    // Create temporary link element
-    const link = document.createElement('a');
-    link.href = backupUrl;
-    link.setAttribute('download', `backup_${new Date().toISOString().split('T')[0]}.json`);
-    
-    // Add Authorization header bypass via query token or fetch
-    fetch(`${api.defaults.baseURL}/data/backup`, {
-      headers: { 'Authorization': `Bearer ${token}` }
-    })
-      .then(res => res.blob())
-      .then(blob => {
-        const url = window.URL.createObjectURL(blob);
-        link.href = url;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        setSuccess('Database backup generated and downloaded successfully! 💾');
-      })
-      .catch(err => {
-        console.error(err);
-        setError('Failed to download database backup');
-      });
+  const handleDownloadBackup = async () => {
+    try {
+      setError('');
+      await downloadAuthenticatedFile(
+        '/data/backup',
+        `backup_${new Date().toISOString().split('T')[0]}.json`,
+      );
+      setSuccess('Database backup generated and downloaded successfully!');
+    } catch (err) {
+      console.error(err);
+      setError('Failed to download database backup');
+    }
   };
 
   const handleRestoreSubmit = async (e) => {
