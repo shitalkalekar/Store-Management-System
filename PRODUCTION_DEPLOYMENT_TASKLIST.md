@@ -56,9 +56,11 @@ the final go/no-go gate is complete.
 - [ ] Return the GitHub repository to private before production. It was made
       temporarily public on 2026-08-14 so the connected GitHub reader could
       inspect the sanitized repository; public access must not remain enabled.
-- [ ] Enable MFA for both GitHub accounts and branch protection for `main`.
-      Branch protection is currently absent and can only be configured by the
-      personal-repository owner, `Nikhil270703`.
+- [x] Enable branch protection for `main`. GitHub's branch API reported
+      `protected: true` on 2026-08-16, and PR #1 reported `REVIEW_REQUIRED`
+      with merging blocked.
+- [x] Enable MFA for both GitHub accounts. MFA for `Nikhil270703` and
+      `Developerr86` was confirmed by the user on 2026-08-16.
 - [ ] Do not allow automatic production deployments from untrusted branches.
 
 History rewriting and force-pushing are destructive coordination operations.
@@ -70,9 +72,12 @@ contained one root commit, no forbidden historical paths, and no matches for
 the credential-value patterns used in the scan. On 2026-08-14, local GitHub CLI
 access was restored for `Developerr86` with Write permission. The repository
 was then made temporarily public, which gave the connected GitHub reader
-read-only access. MFA, owner-only branch protection, final private visibility,
-old-clone confirmation, and deployment-branch policy remain pre-production
-gates.
+read-only access. GitHub's branch API confirmed protection for `main` on
+2026-08-16, and PR #1 confirmed that a review is required before merging. MFA
+for both GitHub accounts was user-confirmed because GitHub does not expose
+another personal account's MFA state to this collaborator. Final private
+visibility, old-clone confirmation, and deployment-branch policy remain
+pre-production gates.
 
 ## 3. Rotate credentials
 
