@@ -11,6 +11,7 @@ export default function Dashboard({ role, onNavigate }) {
   const [error, setError] = useState('');
   const [scanMessage, setScanMessage] = useState('');
   const [loopMessage, setLoopMessage] = useState('');
+  const [loopProcessing, setLoopProcessing] = useState(false);
   const [loopFilterMode, setLoopFilterMode] = useState('before_5_days');
   const [customDaysWindow, setCustomDaysWindow] = useState(5);
 
@@ -168,6 +169,7 @@ export default function Dashboard({ role, onNavigate }) {
 
   const handleProcessLoops = async () => {
     try {
+      setLoopProcessing(true);
       setLoopMessage('Processing order loops...');
       const res = await api.post('/orders/process-recurring');
       setLoopMessage(res.data.message);
@@ -177,6 +179,8 @@ export default function Dashboard({ role, onNavigate }) {
       console.error(err);
       setLoopMessage('Failed to process loops');
       setTimeout(() => setLoopMessage(''), 5000);
+    } finally {
+      setLoopProcessing(false);
     }
   };
 
@@ -717,17 +721,22 @@ export default function Dashboard({ role, onNavigate }) {
               🔄 Order Loops (Recurring Deliveries)
             </h2>
             <p style={{ fontSize: '13px', color: '#64748b', margin: 0 }}>
-              Automatically generate new orders for customers based on their recurring order loop cycles.
+              Review due cycles and generate recurring orders manually. No background scheduler runs on the web service.
+            </p>
+            <p style={{ fontSize: '12px', color: '#475569', margin: '8px 0 0' }}>
+              Last successful review: <strong>{stats?.recurringOrderJob?.lastSuccessfulRunAt ? new Date(stats.recurringOrderJob.lastSuccessfulRunAt).toLocaleString() : 'Not run yet'}</strong>
+              {stats?.recurringOrderJob?.lastSuccessfulRunAt && ` — ${stats.recurringOrderJob.lastResult?.created || 0} created, ${stats.recurringOrderJob.lastResult?.skipped || 0} skipped`}
             </p>
             {loopMessage && <span style={{ display: 'inline-block', marginTop: '10px', fontSize: '12px', color: '#059669', background: '#d1fae5', padding: '4px 12px', borderRadius: '12px', fontWeight: '600' }}>{loopMessage}</span>}
           </div>
           <button 
             onClick={handleProcessLoops}
-            style={{ padding: '10px 20px', background: '#2563eb', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', fontSize: '14px', transition: 'background 0.2s', boxShadow: '0 4px 6px -1px rgba(37, 99, 235, 0.2)' }}
+            disabled={loopProcessing}
+            style={{ padding: '10px 20px', background: loopProcessing ? '#94a3b8' : '#2563eb', color: '#fff', border: 'none', borderRadius: '8px', cursor: loopProcessing ? 'wait' : 'pointer', fontWeight: 'bold', fontSize: '14px', transition: 'background 0.2s', boxShadow: '0 4px 6px -1px rgba(37, 99, 235, 0.2)' }}
             onMouseOver={(e) => e.target.style.background = '#1d4ed8'}
             onMouseOut={(e) => e.target.style.background = '#2563eb'}
           >
-            Process Due Loops
+            {loopProcessing ? 'Processing...' : 'Process Due Loops'}
           </button>
         </div>
         

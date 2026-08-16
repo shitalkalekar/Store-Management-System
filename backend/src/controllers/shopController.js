@@ -14,6 +14,7 @@ const pdfService = require('../services/pdfService');
 const notificationService = require('../services/notificationService');
 const whatsappClient = require('../services/whatsappClient');
 const logger = require('../services/logger');
+const recurringOrderService = require('../services/recurringOrderService');
 
 const pick = (source, fields) => Object.fromEntries(
   fields.filter((field) => Object.prototype.hasOwnProperty.call(source, field)).map((field) => [field, source[field]])
@@ -138,6 +139,7 @@ exports.getDashboardStats = async (req, res) => {
       }
     }
     const activeLoops = Object.values(activeLoopsMap);
+    const recurringOrderJob = await recurringOrderService.getRecurringJobStatus();
 
     // Orders Analysis
     const orderStatusAgg = await Order.aggregate([
@@ -179,6 +181,12 @@ exports.getDashboardStats = async (req, res) => {
       })),
       customerDues,
       activeLoops,
+      recurringOrderJob: recurringOrderJob || {
+        status: 'never_run',
+        trigger: 'owner',
+        lastSuccessfulRunAt: null,
+        lastResult: { scanned: 0, due: 0, created: 0, skipped: 0 }
+      },
       orderStatusCounts,
       recentOrders: recentOrders.map(o => ({
         _id: o._id,
@@ -1907,98 +1915,33 @@ exports.updateStaffStatus = async (req, res) => {
 
 exports.processRecurringOrders = async (req, res) => {
   try {
-    const deliveredOrders = await Order.find({
-      isRecurring: true,
-      status: 'Delivered',
-      recurringProcessed: false
+    const { result, createdOrders } = await recurringOrderService.runRecurringOrders({
+      triggeredBy: req.ctx?.userId || req.user?.id,
     });
-
-    const newlyCreated = [];
-    const now = new Date();
-
-    for (const order of deliveredOrders) {
-      const baseDate = order.deliveredAt || order.deliveryDate || order.createdAt || new Date();
-      const triggerDate = new Date(new Date(baseDate).getTime() + (order.recurringIntervalDays || 30) * 24 * 60 * 60 * 1000);
-      
-      if (now >= triggerDate) {
-        // Time to duplicate
-        const newOrder = new Order({
-          customer: order.customer,
-          items: order.items,
-          totalAmount: order.totalAmount,
-          deliveryDate: now,
-          status: 'Pending',
-          isRecurring: true,
-          recurringIntervalDays: order.recurringIntervalDays,
-          recurringSourceOrder: order._id,
-          statusHistory: [{ status: 'Pending', updatedBy: req.ctx ? req.ctx.userId : req.user ? req.user.id : null }]
-        });
-        
-        await newOrder.save();
-        
-        // Mark old as processed
-        order.recurringProcessed = true;
-        await order.save();
-
-        // Create Notification
-        const customerDetails = await Customer.findById(order.customer);
-        if (customerDetails) {
-          await Notification.create({
-            title: 'Automated Order Loop Triggered',
-            message: `A new recurring order loop was generated automatically for customer: ${customerDetails.name}`,
-            type: 'delivery_reminder',
-            relatedId: newOrder._id
-          });
-        }
-
-        newlyCreated.push(newOrder);
-      }
-    }
-
-    res.json({ message: `Processed ${newlyCreated.length} recurring orders successfully.`, newOrders: newlyCreated });
+    res.json({
+      message: `Recurring-order review complete: ${result.created} created, ${result.skipped} skipped.`,
+      result,
+      newOrders: createdOrders,
+    });
   } catch (err) {
+    logger.write('error', 'recurring_order_job_failed', logger.errorDetails(err, req.id));
     res.status(500).json({ error: err.message });
   }
 };
 
 exports.processSingleRecurringOrder = async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id);
-    if (!order) return res.status(404).json({ error: 'Order not found' });
-    if (!order.isRecurring || order.recurringProcessed) {
-      return res.status(400).json({ error: 'Order is not eligible for recurring processing' });
-    }
-
-    const now = new Date();
-    const newOrder = new Order({
-      customer: order.customer,
-      items: order.items,
-      totalAmount: order.totalAmount,
-      deliveryDate: now,
-      status: 'Pending',
-      isRecurring: true,
-      recurringIntervalDays: order.recurringIntervalDays,
-      recurringSourceOrder: order._id,
-      statusHistory: [{ status: 'Pending', updatedBy: req.ctx ? req.ctx.userId : req.user ? req.user.id : null }]
+    const { result, createdOrders } = await recurringOrderService.runRecurringOrders({
+      orderId: req.params.id,
+      force: true,
+      triggeredBy: req.ctx?.userId || req.user?.id,
     });
-    
-    await newOrder.save();
-    
-    order.recurringProcessed = true;
-    await order.save();
-
-    const customerDetails = await Customer.findById(order.customer);
-    if (customerDetails) {
-      await Notification.create({
-        title: 'Manual Order Loop Triggered',
-        message: `A new recurring order loop was generated manually for customer: ${customerDetails.name}`,
-        type: 'delivery_reminder',
-        relatedId: newOrder._id
-      });
+    if (result.created === 0) {
+      return res.status(400).json({ error: 'Order is not eligible or was already processed' });
     }
-
-    res.json({ message: 'Recurring order loop generated successfully!', newOrder });
+    res.json({ message: 'Recurring order generated successfully.', result, newOrder: createdOrders[0] });
   } catch (err) {
+    logger.write('error', 'single_recurring_order_job_failed', logger.errorDetails(err, req.id));
     res.status(500).json({ error: err.message });
   }
 };

@@ -38,3 +38,11 @@ secret, password, recovery code, or connection string into this repository.
 - [x] GitHub `main` is protected and requires review.
 - [x] The GitHub repository is private.
 - [x] Old pre-rewrite repository clones have been removed.
+
+## After the initial release
+
+- [ ] **M-09 — Scheduling review:** After observing real usage, decide whether
+      recurring-order processing needs an external scheduler. Keep the current
+      owner-triggered workflow if it is sufficient. Any future scheduler must
+      call an authenticated, idempotent job entry point and must not run inside
+      the Render web process.

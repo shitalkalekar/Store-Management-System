@@ -10,8 +10,11 @@ const Order = require('../src/models/order');
 const Product = require('../src/models/product');
 const Setting = require('../src/models/setting');
 const User = require('../src/models/user');
+const JobRun = require('../src/models/jobRun');
 const { inspectValue } = require('../src/middleware/requestSecurity');
 const { redact } = require('../src/services/logger');
+const { getTriggerDate, processCandidates } = require('../src/services/recurringOrderService');
+const Notification = require('../src/models/notification');
 
 const request = (server, path) => new Promise((resolve, reject) => {
   const address = server.address();
@@ -65,4 +68,47 @@ test('pharmacy schemas enforce bounded customer, order, setting, and credential 
   assert.equal(new User({ email: 'owner@example.com', password: 'A'.repeat(64), role: 'admin', name: 'Owner', mobile: '9999999999' }).toJSON().password, undefined);
   assert.equal(new Setting({ whatsappToken: 'provider-secret' }).toJSON().whatsappToken, undefined);
   assert.equal(new Product({ hsnCode: 'HSN3004' }).validateSync()?.errors.hsnCode, undefined);
+});
+
+test('recurring-order scheduling state and due-date calculation are bounded', () => {
+  const deliveredAt = new Date('2026-01-01T00:00:00.000Z');
+  assert.equal(
+    getTriggerDate({ deliveredAt, recurringIntervalDays: 30 }).toISOString(),
+    '2026-01-31T00:00:00.000Z',
+  );
+  assert.ok(new JobRun({
+    jobKey: 'recurring_orders',
+    status: 'invalid',
+    lastStartedAt: new Date(),
+  }).validateSync());
+});
+
+test('recurring-order processing skips an order that another request claimed', async (t) => {
+  const originalFind = Order.find;
+  const originalFindOneAndUpdate = Order.findOneAndUpdate;
+  const originalCreate = Order.create;
+  const originalNotificationUpdate = Notification.findOneAndUpdate;
+  t.after(() => {
+    Order.find = originalFind;
+    Order.findOneAndUpdate = originalFindOneAndUpdate;
+    Order.create = originalCreate;
+    Notification.findOneAndUpdate = originalNotificationUpdate;
+  });
+
+  let createCalls = 0;
+  Order.find = async () => [{
+    _id: 'source-order',
+    deliveredAt: new Date('2026-01-01T00:00:00.000Z'),
+    recurringIntervalDays: 1,
+  }];
+  Order.findOneAndUpdate = async () => null;
+  Order.create = async () => { createCalls += 1; };
+  Notification.findOneAndUpdate = async () => {};
+
+  const output = await processCandidates({
+    triggeredBy: 'owner',
+    now: new Date('2026-01-03T00:00:00.000Z'),
+  });
+  assert.deepEqual(output.result, { scanned: 1, due: 1, created: 0, skipped: 1 });
+  assert.equal(createCalls, 0);
 });
