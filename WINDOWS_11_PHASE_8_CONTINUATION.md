@@ -24,33 +24,24 @@ It does not authorize production go-live. Work only on the
 Never paste a password, Atlas URI, recovery code, token, customer record, or
 unencrypted database into Git, GitHub, chat, screenshots, or a cloud drive.
 
-## 1. Publish the continuation branch before changing computers
+## 1. Confirm the published continuation branch
 
-Phase 8 currently includes uncommitted files on the original computer. A clean
-clone cannot reproduce them until they have been committed and pushed.
-
-On the original computer, inspect and commit only this known scope:
+The initial Phase 8 handoff was committed and pushed to
+`origin/agent/phase-8-data-migration` on 2026-08-19. Before changing computers,
+confirm that the original worktree is clean and the local and remote branch
+commits match:
 
 ```powershell
 cd C:\Users\ashis\Projects\Nikhil_projects\Tammewar_Pharmacy
-git status --short
-git diff --check
-git diff -- MANUAL_PRODUCTION_TASKS.md PRODUCTION_DEPLOYMENT_TASKLIST.md `
-  backend/package.json backend/scripts/auditMigrationDatabase.js `
-  WINDOWS_11_PHASE_8_CONTINUATION.md
-
-git add MANUAL_PRODUCTION_TASKS.md PRODUCTION_DEPLOYMENT_TASKLIST.md `
-  backend/package.json backend/scripts/auditMigrationDatabase.js `
-  WINDOWS_11_PHASE_8_CONTINUATION.md
-git diff --cached --check
-git diff --cached --stat
-git commit -m "Prepare Phase 8 data migration"
-git push -u origin agent/phase-8-data-migration
+git fetch origin agent/phase-8-data-migration
+git status -sb
+git rev-parse HEAD
+git rev-parse origin/agent/phase-8-data-migration
 ```
 
-Do not use `git add -A`. Do not add `data`, `.runtime`, `.env`, logs, archives,
-or database files. A pull request is not required merely to continue on the new
-computer; open the draft PR only after Phase 8 is complete and verified.
+The two hashes must match and status must show no tracked changes. Draft PR #7
+is the handoff PR and must remain draft until Phase 8 is complete. Never add
+`data`, `.runtime`, `.env`, logs, archives, or database files to Git.
 
 ## 2. Create an encrypted transfer of the local source stores
 
