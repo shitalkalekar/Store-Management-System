@@ -176,24 +176,36 @@ build on 2026-08-16.
 Repository preparation for Phase 7 was completed on 2026-08-16: production now
 requires an explicit database name, verifies the connected database at startup,
 and provides `npm run atlas:verify` to test exact-role and cross-database access.
-The account-console work remains M-10 through M-14 in
-`MANUAL_PRODUCTION_TASKS.md` and is a blocker before Phase 8. Follow
-`ATLAS_FREE_SETUP_RUNBOOK.md`.
+The account-console work in M-10 through M-14 was user-confirmed complete on
+2026-08-16 after following `ATLAS_FREE_SETUP_RUNBOOK.md`. Render's
+service-specific outbound CIDRs remain a Phase 10 update because the service
+does not exist yet.
 
-- [ ] Create a dedicated production Atlas project and enable account MFA.
-- [ ] Create one M0 Free cluster near Render, preferably Singapore.
-- [ ] Use a production-specific database name.
-- [ ] Enable termination protection if available.
-- [ ] Create a dedicated application database user with access only to the
+- [x] Create a dedicated production Atlas project and enable account MFA.
+- [x] Create one M0 Free cluster near Render, preferably Singapore.
+- [x] Use a production-specific database name.
+- [x] Enable termination protection if available.
+- [x] Create a dedicated application database user with access only to the
       application database.
-- [ ] Generate a long random database password and store it only in Render.
-- [ ] Allow only Render's documented outbound ranges where possible.
-- [ ] Avoid `0.0.0.0/0`; if temporarily unavoidable, document it and retain
+- [x] Generate a long random database password and store it in the password
+      manager for direct entry into Render during Phase 10.
+- [x] Restrict current access to the trusted migration device; add Render's
+      documented service-specific outbound ranges during Phase 10.
+- [x] Avoid `0.0.0.0/0`; if temporarily unavoidable, document it and retain
       strong TLS, SCRAM credentials, least privilege, and monitoring.
-- [ ] Configure available storage and connection alerts.
-- [ ] Confirm the application cannot access unrelated databases.
+- [x] Configure available storage and connection alerts.
+- [x] Confirm the application cannot access unrelated databases.
 
 ## 8. Validate and migrate data
+
+Phase 8 source validation began on 2026-08-16. The `data/db-local` candidate
+was audited from a disposable copy and is not authoritative: it contains zero
+customers, products, orders, bills, or payments, plus two development-era user
+accounts and one settings document. The repaired candidate uses MongoDB feature
+compatibility version 8.3. This Windows 10 build 19044 administrator device
+cannot load MongoDB 8.3.4 or 8.3.7; MongoDB supports 8.3 on Windows 11 and
+Windows Server 2022. M-15 records the supported-host recovery blocker. The
+original database directories have not been opened or modified.
 
 - [ ] Identify the authoritative local database; do not assume the currently
       connected development database is authoritative.

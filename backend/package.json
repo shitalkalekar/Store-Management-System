@@ -9,6 +9,7 @@
     "dev": "nodemon server.js",
     "secret:generate": "node scripts/generateSecret.js",
     "atlas:verify": "node scripts/verifyAtlasAccess.js",
+    "migration:audit": "node scripts/auditMigrationDatabase.js",
     "test": "node --test"
   },
   "dependencies": {
