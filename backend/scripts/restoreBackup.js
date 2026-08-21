@@ -71,7 +71,13 @@ const spawnMongorestore = (args) => new Promise((resolve, reject) => {
 
 const runMongorestore = async ({ uri, archivePath, sourceDatabase, targetDatabase, scratch }) => {
   const configPath = path.join(scratch, 'mongorestore.config.yaml');
-  await fs.promises.writeFile(configPath, `uri: ${JSON.stringify(uri)}\n`, { mode: 0o600 });
+  // The database must be stripped from the URI. If mongorestore is given both a
+  // database in the connection string and an --nsFrom/--nsTo remap, it filters
+  // the archive to the URI's database name — which is the *target*, a name the
+  // archive never contains — and silently restores nothing.
+  const clusterUri = new URL(uri);
+  clusterUri.pathname = '/';
+  await fs.promises.writeFile(configPath, `uri: ${JSON.stringify(clusterUri.toString())}\n`, { mode: 0o600 });
   try {
     await spawnMongorestore([
       `--config=${configPath}`,
@@ -96,6 +102,25 @@ const readManifest = async (archivePath) => {
   } catch (_err) {
     return null;
   }
+};
+
+/**
+ * Decides whether a completed mongorestore actually restored the archive.
+ *
+ * mongorestore can exit 0 having written nothing — that is how the first drill
+ * of this tooling passed while producing an empty database. Success therefore
+ * has to be asserted from the resulting counts, never inferred from the exit
+ * code.
+ */
+const assertRestoreComplete = (counts, manifest) => {
+  const restoredDocuments = Object.values(counts).reduce((total, count) => total + count, 0);
+  if (restoredDocuments === 0) {
+    fail(`Restore produced an empty database. ${Object.keys(counts).length} collection(s), 0 documents. Do not treat this backup as verified.`);
+  }
+  if (manifest?.sourceDocuments !== undefined && manifest.sourceDocuments !== restoredDocuments) {
+    fail(`Document count mismatch: the archive was taken from ${manifest.sourceDocuments} documents but ${restoredDocuments} were restored. Do not treat this backup as verified.`);
+  }
+  return restoredDocuments;
 };
 
 const main = async () => {
@@ -143,6 +168,8 @@ const main = async () => {
     await fs.promises.rm(scratch, { recursive: true, force: true });
   }
 
+  const restoredDocuments = assertRestoreComplete(counts, manifest);
+
   console.log(JSON.stringify({
     restore: 'ok',
     archive: path.basename(archivePath),
@@ -150,7 +177,9 @@ const main = async () => {
     sourceDatabase,
     targetDatabase,
     collections: Object.keys(counts).length,
-    documents: Object.values(counts).reduce((total, count) => total + count, 0),
+    documents: restoredDocuments,
+    sourceDocuments: manifest?.sourceDocuments ?? 'unknown (manifest predates count recording)',
+    countsMatchSource: manifest?.sourceDocuments === restoredDocuments,
     counts,
   }, null, 2));
   console.log('\nCompare these counts and the business totals against production, then drop the');
@@ -164,4 +193,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { databaseFrom, PRODUCTION_DATABASE };
+module.exports = { databaseFrom, assertRestoreComplete, PRODUCTION_DATABASE };

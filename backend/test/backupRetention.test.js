@@ -8,7 +8,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const { planRetention, parseArchiveDate, timestampFor, RETENTION } = require('../scripts/backupDatabase');
-const { databaseFrom, PRODUCTION_DATABASE } = require('../scripts/restoreBackup');
+const { databaseFrom, assertRestoreComplete, PRODUCTION_DATABASE } = require('../scripts/restoreBackup');
 
 const archiveName = (isoDate) => `tammewar-${timestampFor(new Date(isoDate))}.archive.gz.enc`;
 
@@ -100,4 +100,32 @@ test('the restore target database is parsed from its URI', () => {
   );
   assert.throws(() => databaseFrom('not-a-uri'), /not a valid connection string/);
   assert.equal(PRODUCTION_DATABASE, 'tammewar_pharmacy_prod');
+});
+
+// mongorestore can exit 0 having written nothing. The first real drill of this
+// tooling did exactly that — the target database was passed in the connection
+// string as well as in --nsTo, so the archive's namespaces matched nothing and
+// an empty restore was reported as a success. These lock that behaviour out.
+test('an empty restore is refused, however cleanly mongorestore exited', () => {
+  assert.throws(() => assertRestoreComplete({}, null), /empty database/);
+  assert.throws(() => assertRestoreComplete({ customers: 0, bills: 0 }, null), /0 documents/);
+  assert.throws(
+    () => assertRestoreComplete({ customers: 0 }, { sourceDocuments: 162 }),
+    /empty database/,
+  );
+});
+
+test('a restore that loses documents is refused', () => {
+  assert.throws(
+    () => assertRestoreComplete({ customers: 6, bills: 6 }, { sourceDocuments: 162 }),
+    /taken from 162 documents but 12 were restored/,
+  );
+});
+
+test('a complete restore returns its document total', () => {
+  assert.equal(assertRestoreComplete({ customers: 6, bills: 156 }, { sourceDocuments: 162 }), 162);
+  // An archive whose manifest predates count recording cannot be cross-checked,
+  // but must still be accepted when it clearly restored something.
+  assert.equal(assertRestoreComplete({ customers: 6 }, null), 6);
+  assert.equal(assertRestoreComplete({ customers: 6 }, {}), 6);
 });

@@ -142,14 +142,13 @@ cluster this is a present exposure, not a hypothetical one. It was left
 untouched because it backs a running system and tightening it could interrupt
 the pharmacy's current app.
 
-- [ ] **M-25 — Retire or secure the development project:** There is no
-      migration, so `medical_stock_system` is a development environment rather
-      than a source of record. It nonetheless has `0.0.0.0/0` on its allowlist
-      and an `atlasAdmin` database user. Either delete the project outright —
-      the audit confirmed it holds no plaintext credentials or provider tokens,
-      so nothing needs shredding first — or, if it stays as a development
-      environment, remove `0.0.0.0/0` and downgrade its user to least
-      privilege. Do not leave it as it is.
+- [x] **M-25 — Secure the development project:** Done on 2026-08-22. The
+      project is kept as a development environment. `0.0.0.0/0` was removed
+      from `medical_stock_system` after registering the administrator device,
+      and `medical_stock_system_db_user` was downgraded from `atlasAdmin` to
+      `readWrite` on only the two databases that exist, scoped to `Cluster0`.
+      Anything that connected from an unlisted address, or relied on
+      administrative privileges, will need attention.
 
 ## Phase 8 — resolved, no migration
 
@@ -186,25 +185,43 @@ device-side and account-side actions. See `BACKUP_RUNBOOK.md`.
       daily on the administrator device (Task Scheduler or `cron`), never in
       the Render web process. Keep at least one encrypted copy away from the
       pharmacy computer.
-- [ ] **M-18 — First restore drill:** Run `npm run backup:restore-verify`
-      against an isolated verification database, compare counts and business
-      totals with production, inspect ten representative records, then drop the
-      verification database and record the date. **A backup that has not been
-      restored is not a verified backup, and this gate blocks go-live.**
+- [ ] **M-18 — Restore drill against real data:** The tooling is proven (see
+      above). Once the owner has entered real records, run
+      `npm run backup:restore-verify` against an isolated verification
+      database, compare counts and business totals, inspect ten representative
+      records, then drop the verification database and record the date.
+      **A backup that has not been restored is not a verified backup.** With no
+      prior system, the production database is the only copy of the owner's
+      data from the moment they start typing.
 
-### Tooling validated end to end on 2026-08-22
+### Full drill completed on 2026-08-22
 
-The backup path was exercised against real Atlas, using the disposable
-`medical_stock_system` development cluster so production was never touched:
-`mongodump` produced a 1.44 MB gzip archive, encryption wrote a 1.44 MB
-AES-256-GCM file with a recorded SHA-256, decryption returned exactly the
-original byte count, and `mongorestore --dryRun` parsed the archive's
-collection catalogue without error. The decrypted plaintext was deleted
-immediately afterwards.
+The whole backup path was exercised against real Atlas on the disposable
+`medical_stock_system` development cluster, so production was never touched.
+Backup: 17 collections and 162 documents dumped, gzipped, and encrypted to a
+1.44 MB AES-256-GCM archive with its SHA-256 recorded. Restore: the manifest
+digest verified, the archive decrypted, and `mongorestore` wrote into an
+isolated `restore_drill_check` database.
 
-That validates every step except a real write. M-18 still stands: a drill is
-only complete when documents have actually landed in a database and their
-counts have been compared.
+Result — all 17 collections and all 162 documents came back, every business
+total matched the source exactly (6 customers, 6 bills totalling 61,722.26,
+4 payments totalling 2,798.00, 1,701 stock units, 58,924.26 outstanding), and
+the three unique indexes were recreated. The drill database was dropped and
+the decrypted plaintext deleted.
+
+**The first attempt failed, and is worth recording.** It reported
+`"restore": "ok"` while restoring nothing. Two defects caused it: the target
+database was passed both in the connection string and in `--nsTo`, so
+mongorestore filtered the archive to a name it never contained and matched no
+namespaces; and the script inferred success from mongorestore's exit code
+rather than from what actually arrived. Both are fixed — the URI is stripped to
+the cluster before mongorestore sees it, the manifest now records the source
+document count, and the restore refuses to report success on an empty or
+short database. `backend/test/backupRetention.test.js` covers the guard.
+
+This proves the tooling. It does not yet prove a backup of the owner's data,
+because there is none. Repeat the drill against production once the owner has
+entered real records — that is what M-18 now tracks.
 
 ## Phases 10-13 — hosting and owner account
 

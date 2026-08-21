@@ -22,6 +22,7 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const { spawn } = require('node:child_process');
+const mongoose = require('mongoose');
 
 const { encryptFile } = require('./lib/archiveCrypto');
 const { redact } = require('../src/services/logger');
@@ -90,6 +91,26 @@ const runMongodump = async ({ uri, archivePath, scratch }) => {
 
 // 2026-08-21T09:30:15.123Z -> 2026-08-21T093015Z: sortable, filename-safe, and
 // matched by ARCHIVE_PATTERN above.
+/**
+ * Counts the source documents so the manifest can state what the archive was
+ * taken from. Without this the restore drill can only report what came back,
+ * with nothing to compare it against.
+ */
+const countSourceDocuments = async (uri) => {
+  await mongoose.connect(uri, { serverSelectionTimeoutMS: 15000, maxPoolSize: 1 });
+  try {
+    const db = mongoose.connection.db;
+    const collections = await db.listCollections({}, { nameOnly: true }).toArray();
+    const counts = {};
+    for (const { name } of collections.sort((a, b) => a.name.localeCompare(b.name))) {
+      counts[name] = await db.collection(name).countDocuments();
+    }
+    return { counts, total: Object.values(counts).reduce((sum, n) => sum + n, 0) };
+  } finally {
+    await mongoose.disconnect().catch(() => {});
+  }
+};
+
 const timestampFor = (date) => date.toISOString().replace(/\.\d{3}Z$/, 'Z').replace(/:/g, '');
 
 const parseArchiveDate = (fileName) => {
@@ -159,6 +180,11 @@ const main = async () => {
   const scratch = await fs.promises.mkdtemp(path.join(os.tmpdir(), 'tammewar-dump-'));
   const plaintextPath = path.join(scratch, 'dump.archive.gz');
 
+  // Counted before the dump so the figure describes the same data mongodump
+  // is about to read. A busy source could still drift between the two; for a
+  // single-owner pharmacy taking a nightly backup, it will not.
+  const source = await countSourceDocuments(uri);
+
   let manifest;
   try {
     await runMongodump({ uri, archivePath: plaintextPath, scratch });
@@ -172,6 +198,9 @@ const main = async () => {
       plaintextBytes: encrypted.plaintextBytes,
       ciphertextBytes: encrypted.ciphertextBytes,
       sha256: encrypted.sha256,
+      sourceCollections: Object.keys(source.counts).length,
+      sourceDocuments: source.total,
+      sourceCounts: source.counts,
       cipher: 'aes-256-gcm',
       keyDerivation: 'scrypt',
       toolVersion: 1,
