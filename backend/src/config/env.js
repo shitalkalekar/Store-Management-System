@@ -51,6 +51,29 @@ env.assertSafeConfiguration = () => {
     if (env.ONLINE_RESTORE_ENABLED) throw new Error('Online database restore must be disabled in production');
     if (env.INTERNAL_AUTH_ENABLED) throw new Error('Internal multi-tenant auth cannot be enabled until every pharmacy model is tenant-scoped');
     if (env.CORS_ORIGINS.length === 0) throw new Error('CORS_ORIGINS must be configured in production');
+    // Phase 12: production accepts only exact https origins. A wildcard, a
+    // localhost entry, or a trailing path would widen the browser boundary
+    // beyond the one deployed frontend.
+    for (const origin of env.CORS_ORIGINS) {
+      if (origin === '*' || origin.includes('*')) {
+        throw new Error('CORS_ORIGINS must not contain a wildcard in production');
+      }
+      let parsed;
+      try {
+        parsed = new URL(origin);
+      } catch (_err) {
+        throw new Error(`CORS_ORIGINS entry is not a valid origin: ${origin}`);
+      }
+      if (parsed.protocol !== 'https:') {
+        throw new Error('Every production CORS origin must use https');
+      }
+      if (['localhost', '127.0.0.1', '::1', '0.0.0.0'].includes(parsed.hostname)) {
+        throw new Error('Localhost origins must not be allowed in production');
+      }
+      if (origin !== parsed.origin) {
+        throw new Error(`CORS_ORIGINS entry must be a bare origin with no path or trailing slash: ${origin}`);
+      }
+    }
     if (!process.env.MONGO_URI || !env.MONGO_URI.startsWith('mongodb+srv://')) {
       throw new Error('Production MONGO_URI must be an Atlas mongodb+srv connection string');
     }
