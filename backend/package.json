@@ -9,7 +9,10 @@
     "dev": "nodemon server.js",
     "secret:generate": "node scripts/generateSecret.js",
     "atlas:verify": "node scripts/verifyAtlasAccess.js",
-    "test": "node --test"
+    "test": "node --test",
+    "owner:create": "node scripts/createOwner.js",
+    "backup:create": "node scripts/backupDatabase.js",
+    "backup:restore-verify": "node scripts/restoreBackup.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

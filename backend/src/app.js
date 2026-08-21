@@ -17,8 +17,15 @@ app.use(assignRequestId);
 app.use(logger.requestLogger);
 app.use(cors({
   origin(origin, callback) {
-    if (!origin || env.CORS_ORIGINS.includes(origin)) return callback(null, true);
-    return callback(new Error('Origin not allowed by CORS policy'));
+    // A missing Origin is a non-browser caller (health checks, curl); those are
+    // still gated by the Authorization header on every application route.
+    if (!origin) return callback(null, true);
+    if (env.CORS_ORIGINS.includes(origin)) return callback(null, true);
+    // Reject by withholding Access-Control-Allow-Origin rather than by
+    // throwing. The browser blocks the response either way, and this keeps a
+    // probe from turning into a 500 in the error log.
+    logger.write('warn', 'cors_origin_rejected', { origin });
+    return callback(null, false);
   },
   credentials: false,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],

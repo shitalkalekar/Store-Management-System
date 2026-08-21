@@ -9,6 +9,7 @@ const Customer = require('../src/models/customer');
 const Order = require('../src/models/order');
 const Product = require('../src/models/product');
 const Setting = require('../src/models/setting');
+const Expense = require('../src/models/expense');
 const User = require('../src/models/user');
 const JobRun = require('../src/models/jobRun');
 const { inspectValue } = require('../src/middleware/requestSecurity');
@@ -77,6 +78,26 @@ test('pharmacy schemas enforce bounded customer, order, setting, and credential 
   assert.equal(new User({ email: 'owner@example.com', password: 'A'.repeat(64), role: 'admin', name: 'Owner', mobile: '9999999999' }).toJSON().password, undefined);
   assert.equal(new Setting({ whatsappToken: 'provider-secret' }).toJSON().whatsappToken, undefined);
   assert.equal(new Product({ hsnCode: 'HSN3004' }).validateSync()?.errors.hsnCode, undefined);
+});
+
+test('an expense receipt must be an image or PDF data URI', () => {
+  const receipt = (value) => new Expense({
+    category: 'fuel',
+    amount: 1,
+    branch: '000000000000000000000001',
+    receiptImage: value,
+  }).validateSync()?.errors?.receiptImage?.message;
+
+  // The stored value is rendered in an iframe and opened in a new tab, so a
+  // scheme or markup payload must never survive validation.
+  assert.match(receipt('javascript:alert(1)'), /image or PDF data URI/);
+  assert.match(receipt('"><img src=x onerror=alert(1)>'), /image or PDF data URI/);
+  assert.match(receipt('data:text/html;base64,PHNjcmlwdD4='), /image or PDF data URI/);
+  assert.match(receipt('https://attacker.test/receipt.png'), /image or PDF data URI/);
+
+  assert.equal(receipt('data:image/png;base64,iVBORw0KGgo='), undefined);
+  assert.equal(receipt('data:application/pdf;base64,JVBERi0='), undefined);
+  assert.equal(receipt(''), undefined, 'an expense may have no receipt');
 });
 
 test('recurring-order scheduling state and due-date calculation are bounded', () => {
