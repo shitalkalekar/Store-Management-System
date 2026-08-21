@@ -78,4 +78,12 @@ test('the audited database name is parsed from its URI', () => {
   );
   assert.throws(() => databaseFrom('mongodb+srv://u:p@cluster.example.mongodb.net/'), /must name the database/);
   assert.throws(() => databaseFrom('nonsense'), /not a valid connection string/);
+
+  // With required:false a missing database name is legal; the caller then
+  // lists what the cluster holds instead of auditing.
+  assert.equal(databaseFrom('mongodb+srv://u:p@cluster.example.mongodb.net/', { required: false }), '');
+  assert.equal(
+    databaseFrom('mongodb+srv://u:p@cluster.example.mongodb.net/medical_stock', { required: false }),
+    'medical_stock',
+  );
 });

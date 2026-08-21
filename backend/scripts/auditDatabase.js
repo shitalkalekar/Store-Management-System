@@ -40,7 +40,10 @@ const fail = (message) => {
   throw error;
 };
 
-const databaseFrom = (uri) => {
+// Returns '' when the URI names no database. That is a supported way to run
+// the script: it then lists what the cluster holds so the right source
+// database can be chosen on evidence rather than guessed.
+const databaseFrom = (uri, { required = true } = {}) => {
   let parsed;
   try {
     parsed = new URL(uri);
@@ -48,16 +51,76 @@ const databaseFrom = (uri) => {
     return fail('AUDIT_MONGO_URI is not a valid connection string');
   }
   const name = decodeURIComponent(parsed.pathname.replace(/^\//, '').split('/')[0] || '');
-  if (!name) fail('AUDIT_MONGO_URI must name the database to audit');
+  if (!name && required) fail('AUDIT_MONGO_URI must name the database to audit');
   return name;
 };
 
+/** Lists the databases on the cluster with their sizes, then stops. */
+const listDatabases = async () => {
+  const { databases } = await mongoose.connection.db.admin().command({ listDatabases: 1 });
+  const business = databases
+    .filter((d) => !['admin', 'local', 'config'].includes(d.name))
+    .sort((a, b) => (b.sizeOnDisk || 0) - (a.sizeOnDisk || 0));
+
+  console.log('\nAUDIT_MONGO_URI names no database, so nothing was audited.');
+  console.log('This cluster holds:\n');
+  console.log('Database'.padEnd(34) + 'Size on disk'.padStart(14));
+  console.log('-'.repeat(48));
+  for (const d of business) {
+    const mb = d.sizeOnDisk == null ? 'unknown' : `${(d.sizeOnDisk / 1048576).toFixed(2)} MB`;
+    console.log(d.name.padEnd(34) + mb.padStart(14));
+  }
+  if (!business.length) console.log('(no application databases)');
+  console.log('\nAdd the chosen name to the end of the URI path and re-run.');
+};
+
+// Field names come from the Mongoose models in src/models, not from guesses.
+// A total that silently reads 0 because the field does not exist is worse than
+// no total at all, so `sumField` reports how many documents actually carried a
+// numeric value alongside the sum.
 const sumField = async (db, collection, field, filter = {}) => {
   const [row] = await db.collection(collection).aggregate([
     { $match: filter },
-    { $group: { _id: null, total: { $sum: `$${field}` } } },
+    {
+      $group: {
+        _id: null,
+        total: { $sum: `$${field}` },
+        present: { $sum: { $cond: [{ $isNumber: `$${field}` }, 1, 0] } },
+        documents: { $sum: 1 },
+      },
+    },
+  ]).toArray();
+  return {
+    total: Number((row?.total || 0).toFixed(2)),
+    present: row?.present || 0,
+    documents: row?.documents || 0,
+  };
+};
+
+const sumProduct = async (db, collection, fieldA, fieldB) => {
+  const [row] = await db.collection(collection).aggregate([
+    {
+      $group: {
+        _id: null,
+        total: { $sum: { $multiply: [{ $ifNull: [`$${fieldA}`, 0] }, { $ifNull: [`$${fieldB}`, 0] }] } },
+      },
+    },
   ]).toArray();
   return Number((row?.total || 0).toFixed(2));
+};
+
+// Flags a total whose field was missing from every document, so a misnamed
+// field shows up as a finding rather than as a confident zero.
+const recordTotal = (report, key, result) => {
+  report.businessTotals[key] = result.total;
+  if (result.documents > 0 && result.present === 0) {
+    report.findings.push({
+      severity: 'high',
+      collection: key,
+      issue: 'total could not be computed',
+      note: `No document carried a numeric value for this field across ${result.documents} documents. The field name is wrong for this schema; do not reconcile against this zero.`,
+    });
+  }
 };
 
 const collectionExists = (names, name) => names.includes(name);
@@ -101,9 +164,14 @@ const scanCollection = async (db, name, sampleSize) => {
 const main = async () => {
   const uri = process.env.AUDIT_MONGO_URI || '';
   if (!uri) fail('AUDIT_MONGO_URI is required');
-  const expectedDb = databaseFrom(uri);
+  const expectedDb = databaseFrom(uri, { required: false });
 
   await mongoose.connect(uri, { serverSelectionTimeoutMS: 15000, maxPoolSize: 1 });
+  if (!expectedDb) {
+    await listDatabases();
+    return;
+  }
+
   const db = mongoose.connection.db;
   if (db.databaseName !== expectedDb) fail('Connected to an unexpected database');
 
@@ -169,17 +237,22 @@ const main = async () => {
   const totals = report.businessTotals;
   if (collectionExists(names, 'products')) {
     totals.productCount = report.collections.products.documents;
-    totals.stockUnits = await sumField(db, 'products', 'quantity');
-    totals.stockValue = await sumField(db, 'products', 'purchasePrice');
+    recordTotal(report, 'stockUnits', await sumField(db, 'products', 'currentStock'));
+    // Inventory value at cost, matching how the stock report values it.
+    totals.stockValueAtCost = await sumProduct(db, 'products', 'currentStock', 'purchasePrice');
+    totals.stockValueAtSale = await sumProduct(db, 'products', 'currentStock', 'price');
   }
   if (collectionExists(names, 'customers')) totals.customerCount = report.collections.customers.documents;
   if (collectionExists(names, 'bills')) {
     totals.billCount = report.collections.bills.documents;
-    totals.billedAmount = await sumField(db, 'bills', 'totalAmount');
+    recordTotal(report, 'billedAmount', await sumField(db, 'bills', 'totalAmount'));
   }
   if (collectionExists(names, 'payments')) {
     totals.paymentCount = report.collections.payments.documents;
-    totals.paidAmount = await sumField(db, 'payments', 'amount');
+    recordTotal(report, 'paidAmount', await sumField(db, 'payments', 'amountPaid'));
+  }
+  if (totals.billedAmount !== undefined && totals.paidAmount !== undefined) {
+    totals.outstandingBalance = Number((totals.billedAmount - totals.paidAmount).toFixed(2));
   }
   if (collectionExists(names, 'orders')) totals.orderCount = report.collections.orders.documents;
   if (collectionExists(names, 'users')) {

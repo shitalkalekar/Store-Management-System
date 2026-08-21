@@ -127,6 +127,47 @@ renamed or relocated in place.
 - [x] The GitHub repository is private.
 - [x] Old pre-rewrite repository clones have been removed.
 
+## Source system exposure, found 2026-08-21
+
+While identifying the Phase 8 migration source, the **existing live** project
+`medical_stock_system` (cluster `Cluster0`) was found to have the same two
+weaknesses the production project had:
+
+- `0.0.0.0/0` in its network allowlist — it accepts connections from the whole
+  internet;
+- its only database user, `medical_stock_system_db_user`, holds `atlasAdmin`.
+
+This project holds the real pharmacy records, so unlike the empty production
+cluster this is a present exposure, not a hypothetical one. It was left
+untouched because it backs a running system and tightening it could interrupt
+the pharmacy's current app.
+
+- [ ] **M-25 — Secure the source project:** Before or immediately after the
+      migration, remove `0.0.0.0/0` from `medical_stock_system` and replace the
+      `atlasAdmin` user with a least-privilege one, having first confirmed
+      which hosts the current application connects from. If the source system
+      is being retired at go-live, decommission the project instead and keep
+      only the encrypted Phase 8 export.
+
+## Phase 8 — source data unresolved (blocker)
+
+- [ ] **M-26 — Locate the authoritative records.** The audit of the
+      `medical_stock_system` cluster on 2026-08-22 found two development-sized
+      databases (6 customers at most) and nothing resembling the ~250 customer
+      records this deployment is sized for. Establish, with the owner, whether
+      the real records exist in a system not yet examined, or whether the
+      pharmacy's records have never been digitised and the deployment starts
+      empty. Nothing may be migrated until this is answered — migrating a
+      development dataset into production and calling it done is the specific
+      failure Phase 8 exists to prevent.
+- [ ] **M-27 — Source credential rotated.** The password for
+      `medical_stock_system_db_user` was reset on 2026-08-22 at the user's
+      instruction so the audit could run. **Any application still
+      authenticating as that user is broken until its connection string is
+      updated.** The new value was written to a private file on the
+      administrator device rather than into this repository or the chat
+      transcript; move it into the password manager and delete that file.
+
 ## Phase 9 — encrypted backups (launch blocker)
 
 Tooling and procedure are implemented in the repository; these are the

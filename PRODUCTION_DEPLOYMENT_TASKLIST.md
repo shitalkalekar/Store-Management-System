@@ -230,12 +230,49 @@ passes and organization-wide Require MFA is on.**
 
 ## 8. Validate and migrate data
 
+`npm run data:audit` performs the read-only inventory. It reports collection
+counts, indexes and uniqueness, the business totals below, demo-looking
+records, and credential-shaped fields. Point it at a cluster with no database
+in the URI path and it lists what that cluster holds instead of guessing.
+
+**The authoritative database has not been found.** Audited on 2026-08-22 (see
+the findings note below this list):
+
+| | `medical_stock_system` | `medical_stock_system=Cluster0` |
+| --- | --- | --- |
+| collections / documents | 21 / 76 | 17 / 162 |
+| customers | 2 | 6 |
+| products | 4 | 5 |
+| bills / billed | 2 / 643.10 | 6 / 61,722.26 |
+| payments / paid | 1 / 289.10 | 4 / 2,798.00 |
+| outstanding | 354.00 | 58,924.26 |
+| stock units | 298 | 1,701 |
+| users | 4 (1 admin, 3 staff) | 6 (2 admin, 4 staff) |
+
 - [ ] Identify the authoritative local database; do not assume the currently
-      connected development database is authoritative.
-- [ ] Record collection and document counts by business entity.
+      connected development database is authoritative. **Unresolved.** Neither
+      database on the source cluster is plausibly the pharmacy's live record:
+      the largest holds 6 customers against the ~250 this deployment is sized
+      for. Both look like development datasets. The real records are either on
+      a machine not yet examined, or have never been digitised. This must be
+      settled before anything is migrated.
+- [x] Record collection and document counts by business entity. Captured for
+      both candidates; the JSON baselines are held outside the repository.
 - [ ] Remove demo data, duplicate records, and unused development accounts.
-- [ ] Check for plaintext credentials or provider tokens in documents.
-- [ ] Record inventory totals, outstanding balances, bills, and payments.
+      Both candidates carry staff and second-administrator accounts that must
+      not survive into a single-owner deployment, and `medical_stock_system`
+      has at least one demo-looking product.
+- [x] Check for plaintext credentials or provider tokens in documents. Clean:
+      every password in `users` and `customers` is a bcrypt hash, and no
+      WhatsApp or Razorpay secret is present in any document. Note that two
+      customer records in `medical_stock_system=Cluster0` carry hashed
+      passwords from the retired customer-login feature; that field must be
+      dropped during migration, not carried across.
+- [x] Record inventory totals, outstanding balances, bills, and payments. See
+      the table above. Two data-quality notes: `purchasePrice` is unset on
+      every product, so inventory cannot be valued at cost — only at sale
+      price; and the `=Cluster0` database name is itself a defect, created by a
+      malformed connection string leaking `=Cluster0` into the database name.
 - [ ] Produce an encrypted logical `mongodump`; do not copy `data/db` files.
 - [ ] Restore with current MongoDB Database Tools and `mongorestore`.
 - [ ] Do not restore database users or roles.
