@@ -32,29 +32,89 @@ secret, password, recovery code, or connection string into this repository.
       GitHub password, infrastructure passwords, database password, and JWT
       secret are all distinct.
 
-## Phase 7 — reported complete on 2026-08-21
+## Phase 7 — verified against Atlas on 2026-08-21: NOT complete
 
-The user reported the Atlas console work complete. The agent cannot read
-another account's Atlas console, so M-10 through M-13 are recorded as
-user-confirmed rather than independently verified. M-14 is the one item that
-produces repository-side evidence — run it and keep the output.
+Phase 7 was reported complete, but a direct read of the Atlas project with the
+Atlas CLI (`nraghuvanshi100@gmail.com`, org `tammewar-pharmacy-production`,
+project `tammewar_pharmacy_prod`, cluster `tammewar-pharmacy-prod`) contradicts
+that for four of the five items.
 
-- [x] **M-10 — Atlas ownership and MFA:** In the production Atlas organization,
+Whether the cluster held data at the time is **not established**. The Atlas
+monitoring `listDatabases` endpoint returned `totalCount: 0`, but it returns
+the same for every Free cluster in this account, including ones known to hold
+data — the endpoint does not report on shared tiers. Do not read that zero as
+evidence of an empty database. Confirming the contents requires a real
+`mongosh` connection.
+
+What is genuinely in place:
+
+- The dedicated org, project, and M0 cluster exist, with no sample data.
+- Project membership is a single person.
+- Alerts are configured, including `LOGICAL_SIZE` at 440 MB and
+  `CONNECTIONS_PERCENT` at 80.
+
+What is not:
+
+| Finding | Evidence | Item |
+| --- | --- | --- |
+| `tammewar_app` holds `readWriteAnyDatabase` on `admin`, not `readWrite` on the application database. It can read and write every database on the cluster. | `atlas dbusers list` | M-12 |
+| A second database user, `nraghuvanshi100_db_user`, holds `atlasAdmin`. | `atlas dbusers list` | M-12 |
+| The network allowlist contains `0.0.0.0/0` — the database accepts connections from the entire internet. | `atlas accessLists list` | M-13 |
+| Termination protection is disabled, though the control is available. | `terminationProtectionEnabled: false` | M-11 |
+| The organization-wide Require MFA control is off. | `multiFactorAuthRequired: false` | M-10 |
+
+`npm run atlas:verify` would have caught the first finding on its own — it
+fails any role outside `readWrite` on `MONGO_DB_NAME`. Treat M-14 as not yet
+run, and re-run it as the closing check once M-10 through M-13 are corrected.
+
+### Remediation applied on 2026-08-21, with the user's approval
+
+- **Fixed.** `tammewar_app` now holds exactly `readWrite` on
+  `tammewar_pharmacy_prod`, scoped to cluster `tammewar-pharmacy-prod`. Its
+  password was not changed, so nothing already stored needs updating.
+- **Fixed.** `nraghuvanshi100_db_user` (`atlasAdmin`) was deleted.
+  `tammewar_app` is now the only database user in the project, and its
+  privileges are sufficient for the Phase 8 migration and the Phase 9 restore.
+- **Fixed.** `0.0.0.0/0` was removed from the network allowlist. The trusted
+  device's current address `103.251.209.136/32` was registered first so the
+  removal could not cause a lockout.
+- **Blocked, not a defect.** Termination protection cannot be enabled: Atlas
+  rejects every public-API update to an M0 cluster
+  (`TENANT_CLUSTER_UPDATE_UNSUPPORTED`), and the CLI refuses it below M10. The
+  task list qualifies this item with "if available". Check the console once; if
+  the control is not offered for Free clusters, record M-11 as not applicable
+  and rely on the fact that a deleted cluster is recoverable only from a
+  Phase 9 backup — which is another reason that backup must be real.
+
+**Note on the allowlist:** the pre-existing entry was `103.251.209.156/32` but
+the same machine now presents `103.251.209.136/32`. The address is dynamic, so
+allowlist entries will go stale and produce confusing connection failures. Once
+Render's outbound ranges are added in Phase 10, remove both administrator
+entries and re-add one only for the duration of a maintenance session.
+
+Also noted, not a defect: the cluster is in AWS `AP_SOUTH_1` (Mumbai) rather
+than the Singapore the runbook assumed. Mumbai is the better choice for an
+Indian pharmacy, but Render Free has no Mumbai region, so Phase 10 should place
+Render in Singapore and accept the cross-region hop. Update the runbook's
+region assumption rather than moving the cluster; an Atlas cluster cannot be
+renamed or relocated in place.
+
+- [ ] **M-10 — Atlas ownership and MFA:** In the production Atlas organization,
       configure two MFA methods for each administrator and enable the
       organization-wide Require MFA control.
-- [x] **M-11 — Dedicated Free cluster:** Create project
+- [ ] **M-11 — Dedicated Free cluster:** Create project
       `tammewar-pharmacy-production` and Free/M0 cluster
       `tammewar-pharmacy-prod`, preferably AWS Singapore, with no sample data
       and termination protection enabled when available.
-- [x] **M-12 — Least-privilege application user:** Create `tammewar_app` with
+- [ ] **M-12 — Least-privilege application user:** Create `tammewar_app` with
       only `readWrite` on `tammewar_pharmacy_prod`, restricted to the production
       cluster where available. Store its generated password only in the team
       password manager and later in Render.
-- [x] **M-13 — Network and alerts:** Temporarily allowlist only the trusted
+- [ ] **M-13 — Network and alerts:** Temporarily allowlist only the trusted
       migration device, never `0.0.0.0/0`; configure available Logical Size,
       Connections, and administrative-change notifications. Add Render's full
       service-specific outbound CIDR list during Phase 10.
-- [x] **M-14 — Access verification:** Inject the Atlas URI from the password
+- [ ] **M-14 — Access verification:** Inject the Atlas URI from the password
       manager and run `cd backend && npm.cmd run atlas:verify`. Retain the
       non-secret success output in the private operations record. Re-run this
       after Phase 10 adds Render's outbound ranges, and after any change to the

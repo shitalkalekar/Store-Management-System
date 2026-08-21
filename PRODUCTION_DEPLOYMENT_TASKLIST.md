@@ -193,26 +193,40 @@ The account-console work remains M-10 through M-14 in
 `MANUAL_PRODUCTION_TASKS.md` and is a blocker before Phase 8. Follow
 `ATLAS_FREE_SETUP_RUNBOOK.md`.
 
-- [x] Create a dedicated production Atlas project and enable account MFA.
-- [x] Create one M0 Free cluster near Render, preferably Singapore.
-- [x] Use a production-specific database name.
-- [x] Enable termination protection if available.
+- [x] Create a dedicated production Atlas project and enable account MFA. The
+      project exists; the organization-wide Require MFA control is still off.
+- [x] Create one M0 Free cluster near Render, preferably Singapore. Created in
+      AWS `AP_SOUTH_1` (Mumbai). Acceptable and arguably better for an Indian
+      pharmacy, but Render Free has no Mumbai region, so Phase 10 places Render
+      in Singapore and accepts the cross-region hop.
+- [x] Use a production-specific database name (`tammewar_pharmacy_prod`).
+- [ ] Enable termination protection if available. Not settable on a Free
+      cluster: Atlas rejects public-API updates to M0
+      (`TENANT_CLUSTER_UPDATE_UNSUPPORTED`). Confirm in the console whether the
+      control exists for Free clusters; if not, record as not applicable.
 - [x] Create a dedicated application database user with access only to the
-      application database.
+      application database. Corrected on 2026-08-21: `tammewar_app` now holds
+      exactly `readWrite` on `tammewar_pharmacy_prod`, scoped to the production
+      cluster, and the stray `atlasAdmin` user was deleted.
 - [x] Generate a long random database password and store it only in Render.
 - [ ] Allow only Render's documented outbound ranges where possible. Deferred
       to Phase 10: the ranges cannot be read until the Render service exists.
-- [x] Avoid `0.0.0.0/0`; if temporarily unavoidable, document it and retain
-      strong TLS, SCRAM credentials, least privilege, and monitoring.
-- [x] Configure available storage and connection alerts.
-- [x] Confirm the application cannot access unrelated databases.
+- [x] Avoid `0.0.0.0/0`. Removed on 2026-08-21; the allowlist now holds only
+      the trusted administrator addresses.
+- [x] Configure available storage and connection alerts. `LOGICAL_SIZE` at
+      440 MB and `CONNECTIONS_PERCENT` at 80 are enabled.
+- [ ] Confirm the application cannot access unrelated databases. It currently
+      can.
 
-The Atlas console work (M-10 through M-14) was reported complete by the user on
-2026-08-21. The agent cannot read another account's Atlas console, so those
-items are recorded as user-confirmed. Re-run `cd backend && npm run atlas:verify`
-from an allowlisted device and retain the non-secret output; it is the
-repository-side proof that the application user has exactly `readWrite` on
-`tammewar_pharmacy_prod` and is denied every other database.
+Phase 7 was reported complete on 2026-08-21 and independently verified against
+Atlas the same day with the Atlas CLI. Four of the five console items did not
+hold; three were corrected the same day and one is a Free-tier platform limit.
+The evidence and remediation record is in `MANUAL_PRODUCTION_TASKS.md`.
+Whether the cluster held data while `0.0.0.0/0` was in place is not
+established: the Atlas monitoring `listDatabases` endpoint reports nothing for
+any Free cluster, so its zero is not evidence of an empty database.
+**Phase 8 must not migrate customer records until `npm run atlas:verify`
+passes and organization-wide Require MFA is on.**
 
 ## 8. Validate and migrate data
 
