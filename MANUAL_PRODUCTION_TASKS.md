@@ -10,8 +10,13 @@ secret, password, recovery code, or connection string into this repository.
 - [ ] **M-01 — Production JWT secret:** When configuring Render, run
       `cd backend && npm run secret:generate`, then store the result directly
       in the password manager and Render as `JWT_SECRET`.
-- [ ] **M-02 — MongoDB credentials:** Create or rotate the dedicated Atlas
-      application user before Render connects to the production database.
+- [x] **M-02 — MongoDB credentials:** `tammewar_app` exists with least
+      privilege, and its password was rotated on 2026-08-22. The original was
+      not recoverable — Atlas displays a database password once at creation and
+      never again — so it was regenerated. Safe to do at that point because no
+      service had ever connected: no Render deployment existed and the database
+      was empty. The new value must be moved into the password manager and
+      entered into Render as `MONGO_URI`.
 - [ ] **M-03 — Infrastructure MFA:** Enable MFA on Cloudflare, Render, and
       Atlas before production secrets or customer data are added.
 - [ ] **M-04 — Trusted deployment branches:** In Render and Cloudflare, set
@@ -114,11 +119,21 @@ renamed or relocated in place.
       migration device, never `0.0.0.0/0`; configure available Logical Size,
       Connections, and administrative-change notifications. Add Render's full
       service-specific outbound CIDR list during Phase 10.
-- [ ] **M-14 — Access verification:** Inject the Atlas URI from the password
-      manager and run `cd backend && npm.cmd run atlas:verify`. Retain the
-      non-secret success output in the private operations record. Re-run this
-      after Phase 10 adds Render's outbound ranges, and after any change to the
-      application user's roles.
+- [x] **M-14 — Access verification:** Passed for the first time on 2026-08-22:
+      `{"atlasConnection":"ok","database":"tammewar_pharmacy_prod","role":"readWrite","unrelatedDatabaseAccess":"denied"}`.
+      Re-run after Phase 10 adds Render's outbound ranges, and after any change
+      to the application user's roles.
+
+      The first run failed, and the failure was in the verifier rather than in
+      the privileges. It recognised an authorization denial only by the
+      self-hosted MongoDB shape (`code: 13` / `Unauthorized`), while Atlas wraps
+      the same refusal as `code: 8000` / `AtlasError` — so the one script whose
+      job is proving least privilege reported a false failure against the only
+      platform it targets. Fixed, and its denial detection is now pinned by
+      `backend/test/atlasVerify.test.js`, including the case that matters most:
+      a connectivity error must never be read as a denial, or an unreachable
+      cluster would masquerade as a passing check. That this was never caught is
+      further confirmation the original M-14 sign-off never ran the command.
 
 ## Confirmed controls
 
