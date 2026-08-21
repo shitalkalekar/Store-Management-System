@@ -18,7 +18,7 @@ secret, password, recovery code, or connection string into this repository.
       `main` as the only production branch. Do not expose production secrets or
       customer data to pull-request/preview deployments.
 
-## Before migrating data or going live
+## Before going live
 
 - [ ] **M-05 — Owner password:** Give the named pharmacy owner a unique
       password of at least 16 characters and store it in the password manager.
@@ -142,41 +142,41 @@ cluster this is a present exposure, not a hypothetical one. It was left
 untouched because it backs a running system and tightening it could interrupt
 the pharmacy's current app.
 
-- [ ] **M-25 — Secure the source project:** Before or immediately after the
-      migration, remove `0.0.0.0/0` from `medical_stock_system` and replace the
-      `atlasAdmin` user with a least-privilege one, having first confirmed
-      which hosts the current application connects from. If the source system
-      is being retired at go-live, decommission the project instead and keep
-      only the encrypted Phase 8 export.
+- [ ] **M-25 — Retire or secure the development project:** There is no
+      migration, so `medical_stock_system` is a development environment rather
+      than a source of record. It nonetheless has `0.0.0.0/0` on its allowlist
+      and an `atlasAdmin` database user. Either delete the project outright —
+      the audit confirmed it holds no plaintext credentials or provider tokens,
+      so nothing needs shredding first — or, if it stays as a development
+      environment, remove `0.0.0.0/0` and downgrade its user to least
+      privilege. Do not leave it as it is.
 
-## Phase 8 — source data unresolved (blocker)
+## Phase 8 — resolved, no migration
 
-- [ ] **M-26 — Locate the authoritative records.** The audit of the
-      `medical_stock_system` cluster on 2026-08-22 found two development-sized
-      databases (6 customers at most) and nothing resembling the ~250 customer
-      records this deployment is sized for. Establish, with the owner, whether
-      the real records exist in a system not yet examined, or whether the
-      pharmacy's records have never been digitised and the deployment starts
-      empty. Nothing may be migrated until this is answered — migrating a
-      development dataset into production and calling it done is the specific
-      failure Phase 8 exists to prevent.
+- [x] **M-26 — Locate the authoritative records.** Resolved on 2026-08-22:
+      there are none. The pharmacy's records were never digitised and the
+      project has not been handed over yet, so production starts empty. The
+      audit of the `medical_stock_system` cluster stands as the evidence that
+      the two development databases there are not the pharmacy's live record
+      and must not be migrated.
 - [ ] **M-27 — Source credential rotated.** The password for
       `medical_stock_system_db_user` was reset on 2026-08-22 at the user's
       instruction so the audit could run. **Any application still
       authenticating as that user is broken until its connection string is
       updated.** The new value was written to a private file on the
       administrator device rather than into this repository or the chat
-      transcript; move it into the password manager and delete that file.
+      transcript; move it into the password manager and delete that file. With
+      no migration to perform, this credential is only needed if the
+      development project is kept; if M-25 retires the project, the credential
+      dies with it.
 
 ## Phase 9 — encrypted backups (launch blocker)
 
 Tooling and procedure are implemented in the repository; these are the
 device-side and account-side actions. See `BACKUP_RUNBOOK.md`.
 
-- [ ] **M-15 — MongoDB Database Tools:** Install the current tools on the
-      trusted administrator device so `mongodump` and `mongorestore` are on
-      `PATH`. The versions bundled with older MongoDB server installs are not
-      supported against current Atlas.
+- [x] **M-15 — MongoDB Database Tools:** Installed on the administrator Mac on
+      2026-08-22: Database Tools 100.16.1, `mongosh` 2.9.2, Atlas CLI 1.58.1.
 - [ ] **M-16 — Backup user and passphrase:** Create Atlas user
       `tammewar_backup` with built-in `read` on `tammewar_pharmacy_prod` only —
       not the application user. Generate an archive passphrase of at least 20
@@ -191,6 +191,20 @@ device-side and account-side actions. See `BACKUP_RUNBOOK.md`.
       totals with production, inspect ten representative records, then drop the
       verification database and record the date. **A backup that has not been
       restored is not a verified backup, and this gate blocks go-live.**
+
+### Tooling validated end to end on 2026-08-22
+
+The backup path was exercised against real Atlas, using the disposable
+`medical_stock_system` development cluster so production was never touched:
+`mongodump` produced a 1.44 MB gzip archive, encryption wrote a 1.44 MB
+AES-256-GCM file with a recorded SHA-256, decryption returned exactly the
+original byte count, and `mongorestore --dryRun` parsed the archive's
+collection catalogue without error. The decrypted plaintext was deleted
+immediately afterwards.
+
+That validates every step except a real write. M-18 still stands: a drill is
+only complete when documents have actually landed in a database and their
+counts have been compared.
 
 ## Phases 10-13 — hosting and owner account
 

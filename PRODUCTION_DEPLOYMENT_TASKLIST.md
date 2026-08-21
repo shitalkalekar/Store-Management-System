@@ -8,7 +8,11 @@ Last updated: 2026-08-21
 - Render Free: Node.js/Express API
 - MongoDB Atlas M0 Free: application database
 - One application user: the pharmacy owner
-- Approximately 250 customer records
+- The production database starts empty. Confirmed on 2026-08-22: the pharmacy's
+  records were never digitised, and the project has not yet been handed over to
+  the owner. Earlier drafts of this document assumed roughly 250 existing
+  customer records were waiting to be migrated; there are none. Capacity
+  planning for a few hundred records over time still holds.
 - No application media/object-storage requirement
 - Encrypted database backups stored outside Render and Atlas
 
@@ -228,15 +232,16 @@ any Free cluster, so its zero is not evidence of an empty database.
 **Phase 8 must not migrate customer records until `npm run atlas:verify`
 passes and organization-wide Require MFA is on.**
 
-## 8. Validate and migrate data
+## 8. Start the production database clean
 
-`npm run data:audit` performs the read-only inventory. It reports collection
-counts, indexes and uniqueness, the business totals below, demo-looking
-records, and credential-shaped fields. Point it at a cluster with no database
-in the URI path and it lists what that cluster holds instead of guessing.
+There is no migration. The owner confirmed on 2026-08-22 that the pharmacy's
+records have never been digitised and the system has not been handed over, so
+the production database starts empty and every figure below begins at zero.
 
-**The authoritative database has not been found.** Audited on 2026-08-22 (see
-the findings note below this list):
+This section was originally written as a data migration, and the audit work
+done for it still stands as the record of why no migration is happening. The
+two databases on the `medical_stock_system` cluster were audited on 2026-08-22
+and confirmed to be development datasets, not the pharmacy's live record:
 
 | | `medical_stock_system` | `medical_stock_system=Cluster0` |
 | --- | --- | --- |
@@ -245,41 +250,38 @@ the findings note below this list):
 | products | 4 | 5 |
 | bills / billed | 2 / 643.10 | 6 / 61,722.26 |
 | payments / paid | 1 / 289.10 | 4 / 2,798.00 |
-| outstanding | 354.00 | 58,924.26 |
-| stock units | 298 | 1,701 |
 | users | 4 (1 admin, 3 staff) | 6 (2 admin, 4 staff) |
 
-- [ ] Identify the authoritative local database; do not assume the currently
-      connected development database is authoritative. **Unresolved.** Neither
-      database on the source cluster is plausibly the pharmacy's live record:
-      the largest holds 6 customers against the ~250 this deployment is sized
-      for. Both look like development datasets. The real records are either on
-      a machine not yet examined, or have never been digitised. This must be
-      settled before anything is migrated.
-- [x] Record collection and document counts by business entity. Captured for
-      both candidates; the JSON baselines are held outside the repository.
-- [ ] Remove demo data, duplicate records, and unused development accounts.
-      Both candidates carry staff and second-administrator accounts that must
-      not survive into a single-owner deployment, and `medical_stock_system`
-      has at least one demo-looking product.
-- [x] Check for plaintext credentials or provider tokens in documents. Clean:
-      every password in `users` and `customers` is a bcrypt hash, and no
-      WhatsApp or Razorpay secret is present in any document. Note that two
-      customer records in `medical_stock_system=Cluster0` carry hashed
-      passwords from the retired customer-login feature; that field must be
-      dropped during migration, not carried across.
-- [x] Record inventory totals, outstanding balances, bills, and payments. See
-      the table above. Two data-quality notes: `purchasePrice` is unset on
-      every product, so inventory cannot be valued at cost — only at sale
-      price; and the `=Cluster0` database name is itself a defect, created by a
-      malformed connection string leaking `=Cluster0` into the database name.
-- [ ] Produce an encrypted logical `mongodump`; do not copy `data/db` files.
-- [ ] Restore with current MongoDB Database Tools and `mongorestore`.
-- [ ] Do not restore database users or roles.
-- [ ] Compare all source/destination counts and financial/inventory totals.
-- [ ] Confirm indexes and uniqueness constraints were created.
-- [ ] Manually inspect at least ten representative records.
-- [ ] Retain the old database offline and encrypted during verification.
+Neither is migrated. `npm run data:audit` remains the tool for inventorying any
+database read-only, and is used below to prove the production database is clean
+rather than to reconcile a copy.
+
+- [x] Identify the authoritative database. Resolved: there is none. The records
+      do not exist yet.
+- [x] Do not assume a development database is authoritative. Both candidates
+      were audited and rejected on the evidence above.
+- [x] Check for plaintext credentials or provider tokens. Clean in both
+      candidates: every password is a bcrypt hash and no WhatsApp or Razorpay
+      secret appears in any document. Recorded because it establishes that
+      nothing sensitive needs shredding if those databases are decommissioned.
+- [ ] Confirm the production database is empty before go-live. Run
+      `npm run data:audit` against `tammewar_pharmacy_prod` and keep the output;
+      it is the zero baseline every later reconciliation compares against.
+- [ ] Create the single owner account with `npm run owner:create` and confirm
+      the account count is exactly one. Tracked as M-22.
+- [ ] Confirm indexes and uniqueness constraints exist once the application has
+      connected. The audit lists them per collection; `bills.invoiceNumber`,
+      `customers.mobile`, and `users.email` must each be unique.
+- [ ] Decide what happens to the retired `medical_stock_system` cluster.
+      Tracked as M-25.
+
+Items that only applied to a migration are recorded here as not applicable so
+the omission is deliberate rather than forgotten: producing and restoring an
+encrypted `mongodump` of a source database, comparing source and destination
+counts and financial totals, inspecting ten representative migrated records,
+and retaining the old database offline during verification. Backup and restore
+are still required — they are Phase 9, against production, and they matter more
+now, because with no prior system there is no other copy of the owner's data.
 
 ## 9. Establish external encrypted backups
 
@@ -569,8 +571,9 @@ Items still open require the deployed environment and are tracked as M-24.
 - [ ] Cloudflare Pages uses the correct production Render API.
 - [ ] Render permits only the exact Cloudflare production origin.
 - [ ] Atlas uses least-privilege credentials and a constrained network allowlist.
-- [ ] The authoritative database was identified and migrated correctly.
-- [ ] Customer, inventory, balance, bill, and payment totals match.
+- [ ] The production database starts empty and contains exactly one owner
+      account. There is no migration; the records were never digitised.
+- [ ] Unique indexes exist on invoice number, customer mobile, and owner email.
 - [ ] A recent encrypted external backup exists and was restored successfully.
 - [ ] Critical authorization/security regression tests pass.
 - [ ] Complete business workflows pass on the deployed environment.
