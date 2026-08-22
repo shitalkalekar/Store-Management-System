@@ -143,8 +143,23 @@ Three more things that will otherwise cost you an afternoon:
 - **`TRUST_PROXY=1` is required.** Render terminates TLS one hop in front of the
   service. Without it, every request appears to come from the same address and
   the per-IP login rate limit stops discriminating between callers.
-- **`MONGO_DB_NAME` must match the database in `MONGO_URI`.** Startup verifies
-  both and refuses to run against the wrong one.
+- **`MONGO_DB_NAME` must match the database in `MONGO_URI`.** The cluster and
+  the database differ only by hyphens versus underscores, and pasting the
+  cluster name into the URI path is the easy mistake:
+
+  | | Value | Where it belongs |
+  | --- | --- | --- |
+  | Cluster | `tammewar-pharmacy-prod` (hyphens) | The hostname only |
+  | Database | `tammewar_pharmacy_prod` (underscores) | The end of the URI path, and `MONGO_DB_NAME` |
+
+  ```text
+  mongodb+srv://tammewar_app:PASSWORD@tammewar-pharmacy-prod.zxl08z5.mongodb.net/tammewar_pharmacy_prod?retryWrites=true&w=majority
+                                      └─ cluster, hyphens ─┘                     └─ database, underscores ─┘
+  ```
+
+  Startup verifies both and names each side if they disagree. Note the database
+  does not exist until the first write, so there is nothing to look up in
+  Atlas — the name is declared here, not discovered.
 
 The server validates this entire set at boot. A misconfiguration fails the
 deploy loudly rather than starting with a weaker security posture, and

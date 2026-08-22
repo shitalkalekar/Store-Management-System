@@ -82,13 +82,23 @@ env.assertSafeConfiguration = () => {
       throw new Error('Production MONGO_URI must enable retryWrites=true and w=majority');
     }
     if (!process.env.MONGO_DB_NAME || !/^[a-z][a-z0-9_]{2,62}$/.test(env.MONGO_DB_NAME)) {
-      throw new Error('MONGO_DB_NAME must be an explicit lowercase production database name');
+      throw new Error(
+        `MONGO_DB_NAME must be an explicit lowercase production database name of 3-63 characters using only letters, digits, and underscores; received "${env.MONGO_DB_NAME || '(unset)'}". `
+        + 'A hyphenated value is usually the cluster name, which is not the database name.',
+      );
     }
     if (['admin', 'config', 'local', 'test', 'development', 'result_analysis_db'].includes(env.MONGO_DB_NAME)) {
       throw new Error('MONGO_DB_NAME must identify the dedicated production database');
     }
-    if (getMongoDatabaseName(env.MONGO_URI) !== env.MONGO_DB_NAME) {
-      throw new Error('MONGO_URI must target the configured MONGO_DB_NAME');
+    const uriDatabase = getMongoDatabaseName(env.MONGO_URI);
+    if (uriDatabase !== env.MONGO_DB_NAME) {
+      // Name both sides. The usual cause is the cluster name being pasted into
+      // the URI path, and the two differ only by hyphens versus underscores —
+      // which is invisible in a message that does not quote them.
+      throw new Error(
+        `MONGO_URI targets database "${uriDatabase || '(none)'}" but MONGO_DB_NAME is "${env.MONGO_DB_NAME}". `
+        + 'The database name goes at the end of the URI path; the cluster name belongs only in the hostname.',
+      );
     }
   }
   if (env.AUTO_SEED) {
