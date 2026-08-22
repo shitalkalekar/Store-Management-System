@@ -63,7 +63,7 @@ const shutdown = async (signal) => {
     logger.write('info', 'server_shutdown_complete');
     process.exit(0);
   } catch (err) {
-    logger.write('error', 'server_shutdown_failed', logger.errorDetails(err));
+    logger.write('error', 'server_shutdown_failed', logger.fatalDetails(err));
     process.exit(1);
   }
 };
@@ -82,7 +82,7 @@ process.once('SIGINT', () => void shutdown('SIGINT'));
       console.log('[shop-management] backend listening on http://' + env.HOST + ':' + env.PORT);
     });
   } catch (err) {
-    logger.write('error', 'server_startup_failed', logger.errorDetails(err));
+    logger.write('error', 'server_startup_failed', logger.fatalDetails(err));
     await disconnectDb().catch(() => {});
     process.exit(1);
   }

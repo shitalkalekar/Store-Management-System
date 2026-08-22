@@ -96,7 +96,7 @@ test('production requires an Atlas URI that matches the named database', () => {
       MONGO_URI: 'mongodb+srv://app:pw@cluster.example.mongodb.net/other_db?retryWrites=true&w=majority',
       MONGO_DB_NAME: 'tammewar_pharmacy_prod',
     },
-    /must target the configured MONGO_DB_NAME/,
+    /targets database "other_db" but MONGO_DB_NAME is "tammewar_pharmacy_prod"/,
   );
   assertRefuses({ MONGO_DB_NAME: undefined }, /MONGO_DB_NAME/);
 });
@@ -143,5 +143,36 @@ test('seeding outside production still demands a strong initial credential', () 
   assertRefuses(
     { NODE_ENV: 'development', AUTO_SEED: 'true', INITIAL_ADMIN_EMAIL: 'a@b.co', INITIAL_ADMIN_MOBILE: '9999999999', INITIAL_ADMIN_PASSWORD: 'short' },
     /16\+ character INITIAL_ADMIN_PASSWORD/,
+  );
+});
+
+// The real deployment failure of 2026-08-22: the cluster name was pasted into
+// the URI path. Cluster and database differ only by hyphens versus
+// underscores, so both messages must quote the values rather than describe
+// them abstractly.
+test('the cluster-name-in-the-URI-path mistake is named explicitly', () => {
+  assertRefuses(
+    {
+      MONGO_URI: 'mongodb+srv://app:pw@tammewar-pharmacy-prod.zxl08z5.mongodb.net/tammewar-pharmacy-prod?retryWrites=true&w=majority',
+      MONGO_DB_NAME: 'tammewar_pharmacy_prod',
+    },
+    /targets database "tammewar-pharmacy-prod" but MONGO_DB_NAME is "tammewar_pharmacy_prod"/,
+  );
+
+  // A URI with no database at all names the omission rather than saying "(none)"
+  // cryptically alongside a valid-looking name.
+  assertRefuses(
+    { MONGO_URI: 'mongodb+srv://app:pw@cluster.example.mongodb.net/?retryWrites=true&w=majority' },
+    /targets database "\(none\)"/,
+  );
+});
+
+test('a hyphenated MONGO_DB_NAME says so, and says why', () => {
+  assertRefuses(
+    {
+      MONGO_DB_NAME: 'tammewar-pharmacy-prod',
+      MONGO_URI: 'mongodb+srv://app:pw@c.example.mongodb.net/tammewar-pharmacy-prod?retryWrites=true&w=majority',
+    },
+    /received "tammewar-pharmacy-prod".+cluster name/s,
   );
 });
