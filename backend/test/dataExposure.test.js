@@ -135,3 +135,42 @@ test('production error details never carry an exception message', () => {
     delete require.cache[require.resolve('../src/services/logger')];
   }
 });
+
+test('a fatal startup failure names the cause but never leaks a credential', () => {
+  const saved = process.env.NODE_ENV;
+  try {
+    process.env.NODE_ENV = 'production';
+    delete require.cache[require.resolve('../src/config/env')];
+    delete require.cache[require.resolve('../src/services/logger')];
+    const productionLogger = require('../src/services/logger');
+
+    // The operator must be able to read which variable is wrong. Suppressing
+    // this is what made a failed Render deploy undiagnosable on 2026-08-22.
+    const config = productionLogger.fatalDetails(
+      new Error('CORS_ORIGINS entry is not a valid origin: placeholder'),
+    );
+    assert.equal(config.errorType, 'Error');
+    assert.match(config.message, /CORS_ORIGINS entry is not a valid origin/);
+
+    // A driver error that quotes the connection string must still be scrubbed.
+    const driver = productionLogger.fatalDetails(Object.assign(
+      new Error('connect failed for mongodb+srv://tammewar_app:hunter2@cluster.mongodb.net/db'),
+      { name: 'MongoServerError' },
+    ));
+    assert.equal(driver.errorType, 'MongoServerError');
+    assert.equal(driver.message.includes('hunter2'), false);
+    assert.match(driver.message, /mongodb\+srv:\/\/\[REDACTED\]@/);
+
+    // A bearer token in a fatal message is scrubbed too.
+    assert.equal(
+      productionLogger.fatalDetails(new Error('rejected Bearer abc.def.ghi')).message.includes('abc.def.ghi'),
+      false,
+    );
+
+    assert.equal(productionLogger.fatalDetails(undefined).message, 'Unknown error');
+  } finally {
+    process.env.NODE_ENV = saved;
+    delete require.cache[require.resolve('../src/config/env')];
+    delete require.cache[require.resolve('../src/services/logger')];
+  }
+});

@@ -126,9 +126,17 @@ Then the four secrets, from your password manager:
 | --- | --- |
 | `MONGO_URI` | The Atlas SRV string for `tammewar_app`, ending `/tammewar_pharmacy_prod?retryWrites=true&w=majority` |
 | `JWT_SECRET` | The output of Step 1 |
-| `CORS_ORIGINS` | Leave as a placeholder for now — filled in at Step 7 |
+| `CORS_ORIGINS` | `https://placeholder.invalid` until Step 7 replaces it — see below |
 
-Three things that will otherwise cost you an afternoon:
+**`CORS_ORIGINS` cannot be a loose placeholder.** The startup gate requires
+every entry to be a bare `https` origin, so `placeholder`, `TBD`, an empty
+value, or a trailing slash all abort the deploy. Use
+`https://placeholder.invalid` until Step 7: it is a valid origin, `.invalid` is
+reserved by RFC 2606 and can never resolve, and no real browser origin will
+ever match it — so the service starts while still granting CORS permission to
+nobody.
+
+Three more things that will otherwise cost you an afternoon:
 
 - **Do not set `PORT`.** Render injects it, and the server refuses to start in
   production if the platform did not supply one.
