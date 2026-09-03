@@ -44,6 +44,7 @@ import Purchases from './pages/Purchases.jsx';
 import Expenses from './pages/Expenses.jsx';
 import AuditLogs from './pages/AuditLogs.jsx';
 import CustomerLedgers from './pages/CustomerLedgers.jsx';
+import InvoiceGenerator from './pages/InvoiceGenerator.jsx';
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -175,6 +176,9 @@ export default function App() {
             <div className={`menu-item ${activePage === 'bills' ? 'active' : ''}`} onClick={() => setActivePage('bills')}>
               <span className="menu-icon"><Receipt size={18} /></span> Bills
             </div>
+            <div className={`menu-item ${activePage === 'checkout_invoice' ? 'active' : ''}`} onClick={() => setActivePage('checkout_invoice')}>
+              <span className="menu-icon"><FileText size={18} /></span> Checkout Invoice
+            </div>
             <div className={`menu-item ${activePage === 'payments' ? 'active' : ''}`} onClick={() => setActivePage('payments')}>
               <span className="menu-icon"><CreditCard size={18} /></span> Payments
             </div>
@@ -245,6 +249,8 @@ export default function App() {
         return <AuditLogs />;
       case 'customer_ledgers':
         return <CustomerLedgers onNavigate={(page) => setActivePage(page)} />;
+      case 'checkout_invoice':
+        return <InvoiceGenerator onNavigate={(page) => setActivePage(page)} />;
 
       default:
         return <Dashboard role={user.role} onNavigate={(page) => setActivePage(page)} />;
