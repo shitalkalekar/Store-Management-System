@@ -55,4 +55,20 @@ const errorDetails = (err, requestId) => {
   return { requestId, errorType: err?.name || 'Error', message: err?.message };
 };
 
-module.exports = { write, redact, requestLogger, errorDetails };
+/**
+ * Details for a fatal process-level failure: startup and shutdown.
+ *
+ * Unlike `errorDetails`, this always includes the message. Suppressing it in
+ * production makes a failed deploy undiagnosable — the operator sees only
+ * `errorType: "Error"` and has no way to learn which environment variable is
+ * wrong. These records never reach an HTTP client; they go to the platform log,
+ * visible only to whoever can already read the environment settings. The
+ * message is still scrubbed, so a driver error quoting the connection string
+ * cannot leak its credentials.
+ */
+const fatalDetails = (err) => ({
+  errorType: err?.name || 'Error',
+  message: scrubString(err?.message || 'Unknown error'),
+});
+
+module.exports = { write, redact, requestLogger, errorDetails, fatalDetails };

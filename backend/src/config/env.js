@@ -51,6 +51,29 @@ env.assertSafeConfiguration = () => {
     if (env.ONLINE_RESTORE_ENABLED) throw new Error('Online database restore must be disabled in production');
     if (env.INTERNAL_AUTH_ENABLED) throw new Error('Internal multi-tenant auth cannot be enabled until every pharmacy model is tenant-scoped');
     if (env.CORS_ORIGINS.length === 0) throw new Error('CORS_ORIGINS must be configured in production');
+    // Phase 12: production accepts only exact https origins. A wildcard, a
+    // localhost entry, or a trailing path would widen the browser boundary
+    // beyond the one deployed frontend.
+    for (const origin of env.CORS_ORIGINS) {
+      if (origin === '*' || origin.includes('*')) {
+        throw new Error('CORS_ORIGINS must not contain a wildcard in production');
+      }
+      let parsed;
+      try {
+        parsed = new URL(origin);
+      } catch (_err) {
+        throw new Error(`CORS_ORIGINS entry is not a valid origin: ${origin}`);
+      }
+      if (parsed.protocol !== 'https:') {
+        throw new Error('Every production CORS origin must use https');
+      }
+      if (['localhost', '127.0.0.1', '::1', '0.0.0.0'].includes(parsed.hostname)) {
+        throw new Error('Localhost origins must not be allowed in production');
+      }
+      if (origin !== parsed.origin) {
+        throw new Error(`CORS_ORIGINS entry must be a bare origin with no path or trailing slash: ${origin}`);
+      }
+    }
     if (!process.env.MONGO_URI || !env.MONGO_URI.startsWith('mongodb+srv://')) {
       throw new Error('Production MONGO_URI must be an Atlas mongodb+srv connection string');
     }
@@ -59,13 +82,23 @@ env.assertSafeConfiguration = () => {
       throw new Error('Production MONGO_URI must enable retryWrites=true and w=majority');
     }
     if (!process.env.MONGO_DB_NAME || !/^[a-z][a-z0-9_]{2,62}$/.test(env.MONGO_DB_NAME)) {
-      throw new Error('MONGO_DB_NAME must be an explicit lowercase production database name');
+      throw new Error(
+        `MONGO_DB_NAME must be an explicit lowercase production database name of 3-63 characters using only letters, digits, and underscores; received "${env.MONGO_DB_NAME || '(unset)'}". `
+        + 'A hyphenated value is usually the cluster name, which is not the database name.',
+      );
     }
     if (['admin', 'config', 'local', 'test', 'development', 'result_analysis_db'].includes(env.MONGO_DB_NAME)) {
       throw new Error('MONGO_DB_NAME must identify the dedicated production database');
     }
-    if (getMongoDatabaseName(env.MONGO_URI) !== env.MONGO_DB_NAME) {
-      throw new Error('MONGO_URI must target the configured MONGO_DB_NAME');
+    const uriDatabase = getMongoDatabaseName(env.MONGO_URI);
+    if (uriDatabase !== env.MONGO_DB_NAME) {
+      // Name both sides. The usual cause is the cluster name being pasted into
+      // the URI path, and the two differ only by hyphens versus underscores —
+      // which is invisible in a message that does not quote them.
+      throw new Error(
+        `MONGO_URI targets database "${uriDatabase || '(none)'}" but MONGO_DB_NAME is "${env.MONGO_DB_NAME}". `
+        + 'The database name goes at the end of the URI path; the cluster name belongs only in the hostname.',
+      );
     }
   }
   if (env.AUTO_SEED) {

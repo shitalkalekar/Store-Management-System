@@ -5,8 +5,12 @@ Last updated: 2026-08-13
 ## Objective
 
 Prepare and deploy this MERN pharmacy inventory application as a secure,
-zero-cost, single-owner production pilot while protecting approximately 250
-customer records.
+zero-cost, single-owner production pilot.
+
+The production database starts empty. Confirmed with the user on 2026-08-22:
+the pharmacy's records were never digitised and the system has not been handed
+over. Earlier drafts of this document assumed roughly 250 existing customer
+records needed migrating — there are none, and no migration is planned.
 
 Target deployment:
 
@@ -89,9 +93,10 @@ Do not declare the project production-ready until these are resolved:
    must be revoked/rotated after history cleanup.
 3. The legacy local administrator/staff accounts used weak development passwords.
    Never deploy those credentials.
-4. The authoritative local database has not been identified. A previously
-   connected local database reported 18 collections and only 3 documents, so it
-   may be a fresh/test database rather than the pharmacy's actual data.
+4. Resolved on 2026-08-22. There is no authoritative database: the records were
+   never digitised. The two databases on the `medical_stock_system` Atlas
+   cluster were audited and confirmed to be development data (6 customers at
+   most), and are not migrated. Production starts empty.
 5. Atlas M0 backup automation and a verified restore have not been implemented.
 6. Render cron behavior has not been redesigned for a sleeping service.
 7. Frontend Cloudflare Pages API configuration has not been implemented.

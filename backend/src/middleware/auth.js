@@ -32,8 +32,12 @@ const authenticateLocalToken = async (req, token) => {
     throw new Error('Invalid token claims');
   }
 
-  const user = await User.findById(decoded.sub).select('_id email name mobile role status');
+  const user = await User.findById(decoded.sub).select('_id email name mobile role status +passwordChangedAt');
   if (!user || user.status !== 'Active' || user.role !== 'admin') throw new Error('Owner account is inactive');
+
+  // A password rotation invalidates every token that was issued before it.
+  const changedAt = user.passwordChangedAt ? Math.floor(user.passwordChangedAt.getTime() / 1000) : 0;
+  if (!decoded.iat || decoded.iat < changedAt) throw new Error('Token predates the current credential');
   setContext(req, {
     id: user._id.toString(),
     email: user.email,

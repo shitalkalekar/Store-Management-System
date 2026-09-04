@@ -16,9 +16,11 @@ import {
   Sliders,
   Receipt,
   Layout,
-  Check
+  Check,
+  KeyRound
 } from 'lucide-react';
 import Toast from '../components/Toast.jsx';
+import ChangePasswordCard from '../components/ChangePasswordCard.jsx';
 import {
   validateName,
   sanitizeNameInput,
@@ -31,7 +33,7 @@ import {
 } from '../utils/formValidation.js';
 
 export default function Settings() {
-  const [activeTab, setActiveTab] = useState('shop'); // 'shop' | 'bank' | 'pdf' | 'messages' | 'branches' | 'backup'
+  const [activeTab, setActiveTab] = useState('shop'); // 'shop' | 'bank' | 'pdf' | 'messages' | 'branches' | 'backup' | 'security'
   const [settings, setSettings] = useState(null);
   const [branches, setBranches] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -198,7 +200,16 @@ export default function Settings() {
         >
           <Database size={16} /> Data Backup & Restore
         </button>
+        <button 
+          onClick={() => setActiveTab('security')}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 20px', background: 'transparent', border: 'none', borderBottom: activeTab === 'security' ? '3px solid #3b82f6' : '3px solid transparent', fontWeight: '700', fontSize: '13px', color: activeTab === 'security' ? '#3b82f6' : '#64748b', cursor: 'pointer' }}
+        >
+          <KeyRound size={16} /> Security
+        </button>
       </div>
+
+      {/* Owner credential rotation */}
+      {activeTab === 'security' && <ChangePasswordCard />}
 
       {/* Tab 1: Shop Details */}
       {activeTab === 'shop' && (

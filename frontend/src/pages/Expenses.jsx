@@ -5,6 +5,14 @@ import DateFilter from '../components/DateFilter.jsx';
 import Toast from '../components/Toast.jsx';
 import { validatePositiveNumber, validateRequired } from '../utils/formValidation.js';
 
+// Receipts are stored as inline data URIs. Anything else — most dangerously a
+// `javascript:` URL — must never reach an iframe src, an anchor href, or
+// window.open, so every render and every handler goes through this guard
+// rather than trusting the stored value. The Expense schema enforces the same
+// shape server-side.
+const RECEIPT_DATA_URI = /^data:(image\/(png|jpe?g|gif|webp)|application\/pdf);base64,[A-Za-z0-9+/]+={0,2}$/;
+const safeReceipt = (value) => (typeof value === 'string' && RECEIPT_DATA_URI.test(value) ? value : '');
+
 export default function Expenses() {
   const [expenses, setExpenses] = useState([]);
   const [branches, setBranches] = useState([]);
@@ -111,36 +119,34 @@ export default function Expenses() {
 
   const handleOpenReceiptInNewTab = (receiptDataUri) => {
     if (!receiptDataUri) return;
+    if (!safeReceipt(receiptDataUri)) {
+      setToast({ type: 'error', message: 'This receipt is not a valid image or PDF and was not opened.' });
+      return;
+    }
     try {
-      if (receiptDataUri.startsWith('data:')) {
-        const arr = receiptDataUri.split(',');
-        const mimeMatch = arr[0].match(/:(.*?);/);
-        const mime = mimeMatch ? mimeMatch[1] : 'image/png';
-        const bstr = atob(arr[1]);
-        let n = bstr.length;
-        const u8arr = new Uint8Array(n);
-        while (n--) {
-          u8arr[n] = bstr.charCodeAt(n);
-        }
-        const blob = new Blob([u8arr], { type: mime });
-        const blobUrl = URL.createObjectURL(blob);
-        window.open(blobUrl, '_blank');
-      } else {
-        window.open(receiptDataUri, '_blank');
-      }
+      const [header, payload] = receiptDataUri.split(',');
+      const mime = header.match(/:(.*?);/)?.[1] || 'image/png';
+      const binary = atob(payload);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
+      const blobUrl = URL.createObjectURL(new Blob([bytes], { type: mime }));
+      window.open(blobUrl, '_blank', 'noopener,noreferrer');
+      // The tab keeps its own reference once it has loaded.
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 60000);
     } catch (err) {
-      console.error('Blob URL creation error:', err);
-      const win = window.open('', '_blank');
-      if (win) {
-        win.document.write(`<html><head><title>Receipt Image</title></head><body style="margin:0;display:flex;justify-content:center;align-items:center;background:#0f172a;min-height:100vh;"><img src="${receiptDataUri}" style="max-width:100%;max-height:100vh;object-fit:contain;" /></body></html>`);
-      }
+      console.error('Receipt could not be opened:', err);
+      setToast({ type: 'error', message: 'This receipt could not be opened.' });
     }
   };
 
   const handleDownloadReceipt = (expense) => {
-    if (!expense?.receiptImage) return;
+    const receipt = safeReceipt(expense?.receiptImage);
+    if (!receipt) {
+      setToast({ type: 'error', message: 'This receipt is not a valid image or PDF and was not downloaded.' });
+      return;
+    }
     const link = document.createElement('a');
-    link.href = expense.receiptImage;
+    link.href = receipt;
     link.download = `Expense_Receipt_${expense.category}_${expense._id.substring(18)}.png`;
     document.body.appendChild(link);
     link.click();
@@ -443,15 +449,20 @@ export default function Expenses() {
               maxHeight: '450px',
               overflow: 'hidden'
             }}>
-              {selectedReceiptExpense.receiptImage.startsWith('data:application/pdf') ? (
+              {!safeReceipt(selectedReceiptExpense.receiptImage) ? (
+                <div style={{ color: '#fca5a5', fontSize: '13px', fontWeight: '600', padding: '24px', textAlign: 'center' }}>
+                  This receipt is not a valid image or PDF and was not displayed.
+                </div>
+              ) : selectedReceiptExpense.receiptImage.startsWith('data:application/pdf') ? (
                 <iframe 
-                  src={selectedReceiptExpense.receiptImage} 
+                  src={safeReceipt(selectedReceiptExpense.receiptImage)} 
                   title="PDF Receipt" 
+                  sandbox=""
                   style={{ width: '100%', height: '400px', border: 'none', borderRadius: '8px' }} 
                 />
               ) : (
                 <img 
-                  src={selectedReceiptExpense.receiptImage} 
+                  src={safeReceipt(selectedReceiptExpense.receiptImage)} 
                   alt="Expense Receipt" 
                   style={{ maxWidth: '100%', maxHeight: '420px', objectFit: 'contain', borderRadius: '8px', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.5)' }} 
                 />
