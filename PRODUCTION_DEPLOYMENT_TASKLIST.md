@@ -193,9 +193,10 @@ build on 2026-08-16.
 Repository preparation for Phase 7 was completed on 2026-08-16: production now
 requires an explicit database name, verifies the connected database at startup,
 and provides `npm run atlas:verify` to test exact-role and cross-database access.
-The account-console work remains M-10 through M-14 in
-`MANUAL_PRODUCTION_TASKS.md` and is a blocker before Phase 8. Follow
-`ATLAS_FREE_SETUP_RUNBOOK.md`.
+The account-console work in M-10 through M-14 was user-confirmed complete on
+2026-08-16 after following `ATLAS_FREE_SETUP_RUNBOOK.md`. Render's
+service-specific outbound CIDRs remain a Phase 10 update because the service
+does not exist yet.
 
 - [x] Create a dedicated production Atlas project and enable account MFA. The
       project exists; the organization-wide Require MFA control is still off.
