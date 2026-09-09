@@ -300,23 +300,23 @@ export default function Quotations() {
 
       {/* Action Bar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '15px' }}>
-        <h2 style={{ fontSize: '16px', fontWeight: 'bold', color: '#334155' }}>Quotations & Cost Estimates</h2>
+        <h2 style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--text-primary, #1F2937)' }}>Quotations & Cost Estimates</h2>
         <button 
           onClick={handleOpenAdd}
-          style={{ padding: '10px 20px', background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
+          style={{ padding: '10px 20px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', fontWeight: '600', cursor: 'pointer' }}
         >
           ➕ Create Quotation
         </button>
       </div>
 
       {/* Filters Bar */}
-      <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', background: '#fff', padding: '15px', borderRadius: '12px', border: '1px solid #e2e8f0', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', background: 'var(--bg-card, #FFFFFF)', padding: '15px', borderRadius: 'var(--radius-lg, 10px)', border: '1px solid var(--border-light, #D9E1E7)', alignItems: 'center' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#475569' }}>Status</label>
+          <label style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--text-secondary, #64748B)' }}>Status</label>
           <select 
             value={selectedStatus} 
             onChange={(e) => setSelectedStatus(e.target.value)}
-            style={{ padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '13px', outline: 'none' }}
+            style={{ padding: '8px 12px', borderRadius: 'var(--radius-md, 8px)', border: '1px solid var(--border-light, #D9E1E7)', fontSize: '13px', outline: 'none', background: 'var(--bg-card, #FFFFFF)', color: 'var(--text-primary, #1F2937)' }}
           >
             <option value="">All Statuses</option>
             <option value="Draft">Draft</option>
@@ -327,11 +327,11 @@ export default function Quotations() {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#475569' }}>Customer</label>
+          <label style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--text-secondary, #64748B)' }}>Customer</label>
           <select 
             value={selectedCustomer} 
             onChange={(e) => setSelectedCustomer(e.target.value)}
-            style={{ padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '13px', outline: 'none' }}
+            style={{ padding: '8px 12px', borderRadius: 'var(--radius-md, 8px)', border: '1px solid var(--border-light, #D9E1E7)', fontSize: '13px', outline: 'none', background: 'var(--bg-card, #FFFFFF)', color: 'var(--text-primary, #1F2937)' }}
           >
             <option value="">All Customers</option>
             {customers.map(c => (
@@ -341,7 +341,7 @@ export default function Quotations() {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#475569' }}>Date Range</label>
+          <label style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--text-secondary, #64748B)' }}>Date Range</label>
           <DateFilter
             value={dateRange.filterType}
             onChange={setDateRange}
@@ -351,12 +351,12 @@ export default function Quotations() {
 
       {/* Bulk Actions Bar */}
       {selectedIds.length > 0 && (
-        <div style={{ display: 'flex', gap: '15px', background: '#eff6ff', padding: '15px', borderRadius: '12px', border: '1px solid #bfdbfe', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ fontSize: '14px', color: '#1e40af', fontWeight: '600' }}>
+        <div style={{ display: 'flex', gap: '15px', background: 'var(--bg-main, #F6F8FA)', padding: '15px', borderRadius: 'var(--radius-lg, 10px)', border: '1px solid var(--border-light, #D9E1E7)', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span style={{ fontSize: '14px', color: 'var(--text-primary, #1F2937)', fontWeight: '600' }}>
             Selected <strong>{selectedIds.length}</strong> quotations
           </span>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-            <label style={{ fontSize: '13px', fontWeight: '600', color: '#1e40af' }}>Update Status:</label>
+            <label style={{ fontSize: '13px', fontWeight: '600', color: 'var(--text-secondary, #64748B)' }}>Update Status:</label>
             <select 
               onChange={(e) => {
                 if(e.target.value) {
@@ -364,7 +364,7 @@ export default function Quotations() {
                   e.target.value = '';
                 }
               }}
-              style={{ padding: '6px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', background: '#fff', fontSize: '12px' }}
+              style={{ padding: '6px 12px', borderRadius: 'var(--radius-md, 8px)', border: '1px solid var(--border-light, #D9E1E7)', background: 'var(--bg-card, #FFFFFF)', color: 'var(--text-primary, #1F2937)', fontSize: '12px' }}
             >
               <option value="">Select...</option>
               <option value="Draft">Draft</option>
@@ -375,19 +375,19 @@ export default function Quotations() {
 
             <button 
               onClick={handleBulkExport}
-              style={{ padding: '8px 16px', background: '#10b981', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
+              style={{ padding: '8px 16px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
             >
               📥 Export to Excel
             </button>
             <button 
               onClick={handleBulkDelete}
-              style={{ padding: '8px 16px', background: '#ef4444', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
+              style={{ padding: '8px 16px', background: 'var(--danger, #DC3545)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
             >
               🗑️ Bulk Delete
             </button>
             <button 
               onClick={() => setSelectedIds([])}
-              style={{ padding: '8px 16px', background: '#cbd5e1', color: '#1e293b', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
+              style={{ padding: '8px 16px', background: 'var(--bg-card, #FFFFFF)', color: 'var(--text-secondary, #64748B)', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: 'var(--radius-md, 8px)', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
             >
               Clear Selection
             </button>
@@ -399,10 +399,10 @@ export default function Quotations() {
       {loading ? (
         <div>Loading quotations...</div>
       ) : (
-        <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden' }}>
+        <div style={{ background: 'var(--bg-card, #FFFFFF)', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: 'var(--radius-lg, 10px)', overflow: 'hidden' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
             <thead>
-              <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
+              <tr style={{ background: 'var(--bg-main, #F6F8FA)', borderBottom: '1px solid var(--border-light, #D9E1E7)' }}>
                 <th style={{ padding: '14px 20px', width: '40px' }}>
                   <input 
                     type="checkbox"
@@ -410,19 +410,19 @@ export default function Quotations() {
                     onChange={handleSelectAll}
                   />
                 </th>
-                <th style={{ padding: '14px 20px', fontSize: '12px', color: '#475569', fontWeight: 'bold' }}>Sr. No.</th>
-                <th style={{ padding: '14px 20px', fontSize: '12px', color: '#475569', fontWeight: 'bold' }}>Quotation ID</th>
-                <th style={{ padding: '14px 20px', fontSize: '12px', color: '#475569', fontWeight: 'bold' }}>Customer</th>
-                <th style={{ padding: '14px 20px', fontSize: '12px', color: '#475569', fontWeight: 'bold' }}>Valid Until</th>
-                <th style={{ padding: '14px 20px', fontSize: '12px', color: '#475569', fontWeight: 'bold' }}>Estimated Total</th>
-                <th style={{ padding: '14px 20px', fontSize: '12px', color: '#475569', fontWeight: 'bold' }}>Status</th>
-                <th style={{ padding: '14px 20px', fontSize: '12px', color: '#475569', fontWeight: 'bold', textAlign: 'right' }}>Actions</th>
+                <th style={{ padding: '14px 20px', fontSize: '12px', color: 'var(--text-secondary, #64748B)', fontWeight: 'bold' }}>Sr. No.</th>
+                <th style={{ padding: '14px 20px', fontSize: '12px', color: 'var(--text-secondary, #64748B)', fontWeight: 'bold' }}>Quotation ID</th>
+                <th style={{ padding: '14px 20px', fontSize: '12px', color: 'var(--text-secondary, #64748B)', fontWeight: 'bold' }}>Customer</th>
+                <th style={{ padding: '14px 20px', fontSize: '12px', color: 'var(--text-secondary, #64748B)', fontWeight: 'bold' }}>Valid Until</th>
+                <th style={{ padding: '14px 20px', fontSize: '12px', color: 'var(--text-secondary, #64748B)', fontWeight: 'bold' }}>Estimated Total</th>
+                <th style={{ padding: '14px 20px', fontSize: '12px', color: 'var(--text-secondary, #64748B)', fontWeight: 'bold' }}>Status</th>
+                <th style={{ padding: '14px 20px', fontSize: '12px', color: 'var(--text-secondary, #64748B)', fontWeight: 'bold', textAlign: 'right' }}>Actions</th>
               </tr>
             </thead>
             <tbody>
               {filteredQuotations.length > 0 ? (
                 filteredQuotations.map((q, idx) => (
-                  <tr key={q._id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                  <tr key={q._id} style={{ borderBottom: '1px solid var(--border-subtle, #F1F5F9)' }}>
                     <td style={{ padding: '14px 20px', width: '40px' }}>
                       <input 
                         type="checkbox"
@@ -430,21 +430,21 @@ export default function Quotations() {
                         onChange={() => handleSelectRow(q._id)}
                       />
                     </td>
-                    <td style={{ padding: '14px 20px', color: '#475569', fontWeight: 'bold' }}>{idx + 1}</td>
-                    <td style={{ padding: '14px 20px', fontWeight: '700', color: '#1e293b' }}>
+                    <td style={{ padding: '14px 20px', color: 'var(--text-secondary, #64748B)', fontWeight: 'bold' }}>{idx + 1}</td>
+                    <td style={{ padding: '14px 20px', fontWeight: '700', color: 'var(--text-primary, #1F2937)' }}>
                       Q-{q._id.toString().substring(18).toUpperCase()}
                     </td>
-                    <td style={{ padding: '14px 20px', color: '#334155', fontWeight: '600' }}>{q.customer?.name}</td>
-                    <td style={{ padding: '14px 20px', color: '#475569' }}>{new Date(q.validUntil).toLocaleDateString()}</td>
-                    <td style={{ padding: '14px 20px', color: '#166534', fontWeight: 'bold' }}>Rs. {q.totalAmount.toFixed(2)}</td>
+                    <td style={{ padding: '14px 20px', color: 'var(--text-primary, #1F2937)', fontWeight: '600' }}>{q.customer?.name}</td>
+                    <td style={{ padding: '14px 20px', color: 'var(--text-secondary, #64748B)' }}>{new Date(q.validUntil).toLocaleDateString()}</td>
+                    <td style={{ padding: '14px 20px', color: 'var(--text-primary, #1F2937)', fontWeight: 'bold' }}>Rs. {q.totalAmount.toFixed(2)}</td>
                     <td style={{ padding: '14px 20px' }}>
                       <span style={{ 
                         fontSize: '11px', 
                         padding: '3px 8px', 
-                        borderRadius: '6px', 
+                        borderRadius: 'var(--radius-sm, 4px)', 
                         fontWeight: 'bold',
-                        background: q.status === 'Converted' ? '#d1fae5' : q.status === 'Expired' ? '#fee2e2' : '#eff6ff',
-                        color: q.status === 'Converted' ? '#065f46' : q.status === 'Expired' ? '#b91c1c' : '#1d4ed8'
+                        background: q.status === 'Converted' ? 'var(--success-light, #D1E7DD)' : q.status === 'Expired' ? 'var(--danger-light, #F8D7DA)' : 'var(--primary-light, #E8F5F6)',
+                        color: q.status === 'Converted' ? 'var(--success, #198754)' : q.status === 'Expired' ? 'var(--danger, #DC3545)' : 'var(--primary, #087E8B)'
                       }}>
                         {q.status}
                       </span>
@@ -452,7 +452,7 @@ export default function Quotations() {
                     <td style={{ padding: '14px 20px', textAlign: 'right', display: 'flex', gap: '8px', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
                       <button 
                         onClick={() => handlePrintPDF(q._id)}
-                        style={{ padding: '6px 12px', background: '#f8fafc', color: '#475569', border: '1px solid #cbd5e1', borderRadius: '6px', cursor: 'pointer', fontWeight: '600', fontSize: '12px' }}
+                        style={{ padding: '6px 12px', background: 'var(--bg-card, #FFFFFF)', color: 'var(--text-secondary, #64748B)', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: 'var(--radius-md, 8px)', cursor: 'pointer', fontWeight: '600', fontSize: '12px' }}
                       >
                         🖨️ PDF
                       </button>
@@ -461,20 +461,20 @@ export default function Quotations() {
                           {q.status === 'Draft' && (
                             <button 
                               onClick={() => handleOpenEdit(q)}
-                              style={{ padding: '6px 12px', background: '#fef3c7', color: '#d97706', border: '1px solid #fde68a', borderRadius: '6px', cursor: 'pointer', fontWeight: '600', fontSize: '12px' }}
+                              style={{ padding: '6px 12px', background: 'var(--warning-light, #FEF3C7)', color: 'var(--warning, #D97706)', border: '1px solid var(--warning-border, #FDE68A)', borderRadius: 'var(--radius-md, 8px)', cursor: 'pointer', fontWeight: '600', fontSize: '12px' }}
                             >
                               ✏️ Edit
                             </button>
                           )}
                           <button 
                             onClick={() => handleConvertToOrder(q._id)}
-                            style={{ padding: '6px 12px', background: '#ecfdf5', color: '#047857', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600', fontSize: '12px' }}
+                            style={{ padding: '6px 12px', background: 'var(--success-light, #D1E7DD)', color: 'var(--success, #198754)', border: 'none', borderRadius: 'var(--radius-md, 8px)', cursor: 'pointer', fontWeight: '600', fontSize: '12px' }}
                           >
                             📦 Order
                           </button>
                           <button 
                             onClick={() => handleConvertToInvoice(q._id)}
-                            style={{ padding: '6px 12px', background: '#eff6ff', color: '#1d4ed8', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600', fontSize: '12px' }}
+                            style={{ padding: '6px 12px', background: 'var(--primary-light, #E8F5F6)', color: 'var(--primary, #087E8B)', border: 'none', borderRadius: 'var(--radius-md, 8px)', cursor: 'pointer', fontWeight: '600', fontSize: '12px' }}
                           >
                             🧾 Bill
                           </button>
@@ -485,7 +485,7 @@ export default function Quotations() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="8" style={{ padding: '40px', textAlign: 'center', color: '#64748b' }}>No quotations found matching the filter criteria.</td>
+                  <td colSpan="8" style={{ padding: '40px', textAlign: 'center', color: 'var(--text-muted, #94A3B8)' }}>No quotations found matching the filter criteria.</td>
                 </tr>
               )}
             </tbody>
@@ -495,17 +495,17 @@ export default function Quotations() {
 
       {/* Create Quotation Modal */}
       {formMode && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(15,23,42,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '15px' }}>
-          <div style={{ background: '#fff', borderRadius: '12px', padding: '24px', width: '100%', maxWidth: '650px', maxHeight: '90vh', overflowY: 'auto', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }}>
-            <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#0f172a', marginBottom: '15px' }}>{formMode === 'edit' ? 'Edit Quotation' : 'Create Cost Estimation Quotation'}</h3>
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(23, 50, 77, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '15px' }}>
+          <div style={{ background: 'var(--bg-card, #FFFFFF)', borderRadius: 'var(--radius-lg, 10px)', border: '1px solid var(--border-light, #D9E1E7)', padding: '24px', width: '100%', maxWidth: '650px', maxHeight: '90vh', overflowY: 'auto', boxShadow: 'var(--shadow-card, 0 1px 3px rgba(0,0,0,0.06))' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: 'var(--text-primary, #1F2937)', marginBottom: '15px' }}>{formMode === 'edit' ? 'Edit Quotation' : 'Create Cost Estimation Quotation'}</h3>
             
             <form onSubmit={handleSubmitQuotation} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
               <div>
-                <label style={{ fontSize: '13px', fontWeight: '600', color: '#475569', display: 'block', marginBottom: '5px' }}>Select Customer*</label>
+                <label style={{ fontSize: '13px', fontWeight: '600', color: 'var(--text-secondary, #64748B)', display: 'block', marginBottom: '5px' }}>Select Customer*</label>
                 <select 
                   value={selectedCustomerId}
                   onChange={(e) => setSelectedCustomerId(e.target.value)}
-                  style={{ width: '100%', padding: '8px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', outline: 'none', background: '#fff' }}
+                  style={{ width: '100%', padding: '8px 12px', borderRadius: 'var(--radius-md, 8px)', border: '1px solid var(--border-light, #D9E1E7)', outline: 'none', background: 'var(--bg-card, #FFFFFF)', color: 'var(--text-primary, #1F2937)' }}
                   required
                 >
                   <option value="">-- Choose Customer --</option>
@@ -516,12 +516,12 @@ export default function Quotations() {
               </div>
 
               <div>
-                <label style={{ fontSize: '13px', fontWeight: '600', color: '#475569', display: 'block', marginBottom: '5px' }}>Quote Validity (Days)*</label>
+                <label style={{ fontSize: '13px', fontWeight: '600', color: 'var(--text-secondary, #64748B)', display: 'block', marginBottom: '5px' }}>Quote Validity (Days)*</label>
                 <input 
                   type="number"
                   value={validDays}
                   onChange={(e) => setValidDays(Number(e.target.value))}
-                  style={{ width: '100%', padding: '8px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', outline: 'none' }}
+                  style={{ width: '100%', padding: '8px 12px', borderRadius: 'var(--radius-md, 8px)', border: '1px solid var(--border-light, #D9E1E7)', outline: 'none', background: 'var(--bg-card, #FFFFFF)', color: 'var(--text-primary, #1F2937)' }}
                   required
                   min="1"
                 />
@@ -529,14 +529,14 @@ export default function Quotations() {
 
               {/* Items Section */}
               <div>
-                <label style={{ fontSize: '13px', fontWeight: '600', color: '#475569', display: 'block', marginBottom: '5px' }}>Products & Quantities</label>
+                <label style={{ fontSize: '13px', fontWeight: '600', color: 'var(--text-secondary, #64748B)', display: 'block', marginBottom: '5px' }}>Products & Quantities</label>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   {quotationItems.map((item, idx) => (
                     <div key={idx} style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                       <select 
                         value={item.product}
                         onChange={(e) => handleItemProductChange(idx, e.target.value)}
-                        style={{ flex: 2, padding: '8px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', outline: 'none', background: '#fff' }}
+                        style={{ flex: 2, padding: '8px 12px', borderRadius: 'var(--radius-md, 8px)', border: '1px solid var(--border-light, #D9E1E7)', outline: 'none', background: 'var(--bg-card, #FFFFFF)', color: 'var(--text-primary, #1F2937)' }}
                         required
                       >
                         <option value="">Select Product</option>
@@ -550,33 +550,33 @@ export default function Quotations() {
                         min="1"
                         value={item.quantity}
                         onChange={(e) => handleItemQtyChange(idx, e.target.value)}
-                        style={{ width: '80px', padding: '8px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', outline: 'none' }}
+                        style={{ width: '80px', padding: '8px 12px', borderRadius: 'var(--radius-md, 8px)', border: '1px solid var(--border-light, #D9E1E7)', outline: 'none', background: 'var(--bg-card, #FFFFFF)', color: 'var(--text-primary, #1F2937)' }}
                         required
                         title="Quantity"
                       />
 
-                      <div style={{ display: 'flex', alignItems: 'center', background: '#f8fafc', padding: '0 8px', borderRadius: '6px', border: '1px solid #cbd5e1' }}>
-                        <span style={{ fontSize: '13px', color: '#475569', marginRight: '4px' }}>Rs.</span>
+                      <div style={{ display: 'flex', alignItems: 'center', background: 'var(--bg-main, #F6F8FA)', padding: '0 8px', borderRadius: 'var(--radius-md, 8px)', border: '1px solid var(--border-light, #D9E1E7)' }}>
+                        <span style={{ fontSize: '13px', color: 'var(--text-secondary, #64748B)', marginRight: '4px' }}>Rs.</span>
                         <input 
                           type="number"
                           step="0.01"
                           min="0"
                           value={item.price}
                           onChange={(e) => handleItemPriceChange(idx, e.target.value)}
-                          style={{ width: '70px', padding: '8px 0', border: 'none', background: 'transparent', outline: 'none', fontSize: '13px' }}
+                          style={{ width: '70px', padding: '8px 0', border: 'none', background: 'transparent', outline: 'none', fontSize: '13px', color: 'var(--text-primary, #1F2937)' }}
                           required
                           title="Price per unit"
                         />
                       </div>
 
-                      <div style={{ width: '80px', fontSize: '13px', color: '#475569', textAlign: 'right' }}>
+                      <div style={{ width: '80px', fontSize: '13px', color: 'var(--text-primary, #1F2937)', textAlign: 'right' }}>
                         <b>Rs. {(item.price * item.quantity).toFixed(2)}</b>
                       </div>
 
                       <button 
                         type="button"
                         onClick={() => handleRemoveItemRow(idx)}
-                        style={{ padding: '8px 12px', background: '#fee2e2', color: '#ef4444', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
+                        style={{ padding: '8px 12px', background: 'var(--danger-light, #F8D7DA)', color: 'var(--danger, #DC3545)', border: 'none', borderRadius: 'var(--radius-md, 8px)', cursor: 'pointer' }}
                       >
                         ✕
                       </button>
@@ -586,29 +586,29 @@ export default function Quotations() {
                 <button 
                   type="button" 
                   onClick={handleAddItemRow}
-                  style={{ marginTop: '10px', padding: '6px 12px', background: '#f1f5f9', color: '#475569', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}
+                  style={{ marginTop: '10px', padding: '6px 12px', background: 'var(--bg-main, #F6F8FA)', color: 'var(--text-primary, #1F2937)', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: 'var(--radius-md, 8px)', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}
                 >
                   ➕ Add Row
                 </button>
               </div>
 
               {/* Estimate Total */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid #e2e8f0', paddingTop: '15px', marginTop: '10px', fontWeight: 'bold', fontSize: '16px', color: '#1e293b' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid var(--border-light, #D9E1E7)', paddingTop: '15px', marginTop: '10px', fontWeight: 'bold', fontSize: '16px', color: 'var(--text-primary, #1F2937)' }}>
                 <span>Estimated Grand Total:</span>
-                <span style={{ color: '#166534' }}>Rs. {calculateTotal().toFixed(2)}</span>
+                <span style={{ color: 'var(--text-primary, #1F2937)' }}>Rs. {calculateTotal().toFixed(2)}</span>
               </div>
 
               <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
                 <button 
                   type="button" 
                   onClick={() => setFormMode(null)}
-                  style={{ flex: 1, padding: '10px', background: '#e2e8f0', color: '#334155', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
+                  style={{ flex: 1, padding: '10px', background: 'var(--bg-main, #F6F8FA)', color: 'var(--text-secondary, #64748B)', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: 'var(--radius-md, 8px)', fontWeight: '600', cursor: 'pointer' }}
                 >
                   Cancel
                 </button>
                 <button 
                   type="submit" 
-                  style={{ flex: 1, padding: '10px', background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
+                  style={{ flex: 1, padding: '10px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', fontWeight: '600', cursor: 'pointer' }}
                 >
                   {formMode === 'edit' ? 'Save Changes' : 'Create Proposal'}
                 </button>

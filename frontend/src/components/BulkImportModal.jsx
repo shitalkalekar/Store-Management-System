@@ -113,30 +113,30 @@ export default function BulkImportModal({ type = 'products', isOpen, onClose, on
   return (
     <div className="modal-backdrop" style={{
       position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-      backgroundColor: 'rgba(15, 23, 42, 0.65)', backdropFilter: 'blur(4px)',
+      backgroundColor: 'rgba(23, 50, 77, 0.4)', backdropFilter: 'blur(4px)',
       display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000
     }}>
       <div style={{
-        backgroundColor: '#fff', borderRadius: '12px', width: '90%', maxWidth: '580px',
-        maxHeight: '90vh', overflowY: 'auto', padding: '24px', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)'
+        backgroundColor: 'var(--bg-card, #FFFFFF)', borderRadius: 'var(--radius-lg, 10px)', border: '1px solid var(--border-light, #D9E1E7)', width: '90%', maxWidth: '580px',
+        maxHeight: '90vh', overflowY: 'auto', padding: '24px', boxShadow: 'var(--shadow-card, 0 1px 3px rgba(0, 0, 0, 0.06))'
       }}>
         {/* Modal Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <FileSpreadsheet color="#2563eb" size={24} />
-            <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 600, color: '#0f172a' }}>
+            <FileSpreadsheet color="var(--primary, #087E8B)" size={24} />
+            <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 600, color: 'var(--text-primary, #1F2937)' }}>
               Bulk Import {entityTitle}
             </h3>
           </div>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary, #64748B)' }}>
             <X size={20} />
           </button>
         </div>
 
         {errorMsg && (
           <div style={{
-            backgroundColor: '#fef2f2', border: '1px solid #fca5a5', color: '#991b1b',
-            padding: '10px 14px', borderRadius: '8px', marginBottom: '16px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '8px'
+            backgroundColor: 'var(--danger-light, #F8D7DA)', border: '1px solid var(--danger, #DC3545)', color: 'var(--danger, #DC3545)',
+            padding: '10px 14px', borderRadius: 'var(--radius-md, 8px)', marginBottom: '16px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '8px'
           }}>
             <AlertTriangle size={16} />
             <span>{errorMsg}</span>
@@ -146,19 +146,19 @@ export default function BulkImportModal({ type = 'products', isOpen, onClose, on
         {!importSummary ? (
           <div>
             <div style={{
-              backgroundColor: '#f8fafc', border: '1px dashed #cbd5e1', borderRadius: '8px',
+              backgroundColor: 'var(--bg-main, #F6F8FA)', border: '1px dashed var(--border-light, #D9E1E7)', borderRadius: 'var(--radius-md, 8px)',
               padding: '16px', marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between'
             }}>
               <div>
-                <p style={{ margin: 0, fontSize: '13px', fontWeight: 600, color: '#334155' }}>Need an import template?</p>
-                <p style={{ margin: '2px 0 0 0', fontSize: '12px', color: '#64748b' }}>Download sample formatted Excel sheet with expected columns.</p>
+                <p style={{ margin: 0, fontSize: '13px', fontWeight: 600, color: 'var(--text-primary, #1F2937)' }}>Need an import template?</p>
+                <p style={{ margin: '2px 0 0 0', fontSize: '12px', color: 'var(--text-secondary, #64748B)' }}>Download sample formatted Excel sheet with expected columns.</p>
               </div>
               <button
                 type="button"
                 onClick={handleDownloadSample}
                 style={{
-                  display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: '#eff6ff',
-                  color: '#2563eb', border: '1px solid #bfdbfe', padding: '8px 14px', borderRadius: '6px',
+                  display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: 'var(--primary-light, #E8F5F6)',
+                  color: 'var(--primary, #087E8B)', border: '1px solid var(--primary, #087E8B)', padding: '8px 14px', borderRadius: 'var(--radius-md, 8px)',
                   fontSize: '13px', fontWeight: 500, cursor: 'pointer'
                 }}
               >
@@ -167,7 +167,7 @@ export default function BulkImportModal({ type = 'products', isOpen, onClose, on
             </div>
 
             <div style={{ marginBottom: '20px' }}>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: '#334155', marginBottom: '8px' }}>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-primary, #1F2937)', marginBottom: '8px' }}>
                 Select Excel File (.xlsx, .xls)
               </label>
               <input
@@ -175,8 +175,8 @@ export default function BulkImportModal({ type = 'products', isOpen, onClose, on
                 accept=".xlsx, .xls, .csv"
                 onChange={handleFileChange}
                 style={{
-                  width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #cbd5e1',
-                  fontSize: '13px', backgroundColor: '#fff'
+                  width: '100%', padding: '10px', borderRadius: 'var(--radius-md, 8px)', border: '1px solid var(--border-light, #D9E1E7)',
+                  fontSize: '13px', backgroundColor: 'var(--bg-card, #FFFFFF)', color: 'var(--text-primary, #1F2937)'
                 }}
               />
             </div>
@@ -187,8 +187,8 @@ export default function BulkImportModal({ type = 'products', isOpen, onClose, on
                 onClick={onClose}
                 disabled={loading}
                 style={{
-                  padding: '9px 18px', borderRadius: '6px', border: '1px solid #cbd5e1',
-                  backgroundColor: '#fff', color: '#475569', fontSize: '13px', fontWeight: 500, cursor: 'pointer'
+                  padding: '9px 18px', borderRadius: 'var(--radius-md, 8px)', border: '1px solid var(--border-light, #D9E1E7)',
+                  backgroundColor: 'var(--bg-card, #FFFFFF)', color: 'var(--text-secondary, #64748B)', fontSize: '13px', fontWeight: 500, cursor: 'pointer'
                 }}
               >
                 Cancel
@@ -198,8 +198,8 @@ export default function BulkImportModal({ type = 'products', isOpen, onClose, on
                 onClick={handleUpload}
                 disabled={loading || !file}
                 style={{
-                  display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 20px', borderRadius: '6px',
-                  border: 'none', backgroundColor: '#2563eb', color: '#fff', fontSize: '13px', fontWeight: 500,
+                  display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 20px', borderRadius: 'var(--radius-md, 8px)',
+                  border: 'none', backgroundColor: 'var(--primary, #087E8B)', color: '#fff', fontSize: '13px', fontWeight: 500,
                   cursor: loading || !file ? 'not-allowed' : 'pointer', opacity: loading || !file ? 0.6 : 1
                 }}
               >
@@ -212,27 +212,27 @@ export default function BulkImportModal({ type = 'products', isOpen, onClose, on
           /* Import Summary Screen */
           <div>
             <div style={{
-              backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '8px',
+              backgroundColor: 'var(--success-light, #D1E7DD)', border: '1px solid var(--success, #198754)', borderRadius: 'var(--radius-md, 8px)',
               padding: '16px', marginBottom: '16px'
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-                <CheckCircle size={22} color="#16a34a" />
-                <h4 style={{ margin: 0, fontSize: '16px', fontWeight: 600, color: '#15803d' }}>
+                <CheckCircle size={22} color="var(--success, #198754)" />
+                <h4 style={{ margin: 0, fontSize: '16px', fontWeight: 600, color: 'var(--success, #198754)' }}>
                   Import Completed Summary
                 </h4>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px', textAlign: 'center' }}>
-                <div style={{ background: '#fff', padding: '10px', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
-                  <div style={{ fontSize: '12px', color: '#64748b' }}>Total Rows</div>
-                  <div style={{ fontSize: '18px', fontWeight: 700, color: '#0f172a' }}>{importSummary.totalRows || 0}</div>
+                <div style={{ background: 'var(--bg-card, #FFFFFF)', padding: '10px', borderRadius: 'var(--radius-md, 8px)', border: '1px solid var(--border-light, #D9E1E7)' }}>
+                  <div style={{ fontSize: '12px', color: 'var(--text-secondary, #64748B)' }}>Total Rows</div>
+                  <div style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary, #1F2937)' }}>{importSummary.totalRows || 0}</div>
                 </div>
-                <div style={{ background: '#fff', padding: '10px', borderRadius: '6px', border: '1px solid #bbf7d0' }}>
-                  <div style={{ fontSize: '12px', color: '#16a34a' }}>Successful</div>
-                  <div style={{ fontSize: '18px', fontWeight: 700, color: '#16a34a' }}>{importSummary.importedCount || 0}</div>
+                <div style={{ background: 'var(--bg-card, #FFFFFF)', padding: '10px', borderRadius: 'var(--radius-md, 8px)', border: '1px solid var(--success, #198754)' }}>
+                  <div style={{ fontSize: '12px', color: 'var(--success, #198754)' }}>Successful</div>
+                  <div style={{ fontSize: '18px', fontWeight: 700, color: 'var(--success, #198754)' }}>{importSummary.importedCount || 0}</div>
                 </div>
-                <div style={{ background: '#fff', padding: '10px', borderRadius: '6px', border: '1px solid #fca5a5' }}>
-                  <div style={{ fontSize: '12px', color: '#dc2626' }}>Failed</div>
-                  <div style={{ fontSize: '18px', fontWeight: 700, color: '#dc2626' }}>{importSummary.failedCount || 0}</div>
+                <div style={{ background: 'var(--bg-card, #FFFFFF)', padding: '10px', borderRadius: 'var(--radius-md, 8px)', border: '1px solid var(--danger, #DC3545)' }}>
+                  <div style={{ fontSize: '12px', color: 'var(--danger, #DC3545)' }}>Failed</div>
+                  <div style={{ fontSize: '18px', fontWeight: 700, color: 'var(--danger, #DC3545)' }}>{importSummary.failedCount || 0}</div>
                 </div>
               </div>
             </div>
@@ -240,31 +240,31 @@ export default function BulkImportModal({ type = 'products', isOpen, onClose, on
             {importSummary.failedRecords && importSummary.failedRecords.length > 0 && (
               <div style={{ marginBottom: '16px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                  <h5 style={{ margin: 0, fontSize: '13px', fontWeight: 600, color: '#991b1b' }}>Failed Records Details</h5>
+                  <h5 style={{ margin: 0, fontSize: '13px', fontWeight: 600, color: 'var(--danger, #DC3545)' }}>Failed Records Details</h5>
                   <button
                     onClick={handleDownloadErrorReport}
                     style={{
-                      display: 'flex', alignItems: 'center', gap: '6px', background: '#fef2f2',
-                      border: '1px solid #fca5a5', color: '#b91c1c', padding: '4px 10px', borderRadius: '4px',
+                      display: 'flex', alignItems: 'center', gap: '6px', background: 'var(--danger-light, #F8D7DA)',
+                      border: '1px solid var(--danger, #DC3545)', color: 'var(--danger, #DC3545)', padding: '4px 10px', borderRadius: 'var(--radius-sm, 4px)',
                       fontSize: '12px', cursor: 'pointer', fontWeight: 500
                     }}
                   >
                     <Download size={13} /> Download Error Report
                   </button>
                 </div>
-                <div style={{ maxHeight: '180px', overflowY: 'auto', border: '1px solid #fee2e2', borderRadius: '6px', backgroundColor: '#fff' }}>
+                <div style={{ maxHeight: '180px', overflowY: 'auto', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: 'var(--radius-md, 8px)', backgroundColor: 'var(--bg-card, #FFFFFF)' }}>
                   <table style={{ width: '100%', fontSize: '12px', borderCollapse: 'collapse' }}>
                     <thead>
-                      <tr style={{ background: '#fef2f2', color: '#991b1b', textAlign: 'left' }}>
+                      <tr style={{ background: 'var(--bg-main, #F6F8FA)', color: 'var(--text-secondary, #64748B)', textAlign: 'left' }}>
                         <th style={{ padding: '6px 10px', width: '50px' }}>Row</th>
                         <th style={{ padding: '6px 10px' }}>Reason</th>
                       </tr>
                     </thead>
                     <tbody>
                       {importSummary.failedRecords.map((fail, idx) => (
-                        <tr key={idx} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                          <td style={{ padding: '6px 10px', fontWeight: 600 }}>Row {fail.row}</td>
-                          <td style={{ padding: '6px 10px', color: '#b91c1c' }}>{fail.reason}</td>
+                        <tr key={idx} style={{ borderBottom: '1px solid var(--border-subtle, #F1F5F9)' }}>
+                          <td style={{ padding: '6px 10px', fontWeight: 600, color: 'var(--text-primary, #1F2937)' }}>Row {fail.row}</td>
+                          <td style={{ padding: '6px 10px', color: 'var(--danger, #DC3545)' }}>{fail.reason}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -278,8 +278,8 @@ export default function BulkImportModal({ type = 'products', isOpen, onClose, on
                 type="button"
                 onClick={onClose}
                 style={{
-                  padding: '9px 20px', borderRadius: '6px', border: 'none',
-                  backgroundColor: '#2563eb', color: '#fff', fontSize: '13px', fontWeight: 500, cursor: 'pointer'
+                  padding: '9px 20px', borderRadius: 'var(--radius-md, 8px)', border: 'none',
+                  backgroundColor: 'var(--primary, #087E8B)', color: '#fff', fontSize: '13px', fontWeight: 500, cursor: 'pointer'
                 }}
               >
                 Done

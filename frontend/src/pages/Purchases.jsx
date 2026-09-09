@@ -349,19 +349,19 @@ export default function Purchases() {
       {/* Header Bar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h2 style={{ fontSize: '18px', fontWeight: 'bold', color: '#0f172a' }}>Procurement & Purchase Orders</h2>
-          <p style={{ fontSize: '12px', color: '#64748b', margin: 0 }}>Manage supplier orders, partial receiving batches, and inventory replenishment.</p>
+          <h2 style={{ fontSize: '18px', fontWeight: 'bold', color: 'var(--text-primary, #1F2937)' }}>Procurement & Purchase Orders</h2>
+          <p style={{ fontSize: '12px', color: 'var(--text-secondary, #64748B)', margin: 0 }}>Manage supplier orders, partial receiving batches, and inventory replenishment.</p>
         </div>
         <button 
           onClick={handleOpenAdd}
-          style={{ padding: '12px 20px', background: '#2563eb', color: '#fff', border: 'none', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 6px -1px rgba(37,99,235,0.2)' }}
+          style={{ padding: '12px 20px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
         >
           ➕ Dispatch Purchase Order
         </button>
       </div>
 
       {/* Filters Bar */}
-      <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', background: '#fff', padding: '15px', borderRadius: '12px', border: '1px solid #e2e8f0', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', background: 'var(--bg-card, #FFFFFF)', padding: '15px', borderRadius: 'var(--radius-lg, 10px)', border: '1px solid var(--border-light, #D9E1E7)', alignItems: 'center' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
           <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#475569' }}>PO Status</label>
           <select 
@@ -419,12 +419,12 @@ export default function Purchases() {
 
       {/* Bulk Actions Bar */}
       {selectedIds.length > 0 && (
-        <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', background: '#eff6ff', padding: '15px', borderRadius: '12px', border: '1px solid #bfdbfe', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ fontSize: '14px', color: '#1e40af', fontWeight: '600' }}>
+        <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', background: 'var(--primary-light, #E8F5F6)', padding: '15px', borderRadius: 'var(--radius-lg, 10px)', border: '1px solid var(--border-light, #D9E1E7)', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span style={{ fontSize: '14px', color: 'var(--primary, #087E8B)', fontWeight: '600' }}>
             Selected <strong>{selectedIds.length}</strong> purchase orders
           </span>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-            <label style={{ fontSize: '13px', fontWeight: '600', color: '#1e40af' }}>Update Status:</label>
+            <label style={{ fontSize: '13px', fontWeight: '600', color: 'var(--primary, #087E8B)' }}>Update Status:</label>
             <select 
               onChange={(e) => {
                 if(e.target.value) {
@@ -445,19 +445,19 @@ export default function Purchases() {
 
             <button 
               onClick={handleBulkExport}
-              style={{ padding: '8px 16px', background: '#10b981', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
+              style={{ padding: '8px 16px', background: 'var(--success, #198754)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
             >
               📥 Export to Excel
             </button>
             <button 
               onClick={handleBulkDelete}
-              style={{ padding: '8px 16px', background: '#ef4444', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
+              style={{ padding: '8px 16px', background: 'var(--danger, #DC3545)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
             >
               🗑️ Bulk Delete
             </button>
             <button 
               onClick={() => setSelectedIds([])}
-              style={{ padding: '8px 16px', background: '#cbd5e1', color: '#1e293b', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
+              style={{ padding: '8px 16px', background: '#cbd5e1', color: '#1e293b', border: 'none', borderRadius: 'var(--radius-md, 8px)', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
             >
               Clear Selection
             </button>
@@ -466,10 +466,10 @@ export default function Purchases() {
       )}
 
       {/* PO Listing */}
-      <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden' }}>
+      <div style={{ background: 'var(--bg-card, #FFFFFF)', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: 'var(--radius-lg, 10px)', overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
           <thead>
-            <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
+            <tr style={{ background: '#f8fafc', borderBottom: '1px solid var(--border-light, #D9E1E7)' }}>
               <th style={{ padding: '14px 16px', width: '40px' }}>
                 <input 
                   type="checkbox"
@@ -494,8 +494,8 @@ export default function Purchases() {
                 const canEdit = !['Fully Received', 'Received', 'Locked', 'Cancelled'].includes(po.status);
                 const canReceive = !['Fully Received', 'Received', 'Locked', 'Cancelled'].includes(po.status);
 
-                let statusBg = '#eff6ff';
-                let statusColor = '#1d4ed8';
+                let statusBg = 'var(--primary-light, #E8F5F6)';
+                let statusColor = 'var(--primary, #087E8B)';
                 if (po.status === 'Fully Received' || po.status === 'Received') {
                   statusBg = '#d1fae5'; statusColor = '#065f46';
                 } else if (po.status === 'Partially Received') {
@@ -660,7 +660,7 @@ export default function Purchases() {
                 </button>
                 <button
                   type="submit"
-                  style={{ padding: '10px 20px', background: '#059669', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
+                  style={{ padding: '10px 20px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', fontWeight: '600', cursor: 'pointer' }}
                 >
                   Confirm Partial Receipt 📦
                 </button>
@@ -767,7 +767,7 @@ export default function Purchases() {
                   <button 
                     type="button" 
                     onClick={() => setEditPoItems([...editPoItems, { product: products[0]?._id || '', quantity: 1, costPrice: 0 }])}
-                    style={{ padding: '4px 10px', background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe', borderRadius: '6px', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}
+                    style={{ padding: '4px 10px', background: 'var(--primary-light, #E8F5F6)', color: 'var(--primary, #087E8B)', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: '6px', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}
                   >
                     ➕ Add Line Item
                   </button>
@@ -820,13 +820,13 @@ export default function Purchases() {
                 <button 
                   type="button" 
                   onClick={() => setEditingPo(null)}
-                  style={{ flex: 1, padding: '10px', background: '#e2e8f0', color: '#334155', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
+                  style={{ flex: 1, padding: '10px', background: '#e2e8f0', color: '#334155', border: 'none', borderRadius: 'var(--radius-md, 8px)', fontWeight: '600', cursor: 'pointer' }}
                 >
                   Cancel
                 </button>
                 <button 
                   type="submit" 
-                  style={{ flex: 1, padding: '10px', background: '#2563eb', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
+                  style={{ flex: 1, padding: '10px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', fontWeight: '600', cursor: 'pointer' }}
                 >
                   Save Changes
                 </button>
@@ -887,7 +887,7 @@ export default function Purchases() {
                   <button 
                     type="button" 
                     onClick={handleAddItemRow}
-                    style={{ padding: '4px 10px', background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe', borderRadius: '6px', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}
+                    style={{ padding: '4px 10px', background: 'var(--primary-light, #E8F5F6)', color: 'var(--primary, #087E8B)', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: '6px', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}
                   >
                     ➕ Add Product
                   </button>
@@ -939,20 +939,20 @@ export default function Purchases() {
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: '#f1f5f9', borderRadius: '8px', marginTop: '5px' }}>
                 <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#334155' }}>Total Estimated Cost:</span>
-                <span style={{ fontSize: '16px', fontWeight: 'bold', color: '#2563eb' }}>Rs. {calculateTotal().toFixed(2)}</span>
+                <span style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--primary, #087E8B)' }}>Rs. {calculateTotal().toFixed(2)}</span>
               </div>
 
               <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
                 <button 
                   type="button" 
                   onClick={() => setShowAdd(false)}
-                  style={{ flex: 1, padding: '10px', background: '#e2e8f0', color: '#334155', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
+                  style={{ flex: 1, padding: '10px', background: '#e2e8f0', color: '#334155', border: 'none', borderRadius: 'var(--radius-md, 8px)', fontWeight: '600', cursor: 'pointer' }}
                 >
                   Cancel
                 </button>
                 <button 
                   type="submit" 
-                  style={{ flex: 1, padding: '10px', background: '#2563eb', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
+                  style={{ flex: 1, padding: '10px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', fontWeight: '600', cursor: 'pointer' }}
                 >
                   Dispatch PO
                 </button>

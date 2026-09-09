@@ -293,27 +293,27 @@ export default function Bills() {
 
       {/* Summary Stats Cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
-        <div style={{ background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)', border: '1px solid #bfdbfe', borderRadius: '12px', padding: '18px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-          <span style={{ fontSize: '11px', fontWeight: 'bold', color: '#1e40af', textTransform: 'uppercase' }}>Total Invoiced Sales</span>
-          <span style={{ fontSize: '22px', fontWeight: 'bold', color: '#1e3a8a' }}>Rs. {stats.totalInvoiced.toFixed(2)}</span>
-          <span style={{ fontSize: '12px', color: '#60a5fa' }}>From {filteredBills.length} invoices</span>
+        <div style={{ background: 'var(--bg-card, #FFFFFF)', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: 'var(--radius-lg, 10px)', padding: '18px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <span style={{ fontSize: '11px', fontWeight: 'bold', color: 'var(--text-secondary, #64748B)', textTransform: 'uppercase' }}>Total Invoiced Sales</span>
+          <span style={{ fontSize: '22px', fontWeight: 'bold', color: 'var(--text-primary, #1F2937)' }}>Rs. {stats.totalInvoiced.toFixed(2)}</span>
+          <span style={{ fontSize: '12px', color: 'var(--text-muted, #94A3B8)' }}>From {filteredBills.length} invoices</span>
         </div>
 
-        <div style={{ background: 'linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%)', border: '1px solid #a7f3d0', borderRadius: '12px', padding: '18px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-          <span style={{ fontSize: '11px', fontWeight: 'bold', color: '#065f46', textTransform: 'uppercase' }}>Payment Collected</span>
-          <span style={{ fontSize: '22px', fontWeight: 'bold', color: '#064e3b' }}>Rs. {stats.totalPaid.toFixed(2)}</span>
-          <span style={{ fontSize: '12px', color: '#34d399' }}>Received from sales</span>
+        <div style={{ background: 'var(--bg-card, #FFFFFF)', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: 'var(--radius-lg, 10px)', padding: '18px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <span style={{ fontSize: '11px', fontWeight: 'bold', color: 'var(--text-secondary, #64748B)', textTransform: 'uppercase' }}>Payment Collected</span>
+          <span style={{ fontSize: '22px', fontWeight: 'bold', color: 'var(--success, #198754)' }}>Rs. {stats.totalPaid.toFixed(2)}</span>
+          <span style={{ fontSize: '12px', color: 'var(--text-muted, #94A3B8)' }}>Received from sales</span>
         </div>
 
-        <div style={{ background: 'linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%)', border: '1px solid #fde68a', borderRadius: '12px', padding: '18px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-          <span style={{ fontSize: '11px', fontWeight: 'bold', color: '#92400e', textTransform: 'uppercase' }}>Pending Outstanding</span>
-          <span style={{ fontSize: '22px', fontWeight: 'bold', color: '#78350f' }}>Rs. {stats.totalPending.toFixed(2)}</span>
-          <span style={{ fontSize: '12px', color: '#fbbf24' }}>Remaining balance</span>
+        <div style={{ background: 'var(--bg-card, #FFFFFF)', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: 'var(--radius-lg, 10px)', padding: '18px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <span style={{ fontSize: '11px', fontWeight: 'bold', color: 'var(--text-secondary, #64748B)', textTransform: 'uppercase' }}>Pending Outstanding</span>
+          <span style={{ fontSize: '22px', fontWeight: 'bold', color: 'var(--warning, #D97706)' }}>Rs. {stats.totalPending.toFixed(2)}</span>
+          <span style={{ fontSize: '12px', color: 'var(--text-muted, #94A3B8)' }}>Remaining balance</span>
         </div>
       </div>
 
       {/* Responsive Filters Bar */}
-      <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', background: '#fff', padding: '15px', borderRadius: '12px', border: '1px solid #e2e8f0', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', background: '#fff', padding: '15px', borderRadius: 'var(--radius-lg, 10px)', border: '1px solid var(--border-light, #D9E1E7)', alignItems: 'center' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: '1 1 180px' }}>
           <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#475569' }}>Payment Status</label>
           <select 
@@ -323,8 +323,7 @@ export default function Bills() {
           >
             <option value="">All Payments</option>
             <option value="Pending">Pending</option>
-            <option value="Paid">Paid</option>
-            <option value="Failed">Failed</option>
+            <option value="Paid">Fully Paid</option>
           </select>
         </div>
 
@@ -344,7 +343,7 @@ export default function Bills() {
           </div>
         )}
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: '1 1 200px' }}>
           <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#475569' }}>Date Range</label>
           <DateFilter
             value={dateFilterType}
@@ -359,14 +358,14 @@ export default function Bills() {
         </div>
       </div>
 
-      {/* Responsive Bills Directory List */}
+      {/* Bills Data Grid Table */}
       {loading ? (
         <div style={{ padding: '30px', textAlign: 'center', color: '#64748b' }}>Loading bills...</div>
       ) : (
-        <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', overflowX: 'auto' }}>
-          <table style={{ width: '100%', minWidth: '950px', borderCollapse: 'collapse', textAlign: 'left' }}>
+        <div style={{ background: '#fff', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: 'var(--radius-lg, 10px)', overflowX: 'auto' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '920px' }}>
             <thead>
-              <tr style={{ background: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>
+              <tr style={{ background: '#f8fafc', borderBottom: '2px solid var(--border-light, #D9E1E7)' }}>
                 <th style={{ padding: '12px 14px', width: '36px' }}>
                   <input 
                     type="checkbox"
@@ -403,7 +402,7 @@ export default function Bills() {
                       <td style={{ padding: '12px 14px' }}>
                         <button 
                           onClick={() => handleOpenViewBillModal(b)}
-                          style={{ background: 'transparent', border: 'none', fontWeight: '700', color: '#b91c1c', fontSize: '12px', cursor: 'pointer', fontFamily: 'monospace', textDecoration: 'underline' }}
+                          style={{ background: 'transparent', border: 'none', fontWeight: '700', color: 'var(--primary, #087E8B)', fontSize: '12px', cursor: 'pointer', fontFamily: 'monospace', textDecoration: 'underline' }}
                         >
                           {b.invoiceNumber}
                         </button>
@@ -412,10 +411,10 @@ export default function Bills() {
                       <td style={{ padding: '12px 14px', color: '#64748b', fontSize: '12px', whiteSpace: 'nowrap' }}>
                         {new Date(b.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
                       </td>
-                      <td style={{ padding: '12px 14px', color: '#b91c1c', fontWeight: '700', fontSize: '13px' }}>
+                      <td style={{ padding: '12px 14px', color: 'var(--text-primary, #1F2937)', fontWeight: '700', fontSize: '13px' }}>
                         Rs. {b.totalAmount.toFixed(2)}
                       </td>
-                      <td style={{ padding: '12px 14px', color: '#047857', fontWeight: '600', fontSize: '13px' }}>
+                      <td style={{ padding: '12px 14px', color: 'var(--success, #198754)', fontWeight: '600', fontSize: '13px' }}>
                         Rs. {paymentDetails.paid.toFixed(2)}
                       </td>
                       <td style={{ padding: '12px 14px', fontWeight: '700', fontSize: '13px', color: paymentDetails.pending > 0 ? '#dc2626' : '#16a34a' }}>
@@ -440,7 +439,7 @@ export default function Bills() {
                           <button 
                             onClick={() => handleOpenViewBillModal(b)}
                             title="View Memo Bill UI"
-                            style={{ padding: '5px 9px', background: '#fff1f2', color: '#b91c1c', border: '1px solid #fecdd3', borderRadius: '6px', cursor: 'pointer', fontSize: '11px', fontWeight: '700', whiteSpace: 'nowrap' }}
+                            style={{ padding: '5px 9px', background: 'var(--primary-light, #E8F5F6)', color: 'var(--primary, #087E8B)', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: '6px', cursor: 'pointer', fontSize: '11px', fontWeight: '700', whiteSpace: 'nowrap' }}
                           >
                             👁️ View
                           </button>
@@ -454,7 +453,7 @@ export default function Bills() {
                           <button 
                             onClick={() => handlePrintPDF(b._id)}
                             title="Print / View PDF"
-                            style={{ padding: '5px 9px', background: '#f8fafc', color: '#475569', border: '1px solid #e2e8f0', borderRadius: '6px', cursor: 'pointer', fontSize: '11px', fontWeight: '600', whiteSpace: 'nowrap' }}
+                            style={{ padding: '5px 9px', background: 'var(--border-subtle, #F1F5F9)', color: 'var(--text-primary, #1F2937)', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: '6px', cursor: 'pointer', fontSize: '11px', fontWeight: '600', whiteSpace: 'nowrap' }}
                           >
                             🖨️ PDF
                           </button>
@@ -502,14 +501,14 @@ export default function Bills() {
                 <button 
                   onClick={() => handleDownloadPDF(selectedViewBill)} 
                   className="btn btn-success" 
-                  style={{ background: '#16a34a', borderColor: '#16a34a', padding: '6px 12px', fontSize: '12px' }}
+                  style={{ background: 'var(--primary, #087E8B)', borderColor: 'var(--primary, #087E8B)', padding: '6px 12px', fontSize: '12px' }}
                 >
                   📥 Download PDF
                 </button>
                 <button 
                   onClick={() => handlePrintPDF(selectedViewBill._id)} 
                   className="btn btn-primary" 
-                  style={{ background: '#b91c1c', borderColor: '#b91c1c', padding: '6px 12px', fontSize: '12px' }}
+                  style={{ background: 'var(--secondary, #17324D)', borderColor: 'var(--secondary, #17324D)', padding: '6px 12px', fontSize: '12px' }}
                 >
                   🖨️ Open / Print
                 </button>
@@ -728,7 +727,7 @@ export default function Bills() {
                 </button>
                 <button 
                   type="submit" 
-                  style={{ flex: 1, padding: '10px', background: '#10b981', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
+                  style={{ flex: 1, padding: '10px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', fontWeight: '600', cursor: 'pointer' }}
                 >
                   Submit Payment
                 </button>

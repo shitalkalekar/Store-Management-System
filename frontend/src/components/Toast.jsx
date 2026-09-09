@@ -16,9 +16,9 @@ export default function Toast({ type = 'success', message, onClose, duration = 4
   const isError = type === 'error';
   const isInfo = type === 'info';
 
-  const bgColor = isSuccess ? '#f0fdf4' : isError ? '#fef2f2' : '#eff6ff';
-  const borderColor = isSuccess ? '#86efac' : isError ? '#fca5a5' : '#93c5fd';
-  const textColor = isSuccess ? '#166534' : isError ? '#991b1b' : '#1e40af';
+  const bgColor = isSuccess ? 'var(--success-light, #D1E7DD)' : isError ? 'var(--danger-light, #F8D7DA)' : 'var(--primary-light, #E8F5F6)';
+  const borderColor = isSuccess ? 'var(--success, #198754)' : isError ? 'var(--danger, #DC3545)' : 'var(--primary, #087E8B)';
+  const textColor = isSuccess ? 'var(--success, #198754)' : isError ? 'var(--danger, #DC3545)' : 'var(--primary, #087E8B)';
   const Icon = isSuccess ? CheckCircle2 : isError ? AlertCircle : Info;
 
   return (
@@ -34,9 +34,9 @@ export default function Toast({ type = 'success', message, onClose, duration = 4
         padding: '12px 18px',
         backgroundColor: bgColor,
         border: `1px solid ${borderColor}`,
-        borderRadius: '8px',
+        borderRadius: 'var(--radius-md, 8px)',
         color: textColor,
-        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+        boxShadow: 'var(--shadow-card, 0 1px 3px rgba(0, 0, 0, 0.06))',
         fontSize: '14px',
         fontWeight: '500',
         maxWidth: '420px',

@@ -17,7 +17,7 @@ import {
   ShieldAlert,
   DollarSign,
   LogOut,
-  Pill,
+  Loader2,
   UserCheck,
   Activity,
   ShoppingBag,
@@ -107,10 +107,10 @@ export default function App() {
 
   if (checkingAuth) {
     return (
-      <div style={{ display: 'flex', height: '100vh', width: '100vw', alignItems: 'center', justifyContent: 'center', background: '#f8fafc', fontFamily: 'sans-serif' }}>
+      <div style={{ display: 'flex', height: '100vh', width: '100vw', alignItems: 'center', justifyContent: 'center', background: '#F6F8FA', fontFamily: 'Inter, sans-serif' }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
-          <Pill size={36} color="#3b82f6" className="animate-spin" />
-          <div style={{ fontSize: '14px', fontWeight: '600', color: '#475569' }}>Authenticating user session...</div>
+          <Loader2 size={36} color="#087E8B" className="animate-spin" />
+          <div style={{ fontSize: '14px', fontWeight: '600', color: '#64748B' }}>Authenticating user session...</div>
         </div>
       </div>
     );
@@ -127,11 +127,13 @@ export default function App() {
         <aside className="sidebar no-print">
           <div className="sidebar-header">
             <div className="logo-circle">
-              <Pill size={22} />
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <text x="2" y="18" fontFamily="Inter, sans-serif" fontSize="15" fontWeight="800" fill="white">NE</text>
+              </svg>
             </div>
             <div>
-              <div className="sidebar-title">Tammewar Pharmacy</div>
-              <div className="sidebar-subtitle">Distributions ERP</div>
+              <div className="sidebar-title">NARESH ENTERPRISES</div>
+              <div className="sidebar-subtitle">Distribution Management ERP</div>
             </div>
           </div>
 
@@ -268,9 +270,9 @@ export default function App() {
           </div>
 
           <div className="nav-actions">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', background: '#f1f5f9', padding: '4px 12px', borderRadius: '9999px', border: '1px solid #e2e8f0' }}>
-              <Activity size={14} color="#10b981" />
-              <span style={{ color: '#475569', fontWeight: '600' }}>System Online</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', background: '#E8F5F6', padding: '4px 12px', borderRadius: '9999px', border: '1px solid #D9E1E7' }}>
+              <Activity size={14} color="#087E8B" />
+              <span style={{ color: '#17324D', fontWeight: '600' }}>System Online</span>
             </div>
 
             <div className="nav-profile" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>

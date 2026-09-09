@@ -17,22 +17,22 @@ export default function CustomerDashboard({ user }) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-      <div style={{ background: '#fff', padding: '24px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
-        <h2 style={{ fontSize: '20px', fontWeight: 'bold', color: '#0f172a', marginBottom: '10px' }}>Welcome back, {user?.name}!</h2>
-        <p style={{ color: '#64748b' }}>This is your customer portal. Here you can track orders, view invoices, and make payments online.</p>
+      <div style={{ background: 'var(--bg-card, #FFFFFF)', padding: '24px', borderRadius: 'var(--radius-lg, 10px)', border: '1px solid var(--border-light, #D9E1E7)' }}>
+        <h2 style={{ fontSize: '20px', fontWeight: 'bold', color: 'var(--text-primary, #1F2937)', marginBottom: '10px' }}>Welcome back, {user?.name}!</h2>
+        <p style={{ color: 'var(--text-secondary, #64748B)' }}>This is your customer portal. Here you can track orders, view invoices, and make payments online.</p>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px' }}>
-        <div style={{ background: '#fff', padding: '20px', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
-          <h3 style={{ fontSize: '14px', color: '#475569', marginBottom: '10px' }}>Your Outstanding Balance</h3>
-          <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#b91c1c' }}>Rs. 0.00</div>
-          <p style={{ fontSize: '12px', color: '#64748b', marginTop: '10px' }}>No pending invoices.</p>
+        <div style={{ background: 'var(--bg-card, #FFFFFF)', padding: '20px', borderRadius: 'var(--radius-lg, 10px)', border: '1px solid var(--border-light, #D9E1E7)', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
+          <h3 style={{ fontSize: '14px', color: 'var(--text-secondary, #64748B)', marginBottom: '10px' }}>Your Outstanding Balance</h3>
+          <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--status-danger, #DC3545)' }}>Rs. 0.00</div>
+          <p style={{ fontSize: '12px', color: 'var(--text-muted, #94A3B8)', marginTop: '10px' }}>No pending invoices.</p>
         </div>
 
-        <div style={{ background: '#fff', padding: '20px', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
-          <h3 style={{ fontSize: '14px', color: '#475569', marginBottom: '10px' }}>Active Orders</h3>
-          <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#047857' }}>0</div>
-          <p style={{ fontSize: '12px', color: '#64748b', marginTop: '10px' }}>Currently processing or out for delivery.</p>
+        <div style={{ background: 'var(--bg-card, #FFFFFF)', padding: '20px', borderRadius: 'var(--radius-lg, 10px)', border: '1px solid var(--border-light, #D9E1E7)', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
+          <h3 style={{ fontSize: '14px', color: 'var(--text-secondary, #64748B)', marginBottom: '10px' }}>Active Orders</h3>
+          <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--status-success, #198754)' }}>0</div>
+          <p style={{ fontSize: '12px', color: 'var(--text-muted, #94A3B8)', marginTop: '10px' }}>Currently processing or out for delivery.</p>
         </div>
       </div>
       

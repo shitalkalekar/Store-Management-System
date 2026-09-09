@@ -208,31 +208,31 @@ export default function Vendors() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       
       {error && (
-        <div style={{ padding: '12px', background: '#fee2e2', border: '1px solid #fca5a5', color: '#b91c1c', borderRadius: '8px', fontSize: '13px' }}>
+        <div style={{ padding: '12px', background: '#fee2e2', border: '1px solid #fecaca', color: '#DC3545', borderRadius: '8px', fontSize: '13px' }}>
           {error}
         </div>
       )}
 
       {/* Action Bar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '15px' }}>
-        <h2 style={{ fontSize: '16px', fontWeight: 'bold', color: '#334155' }}>Supplier Master Directory</h2>
+        <h2 style={{ fontSize: '16px', fontWeight: 'bold', color: '#17324D' }}>Supplier Master Directory</h2>
         <div style={{ display: 'flex', gap: '10px' }}>
           <input 
-            type="text"
+            type="text" 
             placeholder="🔍 Search suppliers..."
-            value={search}
+            value={search} 
             onChange={(e) => setSearch(e.target.value)}
-            style={{ padding: '10px 14px', borderRadius: '8px', border: '1px solid #cbd5e1', width: '280px', outline: 'none' }}
+            style={{ padding: '10px 14px', borderRadius: '8px', border: '1px solid #D9E1E7', width: '280px', outline: 'none', color: '#1F2937' }}
           />
           <button 
             onClick={() => setShowBulkImport(true)}
-            style={{ padding: '10px 16px', background: '#059669', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+            style={{ padding: '10px 16px', background: '#FFFFFF', color: '#17324D', border: '1px solid #D9E1E7', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
           >
             📥 Bulk Import Excel
           </button>
           <button 
             onClick={handleOpenAdd}
-            style={{ padding: '10px 20px', background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
+            style={{ padding: '10px 20px', background: '#087E8B', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
           >
             ➕ Add Vendor
           </button>
@@ -240,13 +240,13 @@ export default function Vendors() {
       </div>
 
       {/* Filters Bar */}
-      <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', background: '#fff', padding: '15px', borderRadius: '12px', border: '1px solid #e2e8f0', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', background: '#FFFFFF', padding: '15px', borderRadius: '10px', border: '1px solid #D9E1E7', alignItems: 'center' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#475569' }}>Min Quality Rating</label>
+          <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#64748B' }}>Min Quality Rating</label>
           <select 
             value={selectedRating} 
             onChange={(e) => setSelectedRating(e.target.value)}
-            style={{ padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '13px', outline: 'none' }}
+            style={{ padding: '8px 12px', borderRadius: '8px', border: '1px solid #D9E1E7', fontSize: '13px', outline: 'none', color: '#1F2937' }}
           >
             <option value="">All Ratings</option>
             <option value="5">5 Stars only</option>
@@ -256,11 +256,11 @@ export default function Vendors() {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#475569' }}>Performance Status</label>
+          <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#64748B' }}>Performance Status</label>
           <select 
             value={selectedPerf} 
             onChange={(e) => setSelectedPerf(e.target.value)}
-            style={{ padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '13px', outline: 'none' }}
+            style={{ padding: '8px 12px', borderRadius: '8px', border: '1px solid #D9E1E7', fontSize: '13px', outline: 'none', color: '#1F2937' }}
           >
             <option value="">All Scores</option>
             <option value="excellent">Excellent (&gt;=90)</option>
@@ -272,12 +272,12 @@ export default function Vendors() {
 
       {/* Bulk Actions Bar */}
       {selectedIds.length > 0 && (
-        <div style={{ display: 'flex', gap: '15px', background: '#eff6ff', padding: '15px', borderRadius: '12px', border: '1px solid #bfdbfe', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ fontSize: '14px', color: '#1e40af', fontWeight: '600' }}>
+        <div style={{ display: 'flex', gap: '15px', background: '#E8F5F6', padding: '15px', borderRadius: '10px', border: '1px solid #B2DFE3', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span style={{ fontSize: '14px', color: '#087E8B', fontWeight: '600' }}>
             Selected <strong>{selectedIds.length}</strong> suppliers
           </span>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-            <label style={{ fontSize: '13px', fontWeight: '600', color: '#1e40af' }}>Set Quality Rating:</label>
+            <label style={{ fontSize: '13px', fontWeight: '600', color: '#087E8B' }}>Set Quality Rating:</label>
             <select 
               onChange={(e) => {
                 if(e.target.value) {
@@ -285,7 +285,7 @@ export default function Vendors() {
                   e.target.value = '';
                 }
               }}
-              style={{ padding: '6px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', background: '#fff', fontSize: '12px' }}
+              style={{ padding: '6px 12px', borderRadius: '6px', border: '1px solid #D9E1E7', background: '#FFFFFF', color: '#1F2937', fontSize: '12px' }}
             >
               <option value="">Select...</option>
               <option value="5">5 Stars</option>
@@ -296,19 +296,19 @@ export default function Vendors() {
             </select>
             <button 
               onClick={handleBulkExport}
-              style={{ padding: '8px 16px', background: '#10b981', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
+              style={{ padding: '8px 16px', background: '#198754', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
             >
               📥 Export to Excel
             </button>
             <button 
               onClick={handleBulkDelete}
-              style={{ padding: '8px 16px', background: '#ef4444', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
+              style={{ padding: '8px 16px', background: '#DC3545', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
             >
               🗑️ Bulk Delete
             </button>
             <button 
               onClick={() => setSelectedIds([])}
-              style={{ padding: '8px 16px', background: '#cbd5e1', color: '#1e293b', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
+              style={{ padding: '8px 16px', background: '#FFFFFF', color: '#17324D', border: '1px solid #D9E1E7', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
             >
               Clear Selection
             </button>
@@ -320,10 +320,10 @@ export default function Vendors() {
       {loading ? (
         <div>Loading vendor list...</div>
       ) : (
-        <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden' }}>
+        <div style={{ background: '#FFFFFF', border: '1px solid #D9E1E7', borderRadius: '10px', overflow: 'hidden' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
             <thead>
-              <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
+              <tr style={{ background: '#F8FAFC', borderBottom: '1px solid #D9E1E7' }}>
                 <th style={{ padding: '14px 20px', width: '40px' }}>
                   <input 
                     type="checkbox"
@@ -331,19 +331,19 @@ export default function Vendors() {
                     onChange={handleSelectAll}
                   />
                 </th>
-                <th style={{ padding: '14px 20px', fontSize: '12px', color: '#475569', fontWeight: 'bold' }}>Sr. No.</th>
-                <th style={{ padding: '14px 20px', fontSize: '12px', color: '#475569', fontWeight: 'bold' }}>Vendor Name</th>
-                <th style={{ padding: '14px 20px', fontSize: '12px', color: '#475569', fontWeight: 'bold' }}>Contact Details</th>
-                <th style={{ padding: '14px 20px', fontSize: '12px', color: '#475569', fontWeight: 'bold' }}>Performance</th>
-                <th style={{ padding: '14px 20px', fontSize: '12px', color: '#475569', fontWeight: 'bold' }}>Categories Supplied</th>
-                <th style={{ padding: '14px 20px', fontSize: '12px', color: '#475569', fontWeight: 'bold' }}>Address</th>
-                <th style={{ padding: '14px 20px', fontSize: '12px', color: '#475569', fontWeight: 'bold', textAlign: 'right' }}>Actions</th>
+                <th style={{ padding: '14px 20px', fontSize: '12px', color: '#17324D', fontWeight: 'bold' }}>Sr. No.</th>
+                <th style={{ padding: '14px 20px', fontSize: '12px', color: '#17324D', fontWeight: 'bold' }}>Vendor Name</th>
+                <th style={{ padding: '14px 20px', fontSize: '12px', color: '#17324D', fontWeight: 'bold' }}>Contact Details</th>
+                <th style={{ padding: '14px 20px', fontSize: '12px', color: '#17324D', fontWeight: 'bold' }}>Performance</th>
+                <th style={{ padding: '14px 20px', fontSize: '12px', color: '#17324D', fontWeight: 'bold' }}>Categories Supplied</th>
+                <th style={{ padding: '14px 20px', fontSize: '12px', color: '#17324D', fontWeight: 'bold' }}>Address</th>
+                <th style={{ padding: '14px 20px', fontSize: '12px', color: '#17324D', fontWeight: 'bold', textAlign: 'right' }}>Actions</th>
               </tr>
             </thead>
             <tbody>
               {filteredVendors.length > 0 ? (
                 filteredVendors.map((v, idx) => (
-                  <tr key={v._id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                  <tr key={v._id} style={{ borderBottom: '1px solid #F1F5F9' }}>
                     <td style={{ padding: '14px 20px', width: '40px' }}>
                       <input 
                         type="checkbox"
@@ -351,40 +351,43 @@ export default function Vendors() {
                         onChange={() => handleSelectRow(v._id)}
                       />
                     </td>
-                    <td style={{ padding: '14px 20px', color: '#475569', fontWeight: 'bold' }}>{idx + 1}</td>
-                    <td style={{ padding: '14px 20px', fontWeight: '600', color: '#1e293b' }}>{v.name}</td>
-                    <td style={{ padding: '14px 20px', color: '#334155' }}>{v.contact}</td>
-                    <td style={{ padding: '14px 20px', color: '#334155' }}>
+                    <td style={{ padding: '14px 20px', color: '#64748B', fontWeight: 'bold' }}>{idx + 1}</td>
+                    <td style={{ padding: '14px 20px', fontWeight: '600', color: '#17324D' }}>{v.name}</td>
+                    <td style={{ padding: '14px 20px', color: '#1F2937' }}>{v.contact}</td>
+                    <td style={{ padding: '14px 20px', color: '#1F2937' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: (v.performanceScore || 100) >= 80 ? '#d1fae5' : (v.performanceScore || 100) >= 50 ? '#fef3c7' : '#fee2e2', color: (v.performanceScore || 100) >= 80 ? '#065f46' : (v.performanceScore || 100) >= 50 ? '#b45309' : '#b91c1c', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '14px' }}>
+                        <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: (v.performanceScore || 100) >= 80 ? '#dcfce7' : (v.performanceScore || 100) >= 50 ? '#fef3c7' : '#fee2e2', color: (v.performanceScore || 100) >= 80 ? '#198754' : (v.performanceScore || 100) >= 50 ? '#D97706' : '#DC3545', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '14px' }}>
                           {v.performanceScore || 100}
                         </div>
-                        <div style={{ display: 'flex', color: '#f59e0b', fontSize: '12px' }}>
-                          {'★'.repeat(Math.max(0, Math.min(5, v.qualityRating || 5)))}
-                          {'☆'.repeat(Math.max(0, 5 - Math.min(5, v.qualityRating || 5)))}
+                        <div style={{ display: 'flex', color: '#D97706', fontSize: '12px' }}>
+                          {'★'.repeat(v.qualityRating || 5)}{'☆'.repeat(5 - (v.qualityRating || 5))}
                         </div>
                       </div>
                     </td>
-                    <td style={{ padding: '14px 20px', color: '#475569' }}>
-                      <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap' }}>
-                        {v.itemCategories && v.itemCategories.map((c, i) => (
-                          <span key={i} style={{ background: '#eff6ff', color: '#3b82f6', fontSize: '11px', padding: '2px 8px', borderRadius: '4px', fontWeight: '500' }}>
-                            {c}
-                          </span>
-                        ))}
+                    <td style={{ padding: '14px 20px', color: '#64748B' }}>
+                      <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+                        {v.itemCategories && v.itemCategories.length > 0 ? (
+                          v.itemCategories.map((cat, i) => (
+                            <span key={i} style={{ background: '#E8F5F6', color: '#087E8B', border: '1px solid #B2DFE3', fontSize: '11px', padding: '2px 8px', borderRadius: '4px', fontWeight: '500' }}>
+                              {cat}
+                            </span>
+                          ))
+                        ) : (
+                          <span style={{ color: '#94A3B8', fontSize: '12px' }}>None</span>
+                        )}
                       </div>
                     </td>
-                    <td style={{ padding: '14px 20px', color: '#475569' }}>{v.address}</td>
+                    <td style={{ padding: '14px 20px', color: '#64748B' }}>{v.address}</td>
                     <td style={{ padding: '14px 20px', textAlign: 'right', display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
                       <button 
                         onClick={() => handleOpenEdit(v)}
-                        style={{ padding: '6px 12px', background: '#eff6ff', color: '#1d4ed8', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600', fontSize: '12px' }}
+                        style={{ padding: '6px 12px', background: '#F6F8FA', color: '#17324D', border: '1px solid #D9E1E7', borderRadius: '6px', cursor: 'pointer', fontWeight: '600', fontSize: '12px' }}
                       >
                         ✏️ Edit
                       </button>
                       <button 
                         onClick={() => handleDelete(v._id)}
-                        style={{ padding: '6px 12px', background: '#fef2f2', color: '#b91c1c', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600', fontSize: '12px' }}
+                        style={{ padding: '6px 12px', background: '#fee2e2', color: '#DC3545', border: '1px solid #fecaca', borderRadius: '6px', cursor: 'pointer', fontWeight: '600', fontSize: '12px' }}
                       >
                         🗑️ Delete
                       </button>
@@ -393,7 +396,7 @@ export default function Vendors() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="8" style={{ padding: '40px', textAlign: 'center', color: '#64748b' }}>No vendors found. Add one to get started!</td>
+                  <td colSpan="8" style={{ padding: '40px', textAlign: 'center', color: '#64748B' }}>No vendors found. Add one to get started!</td>
                 </tr>
               )}
             </tbody>
@@ -401,14 +404,14 @@ export default function Vendors() {
         </div>
       )}
 
-      {/* Add / Edit Modal */}
+      {/* Add / Edit Form Modal */}
       {formMode && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(15,23,42,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '15px' }}>
-          <div style={{ background: '#fff', borderRadius: '12px', padding: '24px', width: '100%', maxWidth: '500px', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }}>
-            <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#0f172a', marginBottom: '15px' }}>{formMode === 'add' ? 'Add New Supplier Vendor' : 'Edit Supplier Vendor'}</h3>
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(23, 50, 77, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '15px' }}>
+          <div style={{ background: '#FFFFFF', borderRadius: '10px', border: '1px solid #D9E1E7', padding: '24px', width: '100%', maxWidth: '500px', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#17324D', marginBottom: '15px' }}>{formMode === 'add' ? 'Add New Supplier Vendor' : 'Edit Supplier Vendor'}</h3>
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
               <div>
-                <label style={{ fontSize: '13px', fontWeight: '600', color: '#475569', display: 'block', marginBottom: '5px' }}>Vendor Name*</label>
+                <label style={{ fontSize: '13px', fontWeight: '600', color: '#64748B', display: 'block', marginBottom: '5px' }}>Vendor Name*</label>
                 <input 
                   type="text" 
                   value={formData.name} 
@@ -416,29 +419,30 @@ export default function Vendors() {
                     setFormData({ ...formData, name: sanitizeNameInput(e.target.value) });
                     if (formErrors.name) setFormErrors({ ...formErrors, name: '' });
                   }}
-                  style={{ width: '100%', padding: '8px 12px', borderRadius: '6px', border: `1px solid ${formErrors.name ? '#ef4444' : '#cbd5e1'}`, outline: 'none' }}
+                  placeholder="e.g. Acme Pharmaceuticals Ltd"
+                  style={{ width: '100%', padding: '8px 12px', borderRadius: '6px', border: `1px solid ${formErrors.name ? '#DC3545' : '#D9E1E7'}`, outline: 'none' }}
                 />
-                {formErrors.name && <span style={{ color: '#ef4444', fontSize: '11px', marginTop: '2px', display: 'block' }}>{formErrors.name}</span>}
+                {formErrors.name && <span style={{ color: '#DC3545', fontSize: '11px', marginTop: '2px', display: 'block' }}>{formErrors.name}</span>}
               </div>
 
               <div>
-                <label style={{ fontSize: '13px', fontWeight: '600', color: '#475569', display: 'block', marginBottom: '5px' }}>Contact Phone/Mobile*</label>
+                <label style={{ fontSize: '13px', fontWeight: '600', color: '#64748B', display: 'block', marginBottom: '5px' }}>Contact Phone/Mobile*</label>
                 <input 
-                  type="text" 
+                  type="tel" 
                   maxLength={10}
                   value={formData.contact} 
                   onChange={(e) => {
                     setFormData({ ...formData, contact: sanitizeNumericInput(e.target.value, 10) });
                     if (formErrors.contact) setFormErrors({ ...formErrors, contact: '' });
                   }}
-                  placeholder="10-digit mobile number"
-                  style={{ width: '100%', padding: '8px 12px', borderRadius: '6px', border: `1px solid ${formErrors.contact ? '#ef4444' : '#cbd5e1'}`, outline: 'none' }}
+                  placeholder="10-digit primary mobile"
+                  style={{ width: '100%', padding: '8px 12px', borderRadius: '6px', border: `1px solid ${formErrors.contact ? '#DC3545' : '#D9E1E7'}`, outline: 'none' }}
                 />
-                {formErrors.contact && <span style={{ color: '#ef4444', fontSize: '11px', marginTop: '2px', display: 'block' }}>{formErrors.contact}</span>}
+                {formErrors.contact && <span style={{ color: '#DC3545', fontSize: '11px', marginTop: '2px', display: 'block' }}>{formErrors.contact}</span>}
               </div>
 
               <div>
-                <label style={{ fontSize: '13px', fontWeight: '600', color: '#475569', display: 'block', marginBottom: '5px' }}>Address*</label>
+                <label style={{ fontSize: '13px', fontWeight: '600', color: '#64748B', display: 'block', marginBottom: '5px' }}>Address*</label>
                 <textarea 
                   value={formData.address} 
                   onChange={(e) => {
@@ -446,43 +450,44 @@ export default function Vendors() {
                     if (formErrors.address) setFormErrors({ ...formErrors, address: '' });
                   }}
                   rows="3"
-                  style={{ width: '100%', padding: '8px 12px', borderRadius: '6px', border: `1px solid ${formErrors.address ? '#ef4444' : '#cbd5e1'}`, outline: 'none' }}
+                  placeholder="Official registered address..."
+                  style={{ width: '100%', padding: '8px 12px', borderRadius: '6px', border: `1px solid ${formErrors.address ? '#DC3545' : '#D9E1E7'}`, outline: 'none' }}
                 />
-                {formErrors.address && <span style={{ color: '#ef4444', fontSize: '11px', marginTop: '2px', display: 'block' }}>{formErrors.address}</span>}
+                {formErrors.address && <span style={{ color: '#DC3545', fontSize: '11px', marginTop: '2px', display: 'block' }}>{formErrors.address}</span>}
               </div>
 
               <div>
-                <label style={{ fontSize: '13px', fontWeight: '600', color: '#475569', display: 'block', marginBottom: '5px' }}>Item Categories Supplied (comma separated)</label>
+                <label style={{ fontSize: '13px', fontWeight: '600', color: '#64748B', display: 'block', marginBottom: '5px' }}>Item Categories Supplied (comma separated)</label>
                 <input 
                   type="text" 
                   value={formData.itemCategories} 
-                  placeholder="e.g. Medicines, Supplements, Hygiene"
                   onChange={(e) => setFormData({ ...formData, itemCategories: e.target.value })}
-                  style={{ width: '100%', padding: '8px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', outline: 'none' }}
+                  placeholder="e.g. Antibiotics, Surgical, Syringes"
+                  style={{ width: '100%', padding: '8px 12px', borderRadius: '6px', border: '1px solid #D9E1E7', outline: 'none' }}
                 />
               </div>
 
-              <div style={{ display: 'flex', gap: '15px' }}>
-                <div style={{ flex: 1 }}>
-                  <label style={{ fontSize: '13px', fontWeight: '600', color: '#475569', display: 'block', marginBottom: '5px' }}>Performance Score (0-100)</label>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+                <div>
+                  <label style={{ fontSize: '13px', fontWeight: '600', color: '#64748B', display: 'block', marginBottom: '5px' }}>Performance Score (0-100)</label>
                   <input 
                     type="number" 
                     min="0"
                     max="100"
                     value={formData.performanceScore} 
                     onChange={(e) => setFormData({ ...formData, performanceScore: parseInt(e.target.value) || 0 })}
-                    style={{ width: '100%', padding: '8px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', outline: 'none' }}
+                    style={{ width: '100%', padding: '8px 12px', borderRadius: '6px', border: '1px solid #D9E1E7', outline: 'none' }}
                   />
                 </div>
-                <div style={{ flex: 1 }}>
-                  <label style={{ fontSize: '13px', fontWeight: '600', color: '#475569', display: 'block', marginBottom: '5px' }}>Quality Rating (1-5)</label>
+                <div>
+                  <label style={{ fontSize: '13px', fontWeight: '600', color: '#64748B', display: 'block', marginBottom: '5px' }}>Quality Rating (1-5)</label>
                   <input 
                     type="number" 
                     min="1"
                     max="5"
                     value={formData.qualityRating} 
                     onChange={(e) => setFormData({ ...formData, qualityRating: parseInt(e.target.value) || 1 })}
-                    style={{ width: '100%', padding: '8px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', outline: 'none' }}
+                    style={{ width: '100%', padding: '8px 12px', borderRadius: '6px', border: '1px solid #D9E1E7', outline: 'none' }}
                   />
                 </div>
               </div>
@@ -491,13 +496,13 @@ export default function Vendors() {
                 <button 
                   type="button" 
                   onClick={() => setFormMode(null)}
-                  style={{ flex: 1, padding: '10px', background: '#e2e8f0', color: '#334155', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
+                  style={{ flex: 1, padding: '10px', background: '#FFFFFF', color: '#17324D', border: '1px solid #D9E1E7', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
                 >
                   Cancel
                 </button>
                 <button 
                   type="submit" 
-                  style={{ flex: 1, padding: '10px', background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
+                  style={{ flex: 1, padding: '10px', background: '#087E8B', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
                 >
                   Save
                 </button>

@@ -62,7 +62,7 @@ export default function ChangePasswordCard() {
 
   const field = (label, name, autoComplete) => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-      <label htmlFor={name} style={{ fontSize: '12px', fontWeight: '700', color: '#475569' }}>{label}</label>
+      <label htmlFor={name} style={{ fontSize: '12px', fontWeight: '700', color: 'var(--text-secondary, #64748B)' }}>{label}</label>
       <input
         id={name}
         name={name}
@@ -72,17 +72,17 @@ export default function ChangePasswordCard() {
         onChange={update(name)}
         maxLength={128}
         required
-        style={{ padding: '10px 12px', border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '13px' }}
+        style={{ padding: '10px 12px', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: 'var(--radius-md, 8px)', fontSize: '13px', background: 'var(--bg-card, #FFFFFF)', color: 'var(--text-primary, #1F2937)' }}
       />
     </div>
   );
 
   return (
     <div className="card" style={{ maxWidth: '520px' }}>
-      <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <KeyRound size={18} color="#3b82f6" /> Change owner password
+      <h3 style={{ fontSize: '16px', fontWeight: '700', color: 'var(--text-primary, #1F2937)', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <KeyRound size={18} color="var(--primary, #087E8B)" /> Change owner password
       </h3>
-      <p style={{ fontSize: '12px', color: '#64748b', marginBottom: '16px' }}>
+      <p style={{ fontSize: '12px', color: 'var(--text-secondary, #64748B)', marginBottom: '16px' }}>
         Requires the current password. At least 16 characters with an uppercase letter,
         a lowercase letter, and a digit.
       </p>
@@ -93,12 +93,12 @@ export default function ChangePasswordCard() {
           style={{
             padding: '12px 14px',
             marginBottom: '16px',
-            borderRadius: '8px',
+            borderRadius: 'var(--radius-md, 8px)',
             fontSize: '13px',
             fontWeight: '600',
-            background: status.type === 'success' ? '#d1fae5' : '#fee2e2',
-            border: `1px solid ${status.type === 'success' ? '#6ee7b7' : '#fca5a5'}`,
-            color: status.type === 'success' ? '#065f46' : '#b91c1c',
+            background: status.type === 'success' ? 'var(--success-light, #D1E7DD)' : 'var(--danger-light, #F8D7DA)',
+            border: `1px solid ${status.type === 'success' ? 'var(--success, #198754)' : 'var(--danger, #DC3545)'}`,
+            color: status.type === 'success' ? 'var(--success, #198754)' : 'var(--danger, #DC3545)',
           }}
         >
           {status.message}

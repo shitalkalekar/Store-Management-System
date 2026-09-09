@@ -279,12 +279,12 @@ export default function Employees() {
 
       {/* Bulk Actions Bar */}
       {selectedIds.length > 0 && (
-        <div style={{ display: 'flex', gap: '15px', background: '#eff6ff', padding: '15px', borderRadius: '12px', border: '1px solid #bfdbfe', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ fontSize: '14px', color: '#1e40af', fontWeight: '600' }}>
+        <div style={{ display: 'flex', gap: '15px', background: 'var(--primary-light, #E8F5F6)', padding: '15px', borderRadius: 'var(--radius-lg, 10px)', border: '1px solid var(--border-light, #D9E1E7)', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span style={{ fontSize: '14px', color: 'var(--primary, #087E8B)', fontWeight: '600' }}>
             Selected <strong>{selectedIds.length}</strong> staff profiles
           </span>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-            <label style={{ fontSize: '12px', fontWeight: '600', color: '#1e40af' }}>Update Role:</label>
+            <label style={{ fontSize: '12px', fontWeight: '600', color: 'var(--primary, #087E8B)' }}>Update Role:</label>
             <select 
               onChange={(e) => {
                 if(e.target.value) {
@@ -325,12 +325,12 @@ export default function Employees() {
       )}
 
       {/* Employees CRUD List */}
-      <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '24px' }}>
+      <div style={{ background: 'var(--bg-card, #FFFFFF)', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: 'var(--radius-lg, 10px)', padding: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #f1f5f9', paddingBottom: '10px', marginBottom: '15px' }}>
-          <h3 style={{ fontSize: '16px', fontWeight: 'bold', color: '#1e293b' }}>👥 Staff List</h3>
+          <h3 style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--text-primary, #1F2937)' }}>👥 Staff List</h3>
           <button 
             onClick={() => setShowAdd(true)}
-            style={{ padding: '8px 16px', background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '6px', fontWeight: '600', cursor: 'pointer', fontSize: '13px' }}
+            style={{ padding: '8px 16px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', fontWeight: '600', cursor: 'pointer', fontSize: '13px' }}
           >
             Add Staff
           </button>
@@ -411,9 +411,9 @@ export default function Employees() {
       </div>
 
       {/* Employee Delivery Performance Report */}
-      <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '24px' }}>
+      <div style={{ background: 'var(--bg-card, #FFFFFF)', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: 'var(--radius-lg, 10px)', padding: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #f1f5f9', paddingBottom: '10px', marginBottom: '15px' }}>
-          <h3 style={{ fontSize: '16px', fontWeight: 'bold', color: '#1e293b' }}>🚚 Staff Performance</h3>
+          <h3 style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--text-primary, #1F2937)' }}>🚚 Staff Performance</h3>
           
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
             <input type="date" value={perfStart} onChange={(e) => setPerfStart(e.target.value)} style={{ padding: '6px 10px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '12px' }} />
@@ -421,7 +421,7 @@ export default function Employees() {
             <input type="date" value={perfEnd} onChange={(e) => setPerfEnd(e.target.value)} style={{ padding: '6px 10px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '12px' }} />
             <button 
               onClick={fetchPerformance}
-              style={{ padding: '6px 14px', background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '6px', fontWeight: '600', cursor: 'pointer', fontSize: '12px' }}
+              style={{ padding: '6px 14px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: '6px', fontWeight: '600', cursor: 'pointer', fontSize: '12px' }}
             >
               Filter
             </button>
@@ -448,7 +448,7 @@ export default function Employees() {
                   <td style={{ padding: '10px 15px', fontWeight: 'bold', color: '#334155' }}>{p.name}</td>
                   <td style={{ padding: '10px 15px', color: '#475569' }}>{p.branchName}</td>
                   <td style={{ padding: '10px 15px', fontWeight: 'bold', color: '#166534' }}>{p.deliveriesCompleted} Runs</td>
-                  <td style={{ padding: '10px 15px', color: '#3b82f6', fontWeight: 'bold' }}>{p.averageDeliveryTimeInMinutes} Mins</td>
+                  <td style={{ padding: '10px 15px', color: 'var(--primary, #087E8B)', fontWeight: 'bold' }}>{p.averageDeliveryTimeInMinutes} Mins</td>
                   <td style={{ padding: '10px 15px', color: '#166534', fontWeight: '600' }}>{p.onTimeDeliveries}</td>
                   <td style={{ padding: '10px 15px', color: '#b91c1c', fontWeight: '600' }}>{p.delayedDeliveries}</td>
                 </tr>
@@ -574,7 +574,7 @@ export default function Employees() {
                 </button>
                 <button 
                   type="submit" 
-                  style={{ flex: 1, padding: '10px', background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
+                  style={{ flex: 1, padding: '10px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
                 >
                   Save Profile
                 </button>

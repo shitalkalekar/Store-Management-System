@@ -152,15 +152,15 @@ export default function CustomerLedgers({ onNavigate }) {
   };
 
   return (
-    <div style={{ padding: '24px', background: '#f8fafc', minHeight: '100vh', fontFamily: 'sans-serif' }}>
+    <div style={{ padding: '24px', background: '#F6F8FA', minHeight: '100vh', fontFamily: 'Inter, sans-serif' }}>
       
       {/* Page Title Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '15px' }}>
         <div>
-          <h1 style={{ fontSize: '22px', fontWeight: 'bold', color: '#0f172a', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <h1 style={{ fontSize: '22px', fontWeight: 'bold', color: '#17324D', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
             📓 Customer Accounts & Ledger Management
           </h1>
-          <p style={{ fontSize: '13px', color: '#64748b', marginTop: '4px', margin: 0 }}>
+          <p style={{ fontSize: '13px', color: '#64748B', marginTop: '4px', margin: 0 }}>
             Manage completed order accounts, track customer payments received, and collect outstanding pending balances.
           </p>
         </div>
@@ -176,19 +176,19 @@ export default function CustomerLedgers({ onNavigate }) {
               setPaymentRef('');
               setPaymentNotes('');
             }}
-            style={{ padding: '8px 14px', background: '#2563eb', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', boxShadow: '0 2px 4px rgba(37,99,235,0.2)' }}
+            style={{ padding: '8px 14px', background: '#087E8B', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
           >
             💳 + Add Manual Payment
           </button>
           <button
             onClick={fetchLedgers}
-            style={{ padding: '8px 14px', background: '#fff', border: '1px solid #cbd5e1', borderRadius: '8px', color: '#334155', fontWeight: '600', fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+            style={{ padding: '8px 14px', background: '#FFFFFF', border: '1px solid #D9E1E7', borderRadius: '8px', color: '#17324D', fontWeight: '600', fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
           >
             🔄 Refresh
           </button>
           <button
             onClick={handleExportExcel}
-            style={{ padding: '8px 14px', background: '#16a34a', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+            style={{ padding: '8px 14px', background: '#198754', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
           >
             📊 Export Excel
           </button>
@@ -198,54 +198,52 @@ export default function CustomerLedgers({ onNavigate }) {
       {/* Financial Summary Metric Cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', marginBottom: '24px' }}>
         
-        <div style={{ background: '#fff', padding: '18px', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
-          <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#64748b' }}>TOTAL CUSTOMERS</div>
-          <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#0f172a', marginTop: '6px' }}>{summaryMetrics.totalCustomers}</div>
-          <div style={{ fontSize: '11px', color: '#3b82f6', marginTop: '4px' }}>Active Account Directory</div>
+        <div style={{ background: '#FFFFFF', padding: '18px', borderRadius: '10px', border: '1px solid #D9E1E7' }}>
+          <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#64748B' }}>TOTAL CUSTOMERS</div>
+          <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#17324D', marginTop: '6px' }}>{summaryMetrics.totalCustomers}</div>
+          <div style={{ fontSize: '11px', color: '#087E8B', marginTop: '4px' }}>Active Account Directory</div>
         </div>
 
-        <div style={{ background: '#fff', padding: '18px', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
-          <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#64748b' }}>COMPLETED ORDERS</div>
-          <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#059669', marginTop: '6px' }}>{summaryMetrics.completedOrdersCount}</div>
-          <div style={{ fontSize: '11px', color: '#059669', marginTop: '4px' }}>Delivered & Fulfilled</div>
+        <div style={{ background: '#FFFFFF', padding: '18px', borderRadius: '10px', border: '1px solid #D9E1E7' }}>
+          <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#64748B' }}>COMPLETED ORDERS</div>
+          <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#198754', marginTop: '6px' }}>{summaryMetrics.completedOrdersCount}</div>
+          <div style={{ fontSize: '11px', color: '#198754', marginTop: '4px' }}>Delivered & Fulfilled</div>
         </div>
 
-        <div style={{ background: '#fff', padding: '18px', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
-          <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#64748b' }}>TOTAL SALES BILLED</div>
-          <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#2563eb', marginTop: '6px' }}>Rs. {summaryMetrics.totalBilled.toLocaleString()}</div>
-          <div style={{ fontSize: '11px', color: '#64748b', marginTop: '4px' }}>Gross Revenue Billed</div>
+        <div style={{ background: '#FFFFFF', padding: '18px', borderRadius: '10px', border: '1px solid #D9E1E7' }}>
+          <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#64748B' }}>TOTAL SALES BILLED</div>
+          <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#17324D', marginTop: '6px' }}>Rs. {summaryMetrics.totalBilled.toLocaleString()}</div>
+          <div style={{ fontSize: '11px', color: '#64748B', marginTop: '4px' }}>Gross Revenue Billed</div>
         </div>
 
-        <div style={{ background: '#fff', padding: '18px', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
-          <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#64748b' }}>TOTAL PAYMENTS RECEIVED</div>
-          <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#16a34a', marginTop: '6px' }}>Rs. {summaryMetrics.totalPaid.toLocaleString()}</div>
-          <div style={{ fontSize: '11px', color: '#16a34a', marginTop: '4px' }}>Settled Collections</div>
+        <div style={{ background: '#FFFFFF', padding: '18px', borderRadius: '10px', border: '1px solid #D9E1E7' }}>
+          <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#64748B' }}>TOTAL PAYMENTS RECEIVED</div>
+          <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#198754', marginTop: '6px' }}>Rs. {summaryMetrics.totalPaid.toLocaleString()}</div>
+          <div style={{ fontSize: '11px', color: '#198754', marginTop: '4px' }}>Settled Collections</div>
         </div>
 
-        <div style={{ padding: '18px', borderRadius: '12px', border: '1px solid #fee2e2', background: '#fef2f2', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
-          <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#b91c1c' }}>PENDING OUTSTANDING BALANCE</div>
-          <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#dc2626', marginTop: '6px' }}>Rs. {summaryMetrics.totalPending.toLocaleString()}</div>
-          <div style={{ fontSize: '11px', color: '#b91c1c', marginTop: '4px' }}>To Be Collected</div>
+        <div style={{ background: '#FFFFFF', padding: '18px', borderRadius: '10px', border: '1px solid #D9E1E7' }}>
+          <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#DC3545' }}>PENDING OUTSTANDING BALANCE</div>
+          <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#DC3545', marginTop: '6px' }}>Rs. {summaryMetrics.totalPending.toLocaleString()}</div>
+          <div style={{ fontSize: '11px', color: '#DC3545', marginTop: '4px' }}>To Be Collected</div>
         </div>
 
       </div>
 
       {/* Filter & Search Controls */}
-      <div style={{ background: '#fff', padding: '16px 20px', borderRadius: '12px', border: '1px solid #e2e8f0', marginBottom: '20px', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
+      <div style={{ background: '#FFFFFF', padding: '16px 20px', borderRadius: '10px', border: '1px solid #D9E1E7', marginBottom: '20px' }}>
         <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
           
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center', flex: 1 }}>
             {/* Search */}
             <div style={{ position: 'relative', flex: '1 1 220px', maxWidth: '300px' }}>
-              <span style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', fontSize: '14px', color: '#94a3b8' }}>🔍</span>
+              <span style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', fontSize: '14px', color: '#94A3B8' }}>🔍</span>
               <input
                 type="text"
                 placeholder="Search customer name, phone, or email..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                style={{ width: '100%', padding: '10px 14px 10px 36px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '13px', background: '#f8fafc', transition: 'border 0.2s' }}
-                onFocus={(e) => { e.target.style.borderColor = '#3b82f6'; e.target.style.background = '#fff'; }}
-                onBlur={(e) => { e.target.style.borderColor = '#cbd5e1'; e.target.style.background = '#f8fafc'; }}
+                style={{ width: '100%', padding: '10px 14px 10px 36px', borderRadius: '8px', border: '1px solid #D9E1E7', outline: 'none', fontSize: '13px', background: '#FFFFFF', color: '#1F2937' }}
               />
             </div>
 
@@ -254,9 +252,7 @@ export default function CustomerLedgers({ onNavigate }) {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', background: '#f8fafc', fontSize: '13px', fontWeight: '500', color: '#334155', cursor: 'pointer' }}
-                onFocus={(e) => e.target.style.borderColor = '#3b82f6'}
-                onBlur={(e) => e.target.style.borderColor = '#cbd5e1'}
+                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #D9E1E7', outline: 'none', background: '#FFFFFF', fontSize: '13px', fontWeight: '500', color: '#1F2937', cursor: 'pointer' }}
               >
                 <option value="">📋 All Payment Statuses</option>
                 <option value="Pending Payment">⏳ Pending Payment</option>
@@ -270,9 +266,7 @@ export default function CustomerLedgers({ onNavigate }) {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', background: '#f8fafc', fontSize: '13px', fontWeight: '500', color: '#334155', cursor: 'pointer' }}
-                onFocus={(e) => e.target.style.borderColor = '#3b82f6'}
-                onBlur={(e) => e.target.style.borderColor = '#cbd5e1'}
+                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #D9E1E7', outline: 'none', background: '#FFFFFF', fontSize: '13px', fontWeight: '500', color: '#1F2937', cursor: 'pointer' }}
               >
                 <option value="pending_desc">⬇️ Highest Pending Balance</option>
                 <option value="pending_asc">⬆️ Lowest Pending Balance</option>
@@ -283,11 +277,11 @@ export default function CustomerLedgers({ onNavigate }) {
           </div>
 
           <div style={{ 
-            fontSize: '12px', color: '#475569', fontWeight: '600', 
-            background: '#f1f5f9', padding: '8px 14px', borderRadius: '20px',
+            fontSize: '12px', color: '#17324D', fontWeight: '600', 
+            background: '#E8F5F6', padding: '8px 14px', borderRadius: '20px', border: '1px solid #B2DFE3',
             whiteSpace: 'nowrap'
           }}>
-            Showing <strong style={{ color: '#1e40af' }}>{filteredLedgers.length}</strong> of <strong>{ledgers.length}</strong> customer(s)
+            Showing <strong style={{ color: '#087E8B' }}>{filteredLedgers.length}</strong> of <strong>{ledgers.length}</strong> customer(s)
           </div>
 
         </div>
@@ -296,27 +290,27 @@ export default function CustomerLedgers({ onNavigate }) {
 
       {/* Customer Ledgers Directory Table */}
       {loading ? (
-        <div style={{ padding: '40px', textAlign: 'center', color: '#64748b', background: '#fff', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+        <div style={{ padding: '40px', textAlign: 'center', color: '#64748B', background: '#FFFFFF', borderRadius: '10px', border: '1px solid #D9E1E7' }}>
           Loading customer account ledgers...
         </div>
       ) : error ? (
-        <div style={{ padding: '20px', color: '#b91c1c', background: '#fee2e2', borderRadius: '12px', textAlign: 'center', fontWeight: 'bold' }}>
+        <div style={{ padding: '20px', color: '#DC3545', background: '#fee2e2', borderRadius: '10px', border: '1px solid #fecaca', textAlign: 'center', fontWeight: 'bold' }}>
           {error}
         </div>
       ) : (
-        <div style={{ background: '#fff', borderRadius: '12px', border: '1px solid #e2e8f0', overflow: 'hidden' }}>
+        <div style={{ background: '#FFFFFF', borderRadius: '10px', border: '1px solid #D9E1E7', overflow: 'hidden' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
             <thead>
-              <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
-                <th style={{ padding: '14px 18px', fontSize: '12px', color: '#475569', fontWeight: 'bold' }}>SR. NO.</th>
-                <th style={{ padding: '14px 18px', fontSize: '12px', color: '#475569', fontWeight: 'bold' }}>CUSTOMER NAME</th>
-                <th style={{ padding: '14px 18px', fontSize: '12px', color: '#475569', fontWeight: 'bold' }}>CONTACT & ADDRESS</th>
-                <th style={{ padding: '14px 18px', fontSize: '12px', color: '#475569', fontWeight: 'bold' }}>COMPLETED ORDERS</th>
-                <th style={{ padding: '14px 18px', fontSize: '12px', color: '#475569', fontWeight: 'bold' }}>TOTAL BILLED</th>
-                <th style={{ padding: '14px 18px', fontSize: '12px', color: '#475569', fontWeight: 'bold' }}>TOTAL PAID</th>
-                <th style={{ padding: '14px 18px', fontSize: '12px', color: '#475569', fontWeight: 'bold' }}>PENDING BALANCE</th>
-                <th style={{ padding: '14px 18px', fontSize: '12px', color: '#475569', fontWeight: 'bold' }}>ACCOUNT STATUS</th>
-                <th style={{ padding: '14px 18px', fontSize: '12px', color: '#475569', fontWeight: 'bold', textAlign: 'right' }}>ACTIONS</th>
+              <tr style={{ background: '#F8FAFC', borderBottom: '1px solid #D9E1E7' }}>
+                <th style={{ padding: '14px 18px', fontSize: '12px', color: '#17324D', fontWeight: 'bold' }}>SR. NO.</th>
+                <th style={{ padding: '14px 18px', fontSize: '12px', color: '#17324D', fontWeight: 'bold' }}>CUSTOMER NAME</th>
+                <th style={{ padding: '14px 18px', fontSize: '12px', color: '#17324D', fontWeight: 'bold' }}>CONTACT & ADDRESS</th>
+                <th style={{ padding: '14px 18px', fontSize: '12px', color: '#17324D', fontWeight: 'bold' }}>COMPLETED ORDERS</th>
+                <th style={{ padding: '14px 18px', fontSize: '12px', color: '#17324D', fontWeight: 'bold' }}>TOTAL BILLED</th>
+                <th style={{ padding: '14px 18px', fontSize: '12px', color: '#17324D', fontWeight: 'bold' }}>TOTAL PAID</th>
+                <th style={{ padding: '14px 18px', fontSize: '12px', color: '#17324D', fontWeight: 'bold' }}>PENDING BALANCE</th>
+                <th style={{ padding: '14px 18px', fontSize: '12px', color: '#17324D', fontWeight: 'bold' }}>ACCOUNT STATUS</th>
+                <th style={{ padding: '14px 18px', fontSize: '12px', color: '#17324D', fontWeight: 'bold', textAlign: 'right' }}>ACTIONS</th>
               </tr>
             </thead>
             <tbody>
@@ -326,39 +320,39 @@ export default function CustomerLedgers({ onNavigate }) {
                   return (
                     <tr 
                       key={cust._id || idx}
-                      style={{ borderBottom: '1px solid #f1f5f9', transition: 'background 0.2s' }}
-                      onMouseEnter={(e) => e.currentTarget.style.background = '#f8fafc'}
+                      style={{ borderBottom: '1px solid #F1F5F9', transition: 'background 0.2s' }}
+                      onMouseEnter={(e) => e.currentTarget.style.background = '#E8F5F6'}
                       onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                     >
-                      <td style={{ padding: '14px 18px', fontSize: '13px', color: '#64748b', fontWeight: 'bold' }}>{idx + 1}</td>
+                      <td style={{ padding: '14px 18px', fontSize: '13px', color: '#64748B', fontWeight: 'bold' }}>{idx + 1}</td>
                       <td style={{ padding: '14px 18px' }}>
-                        <div style={{ fontWeight: 'bold', color: '#0f172a', fontSize: '14px' }}>{cust.name || 'Unnamed Customer'}</div>
-                        <div style={{ fontSize: '11px', color: '#64748b' }}>{cust.email || 'No email registered'}</div>
+                        <div style={{ fontWeight: 'bold', color: '#17324D', fontSize: '14px' }}>{cust.name || 'Unnamed Customer'}</div>
+                        <div style={{ fontSize: '11px', color: '#64748B' }}>{cust.email || 'No email registered'}</div>
                       </td>
-                      <td style={{ padding: '14px 18px', fontSize: '12px', color: '#334155' }}>
+                      <td style={{ padding: '14px 18px', fontSize: '12px', color: '#1F2937' }}>
                         <div>📱 {cust.mobile || 'N/A'}</div>
-                        <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>📍 {cust.address || 'N/A'}</div>
+                        <div style={{ fontSize: '11px', color: '#64748B', marginTop: '2px' }}>📍 {cust.address || 'N/A'}</div>
                       </td>
                       <td style={{ padding: '14px 18px' }}>
-                        <span style={{ padding: '4px 10px', background: '#e0e7ff', color: '#3730a3', borderRadius: '12px', fontSize: '12px', fontWeight: 'bold' }}>
+                        <span style={{ padding: '4px 10px', background: '#E8F5F6', color: '#087E8B', borderRadius: '12px', fontSize: '12px', fontWeight: 'bold' }}>
                           📦 {item.completedOrdersCount} Delivered
                         </span>
                       </td>
-                      <td style={{ padding: '14px 18px', fontSize: '14px', fontWeight: 'bold', color: '#1e293b' }}>
+                      <td style={{ padding: '14px 18px', fontSize: '14px', fontWeight: 'bold', color: '#17324D' }}>
                         Rs. {(item.totalBilled || 0).toLocaleString()}
                       </td>
-                      <td style={{ padding: '14px 18px', fontSize: '14px', fontWeight: 'bold', color: '#16a34a' }}>
+                      <td style={{ padding: '14px 18px', fontSize: '14px', fontWeight: 'bold', color: '#198754' }}>
                         Rs. {(item.totalPaid || 0).toLocaleString()}
                       </td>
                       <td style={{ padding: '14px 18px' }}>
                         <span style={{ 
                           fontSize: '14px', 
                           fontWeight: 'bold', 
-                          color: (item.pendingBalance || 0) > 0 ? '#dc2626' : '#059669',
-                          background: (item.pendingBalance || 0) > 0 ? '#fef2f2' : '#f0fdf4',
+                          color: (item.pendingBalance || 0) > 0 ? '#DC3545' : '#198754',
+                          background: (item.pendingBalance || 0) > 0 ? '#fee2e2' : '#dcfce7',
                           padding: '4px 10px',
                           borderRadius: '8px',
-                          border: (item.pendingBalance || 0) > 0 ? '1px solid #fca5a5' : '1px solid #86efac'
+                          border: (item.pendingBalance || 0) > 0 ? '1px solid #fecaca' : '1px solid #bbf7d0'
                         }}>
                           Rs. {(item.pendingBalance || 0).toLocaleString()}
                         </span>
@@ -369,8 +363,8 @@ export default function CustomerLedgers({ onNavigate }) {
                           borderRadius: '12px', 
                           fontSize: '12px', 
                           fontWeight: 'bold',
-                          background: item.status === 'Settled' ? '#d1fae5' : item.status === 'Partial Paid' ? '#fef3c7' : '#fee2e2',
-                          color: item.status === 'Settled' ? '#065f46' : item.status === 'Partial Paid' ? '#b45309' : '#b91c1c'
+                          background: item.status === 'Settled' ? '#dcfce7' : item.status === 'Partial Paid' ? '#fef3c7' : '#fee2e2',
+                          color: item.status === 'Settled' ? '#198754' : item.status === 'Partial Paid' ? '#D97706' : '#DC3545'
                         }}>
                           {item.status === 'Settled' ? '✓ Settled' : item.status === 'Partial Paid' ? '⏳ Partial' : '⚠️ Pending'}
                         </span>
@@ -379,7 +373,7 @@ export default function CustomerLedgers({ onNavigate }) {
                         <div style={{ display: 'flex', gap: '6px', justifyContent: 'flex-end' }}>
                           <button
                             onClick={() => { setSelectedLedger(item); setActiveTab('statement'); }}
-                            style={{ padding: '6px 12px', background: '#eff6ff', color: '#1d4ed8', border: '1px solid #bfdbfe', borderRadius: '6px', cursor: 'pointer', fontWeight: '600', fontSize: '12px' }}
+                            style={{ padding: '6px 12px', background: '#E8F5F6', color: '#087E8B', border: '1px solid #B2DFE3', borderRadius: '6px', cursor: 'pointer', fontWeight: '600', fontSize: '12px' }}
                           >
                             📜 Ledger
                           </button>
@@ -387,7 +381,7 @@ export default function CustomerLedgers({ onNavigate }) {
                           {(item.pendingBalance || 0) > 0 && (
                             <button
                               onClick={() => { setPaymentModalCustomer(item); setPaymentAmount(item.pendingBalance); }}
-                              style={{ padding: '6px 12px', background: '#16a34a', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600', fontSize: '12px' }}
+                              style={{ padding: '6px 12px', background: '#198754', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600', fontSize: '12px' }}
                             >
                               💳 Pay
                             </button>
@@ -399,7 +393,7 @@ export default function CustomerLedgers({ onNavigate }) {
                 })
               ) : (
                 <tr>
-                  <td colSpan="9" style={{ padding: '40px', textAlign: 'center', color: '#64748b' }}>
+                  <td colSpan="9" style={{ padding: '40px', textAlign: 'center', color: '#64748B' }}>
                     No customer accounts found matching criteria.
                   </td>
                 </tr>
@@ -411,53 +405,53 @@ export default function CustomerLedgers({ onNavigate }) {
 
       {/* Customer Full Ledger Statement Modal */}
       {selectedLedger && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(15,23,42,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
-          <div style={{ background: '#fff', borderRadius: '16px', padding: '24px', width: '100%', maxWidth: '850px', maxHeight: '90vh', overflowY: 'auto', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' }}>
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(23, 50, 77, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
+          <div style={{ background: '#FFFFFF', borderRadius: '10px', border: '1px solid #D9E1E7', padding: '24px', width: '100%', maxWidth: '850px', maxHeight: '90vh', overflowY: 'auto', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' }}>
             
             {/* Modal Header */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #e2e8f0', paddingBottom: '16px', marginBottom: '20px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #D9E1E7', paddingBottom: '16px', marginBottom: '20px' }}>
               <div>
-                <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#0f172a', margin: 0 }}>
+                <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#17324D', margin: 0 }}>
                   📜 Customer Statement & Account Ledger
                 </h3>
-                <p style={{ fontSize: '12px', color: '#64748b', margin: '4px 0 0 0' }}>
+                <p style={{ fontSize: '12px', color: '#64748B', margin: '4px 0 0 0' }}>
                   {selectedLedger.customer?.name} (📱 {selectedLedger.customer?.mobile}) | 📍 {selectedLedger.customer?.address || 'N/A'}
                 </p>
               </div>
               <button 
                 onClick={() => setSelectedLedger(null)}
-                style={{ background: 'transparent', border: 'none', fontSize: '20px', cursor: 'pointer', color: '#64748b' }}
+                style={{ background: 'transparent', border: 'none', fontSize: '20px', cursor: 'pointer', color: '#64748B' }}
               >
                 ✕
               </button>
             </div>
 
             {/* Customer Financial Overview Banner */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '15px', background: '#f8fafc', padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0', marginBottom: '20px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '15px', background: '#FFFFFF', padding: '16px', borderRadius: '8px', border: '1px solid #D9E1E7', marginBottom: '20px' }}>
               <div>
-                <div style={{ fontSize: '11px', fontWeight: 'bold', color: '#64748b' }}>TOTAL BILLED (COMPLETED)</div>
-                <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#0f172a', marginTop: '4px' }}>Rs. {(selectedLedger.totalBilled || 0).toLocaleString()}</div>
+                <div style={{ fontSize: '11px', fontWeight: 'bold', color: '#64748B' }}>TOTAL BILLED (COMPLETED)</div>
+                <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#17324D', marginTop: '4px' }}>Rs. {(selectedLedger.totalBilled || 0).toLocaleString()}</div>
               </div>
               <div>
-                <div style={{ fontSize: '11px', fontWeight: 'bold', color: '#64748b' }}>TOTAL PAYMENTS RECEIVED</div>
-                <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#16a34a', marginTop: '4px' }}>Rs. {(selectedLedger.totalPaid || 0).toLocaleString()}</div>
+                <div style={{ fontSize: '11px', fontWeight: 'bold', color: '#64748B' }}>TOTAL PAYMENTS RECEIVED</div>
+                <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#198754', marginTop: '4px' }}>Rs. {(selectedLedger.totalPaid || 0).toLocaleString()}</div>
               </div>
               <div>
-                <div style={{ fontSize: '11px', fontWeight: 'bold', color: '#b91c1c' }}>CURRENT PENDING BALANCE</div>
-                <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#dc2626', marginTop: '4px' }}>Rs. {(selectedLedger.pendingBalance || 0).toLocaleString()}</div>
+                <div style={{ fontSize: '11px', fontWeight: 'bold', color: '#DC3545' }}>CURRENT PENDING BALANCE</div>
+                <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#DC3545', marginTop: '4px' }}>Rs. {(selectedLedger.pendingBalance || 0).toLocaleString()}</div>
               </div>
             </div>
 
             {/* Navigation Tabs */}
-            <div style={{ display: 'flex', gap: '10px', borderBottom: '1px solid #e2e8f0', marginBottom: '20px' }}>
+            <div style={{ display: 'flex', gap: '10px', borderBottom: '1px solid #D9E1E7', marginBottom: '20px' }}>
               <button
                 onClick={() => setActiveTab('statement')}
                 style={{
                   padding: '8px 16px',
                   border: 'none',
-                  borderBottom: activeTab === 'statement' ? '2px solid #2563eb' : 'none',
+                  borderBottom: activeTab === 'statement' ? '2px solid #087E8B' : 'none',
                   background: 'transparent',
-                  color: activeTab === 'statement' ? '#2563eb' : '#64748b',
+                  color: activeTab === 'statement' ? '#087E8B' : '#64748B',
                   fontWeight: 'bold',
                   fontSize: '13px',
                   cursor: 'pointer'
@@ -470,9 +464,9 @@ export default function CustomerLedgers({ onNavigate }) {
                 style={{
                   padding: '8px 16px',
                   border: 'none',
-                  borderBottom: activeTab === 'orders' ? '2px solid #2563eb' : 'none',
+                  borderBottom: activeTab === 'orders' ? '2px solid #087E8B' : 'none',
                   background: 'transparent',
-                  color: activeTab === 'orders' ? '#2563eb' : '#64748b',
+                  color: activeTab === 'orders' ? '#087E8B' : '#64748B',
                   fontWeight: 'bold',
                   fontSize: '13px',
                   cursor: 'pointer'
@@ -485,9 +479,9 @@ export default function CustomerLedgers({ onNavigate }) {
                 style={{
                   padding: '8px 16px',
                   border: 'none',
-                  borderBottom: activeTab === 'payments' ? '2px solid #2563eb' : 'none',
+                  borderBottom: activeTab === 'payments' ? '2px solid #087E8B' : 'none',
                   background: 'transparent',
-                  color: activeTab === 'payments' ? '#2563eb' : '#64748b',
+                  color: activeTab === 'payments' ? '#087E8B' : '#64748B',
                   fontWeight: 'bold',
                   fontSize: '13px',
                   cursor: 'pointer'
@@ -502,12 +496,12 @@ export default function CustomerLedgers({ onNavigate }) {
               <div>
                 <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
                   <thead>
-                    <tr style={{ background: '#f1f5f9', borderBottom: '1px solid #cbd5e1' }}>
-                      <th style={{ padding: '10px', color: '#475569', fontWeight: 'bold' }}>DATE</th>
-                      <th style={{ padding: '10px', color: '#475569', fontWeight: 'bold' }}>TYPE / REFERENCE</th>
-                      <th style={{ padding: '10px', color: '#475569', fontWeight: 'bold' }}>DEBIT (+BILLED)</th>
-                      <th style={{ padding: '10px', color: '#475569', fontWeight: 'bold' }}>CREDIT (-PAID)</th>
-                      <th style={{ padding: '10px', color: '#475569', fontWeight: 'bold' }}>RUNNING BALANCE</th>
+                    <tr style={{ background: '#F8FAFC', borderBottom: '1px solid #D9E1E7' }}>
+                      <th style={{ padding: '10px', color: '#17324D', fontWeight: 'bold' }}>DATE</th>
+                      <th style={{ padding: '10px', color: '#17324D', fontWeight: 'bold' }}>TYPE / REFERENCE</th>
+                      <th style={{ padding: '10px', color: '#17324D', fontWeight: 'bold' }}>DEBIT (+BILLED)</th>
+                      <th style={{ padding: '10px', color: '#17324D', fontWeight: 'bold' }}>CREDIT (-PAID)</th>
+                      <th style={{ padding: '10px', color: '#17324D', fontWeight: 'bold' }}>RUNNING BALANCE</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -539,18 +533,18 @@ export default function CustomerLedgers({ onNavigate }) {
                       return entries.map((entry, eIdx) => {
                         running += (entry.debit - entry.credit);
                         return (
-                          <tr key={eIdx} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                            <td style={{ padding: '10px', color: '#64748b' }}>{new Date(entry.date).toLocaleDateString()}</td>
-                            <td style={{ padding: '10px', fontWeight: 'bold', color: '#0f172a' }}>
-                              {entry.type} <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 'normal' }}>({entry.ref})</span>
+                          <tr key={eIdx} style={{ borderBottom: '1px solid #F1F5F9' }}>
+                            <td style={{ padding: '10px', color: '#64748B' }}>{new Date(entry.date).toLocaleDateString()}</td>
+                            <td style={{ padding: '10px', fontWeight: 'bold', color: '#17324D' }}>
+                              {entry.type} <span style={{ fontSize: '11px', color: '#64748B', fontWeight: 'normal' }}>({entry.ref})</span>
                             </td>
-                            <td style={{ padding: '10px', color: entry.debit > 0 ? '#1e293b' : '#94a3b8', fontWeight: 'bold' }}>
+                            <td style={{ padding: '10px', color: entry.debit > 0 ? '#17324D' : '#94A3B8', fontWeight: 'bold' }}>
                               {entry.debit > 0 ? `Rs. ${entry.debit.toLocaleString()}` : '-'}
                             </td>
-                            <td style={{ padding: '10px', color: entry.credit > 0 ? '#16a34a' : '#94a3b8', fontWeight: 'bold' }}>
+                            <td style={{ padding: '10px', color: entry.credit > 0 ? '#198754' : '#94A3B8', fontWeight: 'bold' }}>
                               {entry.credit > 0 ? `Rs. ${entry.credit.toLocaleString()}` : '-'}
                             </td>
-                            <td style={{ padding: '10px', fontWeight: 'bold', color: running > 0 ? '#dc2626' : '#059669' }}>
+                            <td style={{ padding: '10px', fontWeight: 'bold', color: running > 0 ? '#DC3545' : '#198754' }}>
                               Rs. {running.toLocaleString()}
                             </td>
                           </tr>
@@ -566,21 +560,21 @@ export default function CustomerLedgers({ onNavigate }) {
             {activeTab === 'orders' && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {(selectedLedger.completedOrders || []).map((ord, oIdx) => (
-                  <div key={ord._id} style={{ border: '1px solid #e2e8f0', borderRadius: '10px', padding: '14px', background: '#f8fafc' }}>
+                  <div key={ord._id} style={{ border: '1px solid #D9E1E7', borderRadius: '8px', padding: '14px', background: '#FFFFFF' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                      <span style={{ fontWeight: 'bold', fontSize: '14px', color: '#0f172a' }}>
+                      <span style={{ fontWeight: 'bold', fontSize: '14px', color: '#17324D' }}>
                         ORD-{ord._id.toString().substring(18).toUpperCase()}
                       </span>
-                      <span style={{ padding: '4px 10px', background: '#d1fae5', color: '#065f46', borderRadius: '12px', fontSize: '11px', fontWeight: 'bold' }}>
+                      <span style={{ padding: '4px 10px', background: '#dcfce7', color: '#198754', borderRadius: '12px', fontSize: '11px', fontWeight: 'bold' }}>
                         ✓ Delivered ({new Date(ord.deliveryDate || ord.createdAt).toLocaleDateString()})
                       </span>
                     </div>
-                    <div style={{ fontSize: '12px', color: '#475569', marginBottom: '8px' }}>
+                    <div style={{ fontSize: '12px', color: '#64748B', marginBottom: '8px' }}>
                       Items: {ord.items?.map(i => `${i.product?.name || 'Item'} (x${i.quantity})`).join(', ') || 'N/A'}
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 'bold', borderTop: '1px solid #e2e8f0', paddingTop: '8px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 'bold', borderTop: '1px solid #D9E1E7', paddingTop: '8px' }}>
                       <span>Grand Total Amount:</span>
-                      <span style={{ color: '#2563eb' }}>Rs. {(ord.totalAmount || 0).toLocaleString()}</span>
+                      <span style={{ color: '#17324D' }}>Rs. {(ord.totalAmount || 0).toLocaleString()}</span>
                     </div>
                   </div>
                 ))}
@@ -591,17 +585,17 @@ export default function CustomerLedgers({ onNavigate }) {
             {activeTab === 'payments' && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {(selectedLedger.paymentsList || []).map((pay, pIdx) => (
-                  <div key={pay._id || pIdx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: '#f0fdf4', borderRadius: '8px', border: '1px solid #bbf7d0' }}>
+                  <div key={pay._id || pIdx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: '#FFFFFF', borderRadius: '8px', border: '1px solid #D9E1E7' }}>
                     <div>
-                      <div style={{ fontWeight: 'bold', fontSize: '13px', color: '#166534' }}>
+                      <div style={{ fontWeight: 'bold', fontSize: '13px', color: '#198754' }}>
                         💳 Payment Received: Rs. {(pay.amountPaid || 0).toLocaleString()}
                       </div>
-                      <div style={{ fontSize: '11px', color: '#365314', marginTop: '2px' }}>
+                      <div style={{ fontSize: '11px', color: '#64748B', marginTop: '2px' }}>
                         Mode: {pay.paymentMode || 'Cash'} | Ref: {pay.referenceNumber || 'N/A'} | Date: {new Date(pay.date || pay.createdAt).toLocaleDateString()}
                       </div>
-                      {pay.notes && <div style={{ fontSize: '11px', color: '#4d7c0f', fontStyle: 'italic', marginTop: '2px' }}>"{pay.notes}"</div>}
+                      {pay.notes && <div style={{ fontSize: '11px', color: '#64748B', fontStyle: 'italic', marginTop: '2px' }}>"{pay.notes}"</div>}
                     </div>
-                    <span style={{ padding: '4px 8px', background: '#16a34a', color: '#fff', borderRadius: '6px', fontSize: '11px', fontWeight: 'bold' }}>
+                    <span style={{ padding: '4px 8px', background: '#dcfce7', color: '#198754', borderRadius: '6px', fontSize: '11px', fontWeight: 'bold' }}>
                       Recorded
                     </span>
                   </div>
@@ -610,16 +604,16 @@ export default function CustomerLedgers({ onNavigate }) {
             )}
 
             {/* Record Payment Direct Action Button inside Modal */}
-            <div style={{ borderTop: '1px solid #e2e8f0', marginTop: '24px', paddingTop: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ borderTop: '1px solid #D9E1E7', marginTop: '24px', paddingTop: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <button
                 onClick={() => { setPaymentModalCustomer(selectedLedger); setPaymentAmount(selectedLedger.pendingBalance); }}
-                style={{ padding: '8px 16px', background: '#16a34a', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+                style={{ padding: '8px 16px', background: '#087E8B', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
               >
                 💳 Record Payment Settlement
               </button>
               <button
                 onClick={() => window.print()}
-                style={{ padding: '8px 16px', background: '#f1f5f9', color: '#334155', border: '1px solid #cbd5e1', borderRadius: '8px', fontWeight: 'bold', fontSize: '13px', cursor: 'pointer' }}
+                style={{ padding: '8px 16px', background: '#FFFFFF', color: '#17324D', border: '1px solid #D9E1E7', borderRadius: '8px', fontWeight: 'bold', fontSize: '13px', cursor: 'pointer' }}
               >
                 🖨️ Print Statement
               </button>
@@ -631,21 +625,21 @@ export default function CustomerLedgers({ onNavigate }) {
 
       {/* Record Payment Form Modal */}
       {paymentModalCustomer && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(15,23,42,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1100, padding: '20px' }}>
-          <div style={{ background: '#fff', borderRadius: '16px', padding: '24px', width: '100%', maxWidth: '520px', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' }}>
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(23, 50, 77, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1100, padding: '20px' }}>
+          <div style={{ background: '#FFFFFF', borderRadius: '10px', border: '1px solid #D9E1E7', padding: '24px', width: '100%', maxWidth: '520px', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' }}>
             
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #e2e8f0', paddingBottom: '14px', marginBottom: '16px' }}>
-              <h3 style={{ fontSize: '16px', fontWeight: 'bold', color: '#0f172a', margin: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #D9E1E7', paddingBottom: '14px', marginBottom: '16px' }}>
+              <h3 style={{ fontSize: '16px', fontWeight: 'bold', color: '#17324D', margin: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
                 💳 {paymentModalCustomer.isManual ? 'Add Manual Customer Payment' : 'Record Customer Payment'}
               </h3>
-              <button onClick={() => setPaymentModalCustomer(null)} style={{ background: 'transparent', border: 'none', fontSize: '18px', cursor: 'pointer', color: '#64748b' }}>✕</button>
+              <button onClick={() => setPaymentModalCustomer(null)} style={{ background: 'transparent', border: 'none', fontSize: '18px', cursor: 'pointer', color: '#64748B' }}>✕</button>
             </div>
 
             <form onSubmit={handleRecordPayment} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               
               {paymentModalCustomer.isManual ? (
                 <div>
-                  <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#475569', display: 'block', marginBottom: '4px' }}>Select Customer Account*</label>
+                  <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#64748B', display: 'block', marginBottom: '4px' }}>Select Customer Account*</label>
                   <select
                     required
                     value={selectedCustomerId}
@@ -656,7 +650,7 @@ export default function CustomerLedgers({ onNavigate }) {
                         setPaymentAmount(target.pendingBalance);
                       }
                     }}
-                    style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '13px', background: '#fff', fontWeight: '500' }}
+                    style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #D9E1E7', outline: 'none', fontSize: '13px', background: '#FFFFFF', color: '#1F2937', fontWeight: '500' }}
                   >
                     <option value="">-- Select Customer --</option>
                     {ledgers.map(l => (
@@ -668,8 +662,8 @@ export default function CustomerLedgers({ onNavigate }) {
                 </div>
               ) : (
                 <div>
-                  <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#475569', display: 'block', marginBottom: '4px' }}>Customer Account</label>
-                  <div style={{ padding: '10px', background: '#f8fafc', border: '1px solid #cbd5e1', borderRadius: '8px', fontWeight: 'bold', fontSize: '13px', color: '#0f172a' }}>
+                  <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#64748B', display: 'block', marginBottom: '4px' }}>Customer Account</label>
+                  <div style={{ padding: '10px', background: '#FFFFFF', border: '1px solid #D9E1E7', borderRadius: '8px', fontWeight: 'bold', fontSize: '13px', color: '#17324D' }}>
                     {paymentModalCustomer.customer?.name} (📱 {paymentModalCustomer.customer?.mobile})
                   </div>
                 </div>
@@ -677,22 +671,22 @@ export default function CustomerLedgers({ onNavigate }) {
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <div>
-                  <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#475569', display: 'block', marginBottom: '4px' }}>Payment Date*</label>
+                  <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#64748B', display: 'block', marginBottom: '4px' }}>Payment Date*</label>
                   <input
                     type="date"
                     required
                     value={paymentDate}
                     onChange={(e) => setPaymentDate(e.target.value)}
-                    style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '13px' }}
+                    style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #D9E1E7', outline: 'none', fontSize: '13px', background: '#FFFFFF', color: '#1F2937' }}
                   />
                 </div>
 
                 <div>
-                  <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#475569', display: 'block', marginBottom: '4px' }}>Payment Category*</label>
+                  <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#64748B', display: 'block', marginBottom: '4px' }}>Payment Category*</label>
                   <select
                     value={paymentCategory}
                     onChange={(e) => setPaymentCategory(e.target.value)}
-                    style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '13px', background: '#fff' }}
+                    style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #D9E1E7', outline: 'none', fontSize: '13px', background: '#FFFFFF', color: '#1F2937' }}
                   >
                     <option value="Ledger Settlement">Ledger Settlement</option>
                     <option value="Advance Payment">Advance Payment</option>
@@ -704,7 +698,7 @@ export default function CustomerLedgers({ onNavigate }) {
               </div>
 
               <div>
-                <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#475569', display: 'block', marginBottom: '4px' }}>Amount Received (Rs.)*</label>
+                <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#64748B', display: 'block', marginBottom: '4px' }}>Amount Received (Rs.)*</label>
                 <input
                   type="number"
                   required
@@ -712,21 +706,21 @@ export default function CustomerLedgers({ onNavigate }) {
                   placeholder="Enter amount in Rs."
                   value={paymentAmount}
                   onChange={(e) => setPaymentAmount(e.target.value)}
-                  style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '15px', fontWeight: 'bold', color: '#16a34a' }}
+                  style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #D9E1E7', outline: 'none', fontSize: '15px', fontWeight: 'bold', color: '#198754', background: '#FFFFFF' }}
                 />
                 {!paymentModalCustomer.isManual && (
-                  <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>
+                  <div style={{ fontSize: '11px', color: '#64748B', marginTop: '2px' }}>
                     Current Pending Balance: Rs.{(paymentModalCustomer.pendingBalance || 0).toLocaleString()}
                   </div>
                 )}
               </div>
 
               <div>
-                <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#475569', display: 'block', marginBottom: '4px' }}>Payment Mode*</label>
+                <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#64748B', display: 'block', marginBottom: '4px' }}>Payment Mode*</label>
                 <select
                   value={paymentMode}
                   onChange={(e) => setPaymentMode(e.target.value)}
-                  style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '13px', background: '#fff' }}
+                  style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #D9E1E7', outline: 'none', fontSize: '13px', background: '#FFFFFF', color: '#1F2937' }}
                 >
                   <option value="Cash">Cash</option>
                   <option value="UPI / QR">UPI / QR Code</option>
@@ -737,24 +731,24 @@ export default function CustomerLedgers({ onNavigate }) {
               </div>
 
               <div>
-                <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#475569', display: 'block', marginBottom: '4px' }}>Reference / Transaction ID</label>
+                <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#64748B', display: 'block', marginBottom: '4px' }}>Reference / Transaction ID</label>
                 <input
                   type="text"
                   placeholder="e.g. UPI Ref #981723 / Cheque #00123"
                   value={paymentRef}
                   onChange={(e) => setPaymentRef(e.target.value)}
-                  style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '13px' }}
+                  style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #D9E1E7', outline: 'none', fontSize: '13px', background: '#FFFFFF', color: '#1F2937' }}
                 />
               </div>
 
               <div>
-                <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#475569', display: 'block', marginBottom: '4px' }}>Note / Remarks</label>
+                <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#64748B', display: 'block', marginBottom: '4px' }}>Note / Remarks</label>
                 <input
                   type="text"
                   placeholder="e.g. Received cash payment at shop counter"
                   value={paymentNotes}
                   onChange={(e) => setPaymentNotes(e.target.value)}
-                  style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '13px' }}
+                  style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #D9E1E7', outline: 'none', fontSize: '13px', background: '#FFFFFF', color: '#1F2937' }}
                 />
               </div>
 
@@ -762,14 +756,14 @@ export default function CustomerLedgers({ onNavigate }) {
                 <button
                   type="button"
                   onClick={() => setPaymentModalCustomer(null)}
-                  style={{ flex: 1, padding: '10px', background: '#f1f5f9', border: '1px solid #cbd5e1', color: '#475569', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
+                  style={{ flex: 1, padding: '10px', background: '#FFFFFF', border: '1px solid #D9E1E7', color: '#17324D', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submittingPayment}
-                  style={{ flex: 1, padding: '10px', background: '#16a34a', border: 'none', color: '#fff', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
+                  style={{ flex: 1, padding: '10px', background: '#087E8B', border: 'none', color: '#fff', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
                 >
                   {submittingPayment ? 'Recording...' : 'Submit Payment'}
                 </button>

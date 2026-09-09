@@ -70,7 +70,7 @@ export default function Whatsapp() {
           name: s.name,
           mobile: s.mobile,
           type: 'Staff',
-          avatarColor: '#3b82f6',
+          avatarColor: '#087E8B',
           lastSeen: 'last seen today at 10:15 AM'
         }));
 

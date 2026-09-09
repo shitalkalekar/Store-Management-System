@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { Printer, Plus, Trash2 } from "lucide-react";
 
-const TEAL = "#008099";
+const TEAL = "#087E8B";
 const PINK = "#f59cb0";
 
 const defaultItems = [

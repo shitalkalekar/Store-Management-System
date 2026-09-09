@@ -581,20 +581,20 @@ export default function Products() {
 
       {/* Bulk Actions Bar */}
       {selectedIds.length > 0 && (
-        <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', background: '#eff6ff', padding: '15px', borderRadius: '12px', border: '1px solid #bfdbfe', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ fontSize: '14px', color: '#1e40af', fontWeight: '600' }}>
+        <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', background: 'var(--bg-main, #F6F8FA)', padding: '15px', borderRadius: 'var(--radius-lg, 10px)', border: '1px solid var(--border-light, #D9E1E7)', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span style={{ fontSize: '14px', color: 'var(--primary, #087E8B)', fontWeight: '600' }}>
             Selected <strong>{selectedIds.length}</strong> products
           </span>
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
             {/* Bulk Category Update */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <label style={{ fontSize: '12px', fontWeight: '600', color: '#1e40af' }}>Move to Cat:</label>
+              <label style={{ fontSize: '12px', fontWeight: '600', color: 'var(--text-primary, #1F2937)' }}>Move to Cat:</label>
               <input 
                 type="text"
                 placeholder="New Category"
                 value={bulkCategoryChange}
                 onChange={(e) => setBulkCategoryChange(e.target.value)}
-                style={{ padding: '6px 10px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '12px', width: '120px' }}
+                style={{ padding: '6px 10px', borderRadius: '6px', border: '1px solid var(--border-light, #D9E1E7)', fontSize: '12px', width: '120px' }}
               />
               <button 
                 onClick={() => {
@@ -603,7 +603,7 @@ export default function Products() {
                     setBulkCategoryChange('');
                   }
                 }}
-                style={{ padding: '6px 10px', background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: '600' }}
+                style={{ padding: '6px 10px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: '600' }}
               >
                 Apply
               </button>
@@ -611,7 +611,7 @@ export default function Products() {
 
             {/* Bulk Price Adjust */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <label style={{ fontSize: '12px', fontWeight: '600', color: '#1e40af' }}>Adjust Price %:</label>
+              <label style={{ fontSize: '12px', fontWeight: '600', color: 'var(--text-primary, #1F2937)' }}>Adjust Price %:</label>
               <select 
                 onChange={(e) => {
                   if(e.target.value) {
@@ -619,7 +619,7 @@ export default function Products() {
                     e.target.value = '';
                   }
                 }}
-                style={{ padding: '6px 10px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '12px' }}
+                style={{ padding: '6px 10px', borderRadius: '6px', border: '1px solid var(--border-light, #D9E1E7)', fontSize: '12px' }}
               >
                 <option value="">Select...</option>
                 <option value="10">+10%</option>
@@ -631,19 +631,19 @@ export default function Products() {
 
             <button 
               onClick={handleBulkExport}
-              style={{ padding: '8px 16px', background: '#10b981', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
+              style={{ padding: '8px 16px', background: 'var(--success, #198754)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
             >
               📥 Export to Excel
             </button>
             <button 
               onClick={handleBulkDelete}
-              style={{ padding: '8px 16px', background: '#ef4444', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
+              style={{ padding: '8px 16px', background: 'var(--danger, #DC3545)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
             >
               🗑️ Bulk Delete
             </button>
             <button 
               onClick={() => setSelectedIds([])}
-              style={{ padding: '8px 16px', background: '#cbd5e1', color: '#1e293b', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
+              style={{ padding: '8px 16px', background: 'var(--border-subtle, #F1F5F9)', color: 'var(--text-primary, #1F2937)', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: 'var(--radius-md, 8px)', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
             >
               Clear Selection
             </button>
@@ -713,7 +713,7 @@ export default function Products() {
         <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
           <button 
             onClick={() => setShowBulkImport(true)}
-            style={{ padding: '10px 16px', background: '#059669', color: '#fff', border: 'none', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', boxShadow: '0 2px 4px rgba(5,150,105,0.2)' }}
+            style={{ padding: '10px 16px', background: 'var(--secondary, #17324D)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px' }}
           >
             📥 Bulk Import Excel
           </button>
@@ -730,7 +730,7 @@ export default function Products() {
               }
               setShowAddBatchModal(true);
             }}
-            style={{ padding: '10px 16px', background: '#7c3aed', color: '#fff', border: 'none', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', boxShadow: '0 2px 4px rgba(124,58,237,0.2)' }}
+            style={{ padding: '10px 16px', background: 'var(--border-subtle, #F1F5F9)', color: 'var(--text-primary, #1F2937)', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: 'var(--radius-md, 8px)', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px' }}
           >
             🏷️ Register Batch
           </button>
@@ -746,7 +746,7 @@ export default function Products() {
               background: lowStockProducts.length > 0 ? '#fef2f2' : '#f8fafc', 
               color: lowStockProducts.length > 0 ? '#dc2626' : '#475569', 
               border: `1px solid ${lowStockProducts.length > 0 ? '#fca5a5' : '#cbd5e1'}`, 
-              borderRadius: '10px', 
+              borderRadius: 'var(--radius-md, 8px)', 
               fontWeight: '600', 
               cursor: 'pointer', 
               display: 'flex', 
@@ -760,7 +760,7 @@ export default function Products() {
 
           <button 
             onClick={() => setShowAdd(true)}
-            style={{ padding: '10px 18px', background: '#2563eb', color: '#fff', border: 'none', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', boxShadow: '0 4px 6px -1px rgba(37,99,235,0.2)' }}
+            style={{ padding: '10px 18px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px' }}
           >
             ➕ Register Product
           </button>
@@ -769,7 +769,7 @@ export default function Products() {
 
       {/* Expiry Management View */}
       {activeTab === 'expiry' ? (
-        <div style={{ background: '#fff', borderRadius: '12px', padding: '20px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
+        <div style={{ background: '#fff', borderRadius: 'var(--radius-lg, 10px)', padding: '20px', border: '1px solid var(--border-light, #D9E1E7)', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
             <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '700', color: '#0f172a' }}>Batch Expiry Tracking</h3>
             
@@ -780,7 +780,7 @@ export default function Products() {
                 { id: 'expired', label: 'Expired', color: '#ef4444', bg: '#fef2f2' },
                 { id: '7days', label: '7 Days', color: '#ea580c', bg: '#fff7ed' },
                 { id: '15days', label: '15 Days', color: '#ca8a04', bg: '#fefce8' },
-                { id: '30days', label: '30 Days', color: '#2563eb', bg: '#eff6ff' }
+                { id: '30days', label: '30 Days', color: 'var(--primary, #087E8B)', bg: 'var(--primary-light, #E8F5F6)' }
               ].map(pill => (
                 <button
                   key={pill.id}
@@ -788,9 +788,9 @@ export default function Products() {
                   style={{
                     padding: '6px 12px',
                     borderRadius: '20px',
-                    border: expiryCategoryFilter === pill.id ? '2px solid #2563eb' : '1px solid #cbd5e1',
-                    background: expiryCategoryFilter === pill.id ? (pill.bg || '#eff6ff') : '#fff',
-                    color: expiryCategoryFilter === pill.id ? (pill.color || '#1d4ed8') : '#475569',
+                    border: expiryCategoryFilter === pill.id ? '2px solid var(--primary, #087E8B)' : '1px solid var(--border-light, #D9E1E7)',
+                    background: expiryCategoryFilter === pill.id ? (pill.bg || 'var(--primary-light, #E8F5F6)') : '#fff',
+                    color: expiryCategoryFilter === pill.id ? (pill.color || 'var(--primary, #087E8B)') : '#475569',
                     fontSize: '12px',
                     fontWeight: '600',
                     cursor: 'pointer'
@@ -805,7 +805,7 @@ export default function Products() {
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
               <thead>
-                <tr style={{ background: '#f8fafc', borderBottom: '2px solid #e2e8f0', color: '#475569' }}>
+                <tr style={{ background: '#f8fafc', borderBottom: '2px solid var(--border-light, #D9E1E7)', color: '#475569' }}>
                   <th style={{ padding: '10px 14px' }}>Product Name</th>
                   <th style={{ padding: '10px 14px' }}>Batch Number</th>
                   <th style={{ padding: '10px 14px' }}>Expiry Date</th>
@@ -840,7 +840,7 @@ export default function Products() {
                       } else if (rem <= 15) {
                         badgeBg = '#fefce8'; badgeColor = '#ca8a04'; badgeText = '15 Days Warning';
                       } else if (rem <= 30) {
-                        badgeBg = '#eff6ff'; badgeColor = '#2563eb'; badgeText = '30 Days Warning';
+                        badgeBg = 'var(--primary-light, #E8F5F6)'; badgeColor = 'var(--primary, #087E8B)'; badgeText = '30 Days Warning';
                       }
                     }
 
@@ -892,23 +892,23 @@ export default function Products() {
         {activeProducts.map((prod, idx) => (
           <div key={prod._id} style={{ 
             background: '#fff', 
-            border: '1px solid #e2e8f0', 
-            borderRadius: '16px', 
+            border: '1px solid var(--border-light, #D9E1E7)', 
+            borderRadius: 'var(--radius-lg, 10px)', 
             padding: '24px', 
             display: 'flex', 
             flexDirection: 'column', 
             gap: '16px', 
             position: 'relative',
-            boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03)',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
             transition: 'transform 0.2s, box-shadow 0.2s'
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.transform = 'translateY(-2px)';
-            e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)';
+            e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.1)';
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.transform = 'none';
-            e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03)';
+            e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.05)';
           }}>
             
             {/* Selection Checkbox */}
@@ -936,7 +936,7 @@ export default function Products() {
               </div>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#f8fafc', padding: '14px', borderRadius: '12px', border: '1px solid #f1f5f9' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#f8fafc', padding: '14px', borderRadius: '8px', border: '1px solid var(--border-light, #D9E1E7)' }}>
               <div>
                 <span style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: '600' }}>Stock Status</span>
                 <div style={{ fontSize: '16px', fontWeight: '800', marginTop: '2px', color: (prod.currentStock - (prod.reservedStock || 0)) <= prod.lowStockThreshold ? '#dc2626' : '#0f172a' }}>
@@ -946,15 +946,15 @@ export default function Products() {
                   Total: {prod.currentStock} {prod.unit} {prod.reservedStock > 0 && <span style={{ color: '#d97706', fontWeight: 'bold' }}>(🔒 {prod.reservedStock} Reserved)</span>}
                 </div>
               </div>
-              <div style={{ textAlign: 'right', borderLeft: '1px solid #e2e8f0', paddingLeft: '14px' }}>
+              <div style={{ textAlign: 'right', borderLeft: '1px solid var(--border-light, #D9E1E7)', paddingLeft: '14px' }}>
                 <span style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: '600' }}>Retail Price</span>
-                <div style={{ fontSize: '16px', fontWeight: '800', marginTop: '2px', color: '#059669' }}>
+                <div style={{ fontSize: '16px', fontWeight: '800', marginTop: '2px', color: 'var(--primary, #087E8B)' }}>
                   <span style={{ fontSize: '12px', fontWeight: '600', color: '#64748b' }}>Rs.</span> {prod.price.toFixed(2)}
                 </div>
               </div>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: 'auto', paddingTop: '16px', borderTop: '1px solid #f1f5f9' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: 'auto', paddingTop: '16px', borderTop: '1px solid var(--border-light, #D9E1E7)' }}>
 
               <div style={{ display: 'flex', gap: '8px' }}>
                 <button 
@@ -963,7 +963,7 @@ export default function Products() {
                     const tmrw = new Date(); tmrw.setDate(tmrw.getDate() + 1);
                     setOrderForm({ quantity: Math.max(10, prod.lowStockThreshold), expectedDeliveryDate: tmrw.toISOString().split('T')[0] });
                   }}
-                  style={{ padding: '8px 12px', background: '#f0fdf4', color: '#16a34a', border: '1px solid #bbf7d0', borderRadius: '8px', fontSize: '12px', cursor: 'pointer', fontWeight: '600', transition: 'all 0.2s' }}
+                  style={{ padding: '8px 12px', background: '#f0fdf4', color: '#16a34a', border: '1px solid #bbf7d0', borderRadius: 'var(--radius-md, 8px)', fontSize: '12px', cursor: 'pointer', fontWeight: '600', transition: 'all 0.2s' }}
                   onMouseEnter={(e) => e.currentTarget.style.background = '#dcfce7'}
                   onMouseLeave={(e) => e.currentTarget.style.background = '#f0fdf4'}
                   title="Quick Order"
@@ -975,7 +975,7 @@ export default function Products() {
                     setAdjustingProduct(prod);
                     setAdjustForm({ newQty: prod.currentStock, reason: 'recount' });
                   }}
-                  style={{ padding: '8px 12px', background: '#f1f5f9', color: '#475569', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '12px', cursor: 'pointer', fontWeight: '600', transition: 'all 0.2s' }}
+                  style={{ padding: '8px 12px', background: '#f1f5f9', color: '#475569', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: 'var(--radius-md, 8px)', fontSize: '12px', cursor: 'pointer', fontWeight: '600', transition: 'all 0.2s' }}
                   onMouseEnter={(e) => e.currentTarget.style.background = '#e2e8f0'}
                   onMouseLeave={(e) => e.currentTarget.style.background = '#f1f5f9'}
                   title="Adjust Stock"
@@ -984,16 +984,16 @@ export default function Products() {
                 </button>
                 <button 
                   onClick={() => handleViewLogs(prod)}
-                  style={{ padding: '8px 12px', background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe', borderRadius: '8px', fontSize: '12px', cursor: 'pointer', fontWeight: '600', transition: 'all 0.2s' }}
-                  onMouseEnter={(e) => e.currentTarget.style.background = '#dbeafe'}
-                  onMouseLeave={(e) => e.currentTarget.style.background = '#eff6ff'}
+                  style={{ padding: '8px 12px', background: 'var(--primary-light, #E8F5F6)', color: 'var(--primary, #087E8B)', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: 'var(--radius-md, 8px)', fontSize: '12px', cursor: 'pointer', fontWeight: '600', transition: 'all 0.2s' }}
+                  onMouseEnter={(e) => e.currentTarget.style.background = 'var(--border-subtle, #F1F5F9)'}
+                  onMouseLeave={(e) => e.currentTarget.style.background = 'var(--primary-light, #E8F5F6)'}
                   title="View Logs"
                 >
                   Logs
                 </button>
                 <button 
                   onClick={() => handleDeleteProduct(prod._id)}
-                  style={{ padding: '8px 12px', background: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca', borderRadius: '8px', fontSize: '12px', cursor: 'pointer', fontWeight: '600', transition: 'all 0.2s' }}
+                  style={{ padding: '8px 12px', background: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca', borderRadius: 'var(--radius-md, 8px)', fontSize: '12px', cursor: 'pointer', fontWeight: '600', transition: 'all 0.2s' }}
                   onMouseEnter={(e) => e.currentTarget.style.background = '#fee2e2'}
                   onMouseLeave={(e) => e.currentTarget.style.background = '#fef2f2'}
                   title="Delete Product"
@@ -1189,7 +1189,7 @@ export default function Products() {
                     Enable Expiry Tracking for this Product
                   </label>
                   {formData.hasExpiryTracking && (
-                    <div style={{ marginTop: '6px', fontSize: '12px', color: '#0284c7', background: '#e0f2fe', padding: '6px 10px', borderRadius: '6px', fontWeight: 500 }}>
+                    <div style={{ marginTop: '6px', fontSize: '12px', color: 'var(--primary, #087E8B)', background: 'var(--primary-light, #E8F5F6)', padding: '6px 10px', borderRadius: '6px', fontWeight: 500 }}>
                       💡 <strong>Expiry Managed Through Batch</strong>
                     </div>
                   )}
@@ -1200,13 +1200,13 @@ export default function Products() {
                 <button 
                   type="button" 
                   onClick={() => setShowAdd(false)}
-                  style={{ flex: 1, padding: '10px', background: '#e2e8f0', color: '#334155', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
+                  style={{ flex: 1, padding: '10px', background: '#e2e8f0', color: '#334155', border: 'none', borderRadius: 'var(--radius-md, 8px)', fontWeight: '600', cursor: 'pointer' }}
                 >
                   Cancel
                 </button>
                 <button 
                   type="submit" 
-                  style={{ flex: 1, padding: '10px', background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
+                  style={{ flex: 1, padding: '10px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', fontWeight: '600', cursor: 'pointer' }}
                 >
                   Register
                 </button>
@@ -1259,7 +1259,7 @@ export default function Products() {
                 </button>
                 <button 
                   type="submit" 
-                  style={{ flex: 1, padding: '10px', background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
+                  style={{ flex: 1, padding: '10px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', fontWeight: '600', cursor: 'pointer' }}
                 >
                   Update Stock
                 </button>
@@ -1474,7 +1474,7 @@ export default function Products() {
                               setOrderingProduct(prod);
                               setOrderForm({ quantity: Math.max(20, (prod.lowStockThreshold || 10) * 2), expectedDeliveryDate: new Date(Date.now() + 86400000).toISOString().split('T')[0] });
                             }}
-                            style={{ padding: '6px 12px', background: '#2563eb', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '12px' }}
+                            style={{ padding: '6px 12px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '12px' }}
                           >
                             ⚡ Order
                           </button>
@@ -1494,7 +1494,7 @@ export default function Products() {
                   setTempSettings(alertSettings);
                   setShowSettingsModal(true);
                 }}
-                style={{ background: 'none', border: 'none', color: '#3b82f6', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer', textDecoration: 'underline' }}
+                style={{ background: 'none', border: 'none', color: 'var(--primary, #087E8B)', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer', textDecoration: 'underline' }}
               >
                 ⚙️ Adjust Popup Duration ({alertSettings.displayTimeSeconds}s)
               </button>
@@ -1563,7 +1563,7 @@ export default function Products() {
                       type="button"
                       key={sec}
                       onClick={() => setTempSettings({ ...tempSettings, displayTimeSeconds: sec })}
-                      style={{ padding: '4px 10px', borderRadius: '6px', border: '1px solid #cbd5e1', background: tempSettings.displayTimeSeconds === sec ? '#2563eb' : '#f8fafc', color: tempSettings.displayTimeSeconds === sec ? '#fff' : '#475569', fontSize: '11px', fontWeight: 'bold', cursor: 'pointer' }}
+                      style={{ padding: '4px 10px', borderRadius: '6px', border: '1px solid #cbd5e1', background: tempSettings.displayTimeSeconds === sec ? 'var(--primary, #087E8B)' : '#f8fafc', color: tempSettings.displayTimeSeconds === sec ? '#fff' : '#475569', fontSize: '11px', fontWeight: 'bold', cursor: 'pointer' }}
                     >
                       {sec === 0 ? 'Never Auto-Close (0s)' : `${sec}s Preset`}
                     </button>
@@ -1627,15 +1627,15 @@ export default function Products() {
               {/* Form Action Buttons */}
               <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
                 <button 
-                  type="button"
+                  type="button" 
                   onClick={() => setShowSettingsModal(false)}
-                  style={{ flex: 1, padding: '10px', background: '#e2e8f0', color: '#334155', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
+                  style={{ flex: 1, padding: '10px', background: '#e2e8f0', color: '#334155', border: 'none', borderRadius: 'var(--radius-md, 8px)', fontWeight: '600', cursor: 'pointer' }}
                 >
                   Cancel
                 </button>
                 <button 
-                  type="submit"
-                  style={{ flex: 1, padding: '10px', background: '#2563eb', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
+                  type="submit" 
+                  style={{ flex: 1, padding: '10px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', fontWeight: 'bold', cursor: 'pointer' }}
                 >
                   Save Settings
                 </button>
@@ -1750,7 +1750,7 @@ export default function Products() {
                 </button>
                 <button
                   type="submit"
-                  style={{ flex: 1, padding: '10px', background: '#7c3aed', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
+                  style={{ flex: 1, padding: '10px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', fontWeight: '600', cursor: 'pointer' }}
                 >
                   Save Batch
                 </button>
