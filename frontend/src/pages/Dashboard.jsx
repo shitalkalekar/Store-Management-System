@@ -399,7 +399,7 @@ export default function Dashboard({ role, onNavigate }) {
 
   const pieData = stats?.orderStatusCounts ? [
     { name: 'Pending', value: stats.orderStatusCounts.Pending || 0, color: '#f59e0b' },
-    { name: 'Assigned', value: stats.orderStatusCounts.Assigned || 0, color: '#3b82f6' },
+    { name: 'Assigned', value: stats.orderStatusCounts.Assigned || 0, color: 'var(--primary, #087E8B)' },
     { name: 'Packed', value: stats.orderStatusCounts.Packed || 0, color: '#8b5cf6' },
     { name: 'Out for Delivery', value: stats.orderStatusCounts['Out for Delivery'] || 0, color: '#06b6d4' },
     { name: 'Delivered', value: stats.orderStatusCounts.Delivered || 0, color: '#10b981' },
@@ -458,11 +458,11 @@ export default function Dashboard({ role, onNavigate }) {
         padding: '18px 20px', 
         color: '#1e293b',
         boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
-        border: '1px solid #fca5a5'
+        border: '1px solid #D9E1E7'
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '10px' }}>
           <div>
-            <h3 style={{ fontSize: '16px', fontWeight: '800', margin: 0, color: '#dc2626', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <h3 style={{ fontSize: '16px', fontWeight: '800', margin: 0, color: '#087E8B', display: 'flex', alignItems: 'center', gap: '8px' }}>
               🛍️ Quick Express Sale / Issue Item (Counter Sale)
             </h3>
             <p style={{ fontSize: '12px', color: '#64748b', margin: '4px 0 0 0' }}>
@@ -474,14 +474,13 @@ export default function Dashboard({ role, onNavigate }) {
             onClick={() => setShowMultiIssueModal(true)}
             style={{ 
               padding: '9px 16px', 
-              background: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)', 
+              background: '#087E8B', 
               color: '#ffffff', 
               border: 'none', 
               borderRadius: '8px', 
               cursor: 'pointer', 
               fontWeight: '700', 
               fontSize: '13px',
-              boxShadow: '0 2px 8px rgba(220, 38, 38, 0.25)',
               display: 'flex',
               alignItems: 'center',
               gap: '6px'
@@ -550,7 +549,7 @@ export default function Dashboard({ role, onNavigate }) {
           <button 
             type="submit"
             disabled={issueLoading}
-            style={{ padding: '9px 20px', background: '#dc2626', color: '#ffffff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px', whiteSpace: 'nowrap' }}
+            style={{ padding: '9px 20px', background: '#087E8B', color: '#ffffff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px', whiteSpace: 'nowrap' }}
           >
             {issueLoading ? 'Processing...' : '⚡ Issue Item & Receipt'}
           </button>
@@ -564,11 +563,11 @@ export default function Dashboard({ role, onNavigate }) {
         padding: '18px 20px', 
         color: '#1e293b',
         boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
-        border: '1px solid #bbf7d0'
+        border: '1px solid #D9E1E7'
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '10px' }}>
           <div>
-            <h3 style={{ fontSize: '16px', fontWeight: '800', margin: 0, color: '#059669', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <h3 style={{ fontSize: '16px', fontWeight: '800', margin: 0, color: '#087E8B', display: 'flex', alignItems: 'center', gap: '8px' }}>
               ⚡ Quick Stock In (Fast Inventory Addition)
             </h3>
             <p style={{ fontSize: '12px', color: '#64748b', margin: '4px 0 0 0' }}>
@@ -580,14 +579,13 @@ export default function Dashboard({ role, onNavigate }) {
             onClick={() => setShowBulkStockModal(true)}
             style={{ 
               padding: '9px 16px', 
-              background: 'linear-gradient(135deg, #059669 0%, #047857 100%)', 
+              background: '#087E8B', 
               color: '#ffffff', 
               border: 'none', 
               borderRadius: '8px', 
               cursor: 'pointer', 
               fontWeight: '700', 
               fontSize: '13px',
-              boxShadow: '0 2px 8px rgba(5, 150, 105, 0.25)',
               display: 'flex',
               alignItems: 'center',
               gap: '6px'
@@ -640,7 +638,7 @@ export default function Dashboard({ role, onNavigate }) {
           <button 
             type="submit"
             disabled={quickStockLoading}
-            style={{ padding: '9px 20px', background: '#059669', color: '#ffffff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px', whiteSpace: 'nowrap' }}
+            style={{ padding: '9px 20px', background: '#087E8B', color: '#ffffff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px', whiteSpace: 'nowrap' }}
           >
             {quickStockLoading ? 'Updating...' : '⚡ Add Stock Now'}
           </button>
@@ -653,13 +651,13 @@ export default function Dashboard({ role, onNavigate }) {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
         <div 
           onClick={() => onNavigate && onNavigate('bills')}
-          style={{ background: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: '12px', padding: '20px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', cursor: 'pointer', transition: 'transform 0.2s' }}
+          style={{ background: '#FFFFFF', border: '1px solid #D9E1E7', borderRadius: '10px', padding: '20px', cursor: 'pointer', transition: 'transform 0.2s' }}
           onMouseOver={e => e.currentTarget.style.transform = 'scale(1.02)'}
           onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
         >
-          <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#1e40af', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total Sales</div>
-          <div style={{ fontSize: '28px', fontWeight: '800', color: '#172554', marginTop: '10px' }}>Rs. {stats?.totalSales?.toFixed(2) || '0.00'}</div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#475569', marginTop: '10px' }}>
+          <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#087E8B', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total Sales</div>
+          <div style={{ fontSize: '28px', fontWeight: '800', color: '#17324D', marginTop: '10px' }}>Rs. {stats?.totalSales?.toFixed(2) || '0.00'}</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#64748B', marginTop: '10px' }}>
             <span>Today: <strong>Rs. {stats?.todaySales?.toFixed(2) || '0.00'}</strong></span>
             <span>This Month: <strong>Rs. {stats?.thisMonthSales?.toFixed(2) || '0.00'}</strong></span>
           </div>
@@ -667,24 +665,24 @@ export default function Dashboard({ role, onNavigate }) {
 
         <div 
           onClick={() => onNavigate && onNavigate('customers')}
-          style={{ background: '#fef2f2', border: '1px solid #fee2e2', borderRadius: '12px', padding: '20px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', cursor: 'pointer', transition: 'transform 0.2s' }}
+          style={{ background: '#FFFFFF', border: '1px solid #D9E1E7', borderRadius: '10px', padding: '20px', cursor: 'pointer', transition: 'transform 0.2s' }}
           onMouseOver={e => e.currentTarget.style.transform = 'scale(1.02)'}
           onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
         >
-          <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Outstanding Amount</div>
-          <div style={{ fontSize: '28px', fontWeight: '800', color: '#7f1d1d', marginTop: '10px' }}>Rs. {stats?.totalOutstanding?.toFixed(2) || '0.00'}</div>
-          <div style={{ fontSize: '11px', color: '#64748b', marginTop: '10px' }}>Outstanding credit balance from invoices</div>
+          <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#DC3545', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Outstanding Amount</div>
+          <div style={{ fontSize: '28px', fontWeight: '800', color: '#17324D', marginTop: '10px' }}>Rs. {stats?.totalOutstanding?.toFixed(2) || '0.00'}</div>
+          <div style={{ fontSize: '11px', color: '#64748B', marginTop: '10px' }}>Outstanding credit balance from invoices</div>
         </div>
 
         <div 
           onClick={() => onNavigate && onNavigate('orders')}
-          style={{ background: '#f0fdf4', border: '1px solid #dcfce7', borderRadius: '12px', padding: '20px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', cursor: 'pointer', transition: 'transform 0.2s' }}
+          style={{ background: '#FFFFFF', border: '1px solid #D9E1E7', borderRadius: '10px', padding: '20px', cursor: 'pointer', transition: 'transform 0.2s' }}
           onMouseOver={e => e.currentTarget.style.transform = 'scale(1.02)'}
           onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
         >
-          <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#166534', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Today's Deliveries</div>
-          <div style={{ fontSize: '28px', fontWeight: '800', color: '#14532d', marginTop: '10px' }}>{stats?.todayDeliveries || 0}</div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#475569', marginTop: '10px' }}>
+          <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#198754', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Today's Deliveries</div>
+          <div style={{ fontSize: '28px', fontWeight: '800', color: '#17324D', marginTop: '10px' }}>{stats?.todayDeliveries || 0}</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#64748B', marginTop: '10px' }}>
             <span>Tomorrow: <strong>{stats?.tomorrowDeliveries}</strong></span>
             <span>Total Pending: <strong>{stats?.pendingDeliveries}</strong></span>
           </div>
@@ -701,13 +699,13 @@ export default function Dashboard({ role, onNavigate }) {
               onNavigate('products');
             }
           }}
-          style={{ background: stats?.lowStockCount > 0 ? '#fffbeb' : '#faf5ff', border: stats?.lowStockCount > 0 ? '1px solid #fef3c7' : '1px solid #f3e8ff', borderRadius: '12px', padding: '20px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', cursor: 'pointer', transition: 'transform 0.2s' }}
+          style={{ background: '#FFFFFF', border: stats?.lowStockCount > 0 ? '1px solid #fef3c7' : '1px solid #D9E1E7', borderRadius: '10px', padding: '20px', cursor: 'pointer', transition: 'transform 0.2s' }}
           onMouseOver={e => e.currentTarget.style.transform = 'scale(1.02)'}
           onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
         >
-          <div style={{ fontSize: '12px', fontWeight: 'bold', color: stats?.lowStockCount > 0 ? '#92400e' : '#6b21a8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Low Stock Items</div>
-          <div style={{ fontSize: '28px', fontWeight: '800', color: stats?.lowStockCount > 0 ? '#78350f' : '#581c87', marginTop: '10px' }}>{stats?.lowStockCount || 0}</div>
-          <div style={{ fontSize: '11px', color: '#64748b', marginTop: '10px' }}>
+          <div style={{ fontSize: '12px', fontWeight: 'bold', color: stats?.lowStockCount > 0 ? '#D97706' : '#64748B', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Low Stock Items</div>
+          <div style={{ fontSize: '28px', fontWeight: '800', color: '#17324D', marginTop: '10px' }}>{stats?.lowStockCount || 0}</div>
+          <div style={{ fontSize: '11px', color: '#64748B', marginTop: '10px' }}>
             {stats?.lowStockCount > 0 ? '⚠️ Immediate restock required' : '✅ Stock levels are normal'}
           </div>
         </div>
@@ -732,9 +730,9 @@ export default function Dashboard({ role, onNavigate }) {
           <button 
             onClick={handleProcessLoops}
             disabled={loopProcessing}
-            style={{ padding: '10px 20px', background: loopProcessing ? '#94a3b8' : '#2563eb', color: '#fff', border: 'none', borderRadius: '8px', cursor: loopProcessing ? 'wait' : 'pointer', fontWeight: 'bold', fontSize: '14px', transition: 'background 0.2s', boxShadow: '0 4px 6px -1px rgba(37, 99, 235, 0.2)' }}
-            onMouseOver={(e) => e.target.style.background = '#1d4ed8'}
-            onMouseOut={(e) => e.target.style.background = '#2563eb'}
+            style={{ padding: '10px 20px', background: loopProcessing ? 'var(--text-muted, #94A3B8)' : 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', cursor: loopProcessing ? 'wait' : 'pointer', fontWeight: 'bold', fontSize: '14px', transition: 'background 0.2s', boxShadow: '0 4px 6px -1px rgba(8, 126, 139, 0.2)' }}
+            onMouseOver={(e) => e.target.style.background = 'var(--primary-hover, #066a75)'}
+            onMouseOut={(e) => e.target.style.background = 'var(--primary, #087E8B)'}
           >
             {loopProcessing ? 'Processing...' : 'Process Due Loops'}
           </button>
@@ -975,7 +973,7 @@ export default function Dashboard({ role, onNavigate }) {
                     {!n.read && (
                       <button 
                         onClick={() => handleMarkAsRead(n._id)}
-                        style={{ marginTop: '8px', padding: '2px 8px', fontSize: '10px', background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: '600' }}
+                        style={{ marginTop: '8px', padding: '2px 8px', fontSize: '10px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: 'var(--radius-sm, 4px)', cursor: 'pointer', fontWeight: '600' }}
                       >
                         Acknowledge
                       </button>
@@ -1114,7 +1112,7 @@ export default function Dashboard({ role, onNavigate }) {
                               setOrderingProduct(prod);
                               setOrderForm({ quantity: Math.max(20, (prod.lowStockThreshold || 10) * 2), expectedDeliveryDate: new Date(Date.now() + 86400000).toISOString().split('T')[0] });
                             }}
-                            style={{ padding: '6px 12px', background: '#2563eb', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '12px' }}
+                            style={{ padding: '6px 12px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '12px' }}
                           >
                             ⚡ Order
                           </button>
@@ -1134,7 +1132,7 @@ export default function Dashboard({ role, onNavigate }) {
                   setTempSettings(alertSettings);
                   setShowSettingsModal(true);
                 }}
-                style={{ background: 'none', border: 'none', color: '#3b82f6', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer', textDecoration: 'underline' }}
+                style={{ background: 'none', border: 'none', color: 'var(--primary, #087E8B)', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer', textDecoration: 'underline' }}
               >
                 ⚙️ Adjust Popup Duration ({alertSettings.displayTimeSeconds}s)
               </button>
@@ -1203,7 +1201,7 @@ export default function Dashboard({ role, onNavigate }) {
                       type="button"
                       key={sec}
                       onClick={() => setTempSettings({ ...tempSettings, displayTimeSeconds: sec })}
-                      style={{ padding: '4px 10px', borderRadius: '6px', border: '1px solid #cbd5e1', background: tempSettings.displayTimeSeconds === sec ? '#2563eb' : '#f8fafc', color: tempSettings.displayTimeSeconds === sec ? '#fff' : '#475569', fontSize: '11px', fontWeight: 'bold', cursor: 'pointer' }}
+                      style={{ padding: '4px 10px', borderRadius: '6px', border: '1px solid #cbd5e1', background: tempSettings.displayTimeSeconds === sec ? 'var(--primary, #087E8B)' : '#f8fafc', color: tempSettings.displayTimeSeconds === sec ? '#fff' : '#475569', fontSize: '11px', fontWeight: 'bold', cursor: 'pointer' }}
                     >
                       {sec === 0 ? 'Never Auto-Close (0s)' : `${sec}s Preset`}
                     </button>
@@ -1275,7 +1273,7 @@ export default function Dashboard({ role, onNavigate }) {
                 </button>
                 <button 
                   type="submit"
-                  style={{ flex: 1, padding: '10px', background: '#2563eb', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
+                  style={{ flex: 1, padding: '10px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
                 >
                   Save Settings
                 </button>
@@ -1435,7 +1433,7 @@ export default function Dashboard({ role, onNavigate }) {
                 <button 
                   type="button"
                   onClick={handleAddBulkRow}
-                  style={{ marginTop: '12px', padding: '7px 14px', background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '12px' }}
+                  style={{ marginTop: '12px', padding: '7px 14px', background: 'var(--primary-light, #E8F5F6)', color: 'var(--primary, #087E8B)', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '12px' }}
                 >
                   ➕ Add Another Product Line
                 </button>
@@ -1555,7 +1553,7 @@ export default function Dashboard({ role, onNavigate }) {
                 <button 
                   type="button"
                   onClick={handleAddMultiIssueRow}
-                  style={{ marginTop: '12px', padding: '7px 14px', background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '12px' }}
+                  style={{ marginTop: '12px', padding: '7px 14px', background: 'var(--primary-light, #E8F5F6)', color: 'var(--primary, #087E8B)', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '12px' }}
                 >
                   ➕ Add Another Product Line
                 </button>
@@ -1618,7 +1616,7 @@ export default function Dashboard({ role, onNavigate }) {
               <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                 <button 
                   onClick={() => handleGeneratedBillPdf(generatedBillModal, true)}
-                  style={{ background: '#2563eb', color: '#ffffff', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+                  style={{ background: 'var(--primary, #087E8B)', color: '#ffffff', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
                 >
                   💾 Save PDF
                 </button>

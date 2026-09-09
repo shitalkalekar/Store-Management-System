@@ -117,22 +117,22 @@ export default function DataManagement() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
           
           {/* Backup Database */}
-          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '24px' }}>
-            <h3 style={{ fontSize: '16px', fontWeight: 'bold', color: '#1e293b', borderBottom: '1px solid #f1f5f9', paddingBottom: '10px', marginBottom: '15px' }}>💾 Download Backup</h3>
+          <div style={{ background: 'var(--bg-card, #FFFFFF)', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: 'var(--radius-lg, 10px)', padding: '24px' }}>
+            <h3 style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--text-primary, #1F2937)', borderBottom: '1px solid var(--border-light, #D9E1E7)', paddingBottom: '10px', marginBottom: '15px' }}>💾 Download Backup</h3>
             <p style={{ fontSize: '12px', color: '#64748b', lineHeight: '1.5', marginBottom: '15px' }}>
               Download a backup file of your entire database (Branches, Staff, Customers, Products, Bills, Payments, and Expenses).
             </p>
             <button 
               onClick={handleDownloadBackup}
-              style={{ width: '100%', padding: '10px', background: '#2563eb', color: '#fff', border: 'none', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer' }}
+              style={{ width: '100%', padding: '10px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', fontWeight: 'bold', cursor: 'pointer' }}
             >
               📥 Download Backup File
             </button>
           </div>
 
           {/* Restore Database */}
-          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '24px' }}>
-            <h3 style={{ fontSize: '16px', fontWeight: 'bold', color: '#991b1b', borderBottom: '1px solid #f1f5f9', paddingBottom: '10px', marginBottom: '15px' }}>🚨 Restore Backup</h3>
+          <div style={{ background: 'var(--bg-card, #FFFFFF)', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: 'var(--radius-lg, 10px)', padding: '24px' }}>
+            <h3 style={{ fontSize: '16px', fontWeight: 'bold', color: '#991b1b', borderBottom: '1px solid var(--border-light, #D9E1E7)', paddingBottom: '10px', marginBottom: '15px' }}>🚨 Restore Backup</h3>
             <p style={{ fontSize: '12px', color: '#64748b', lineHeight: '1.5', marginBottom: '15px' }}>
               Upload a previously downloaded backup file to restore your database. Warning: This will overwrite your current database.
             </p>
@@ -140,7 +140,7 @@ export default function DataManagement() {
             <form onSubmit={handleRestoreSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
               <div>
                 <input 
-                  type="file"
+                  type="file" 
                   accept=".json"
                   onChange={(e) => setRestoreFile(e.target.files[0])}
                   style={{ width: '100%', fontSize: '12px' }}
@@ -148,7 +148,7 @@ export default function DataManagement() {
                 />
               </div>
               
-              <button type="submit" style={{ padding: '10px', background: '#b91c1c', color: '#fff', border: 'none', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer' }}>
+              <button type="submit" style={{ padding: '10px', background: '#b91c1c', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', fontWeight: 'bold', cursor: 'pointer' }}>
                 ⚠️ Restore Backup Now
               </button>
             </form>
@@ -157,8 +157,8 @@ export default function DataManagement() {
         </div>
 
         {/* Excel / CSV Importer */}
-        <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '24px' }}>
-          <h3 style={{ fontSize: '16px', fontWeight: 'bold', color: '#1e293b', borderBottom: '1px solid #f1f5f9', paddingBottom: '10px', marginBottom: '15px' }}>📥 Import Bulk Data</h3>
+        <div style={{ background: 'var(--bg-card, #FFFFFF)', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: 'var(--radius-lg, 10px)', padding: '24px' }}>
+          <h3 style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--text-primary, #1F2937)', borderBottom: '1px solid var(--border-light, #D9E1E7)', paddingBottom: '10px', marginBottom: '15px' }}>📥 Import Bulk Data</h3>
           
           <form onSubmit={handleCSVImport} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
             <div>
@@ -195,7 +195,7 @@ export default function DataManagement() {
               />
             </div>
 
-            <button type="submit" style={{ padding: '10px', background: '#10b981', color: '#fff', border: 'none', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer' }}>
+            <button type="submit" style={{ padding: '10px', background: '#10b981', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', fontWeight: 'bold', cursor: 'pointer' }}>
               🚀 Import Bulk Data Now
             </button>
           </form>

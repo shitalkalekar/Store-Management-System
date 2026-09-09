@@ -590,7 +590,7 @@ export default function Orders({ role, onNavigate }) {
         
         <button 
           onClick={handleOpenAdd}
-          style={{ padding: '10px 20px', background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
+          style={{ padding: '10px 20px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', fontWeight: '600', cursor: 'pointer' }}
         >
           ➕ Create Order
         </button>
@@ -598,12 +598,12 @@ export default function Orders({ role, onNavigate }) {
 
       {/* Bulk Actions Bar */}
       {selectedIds.length > 0 && (
-        <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', background: '#eff6ff', padding: '15px', borderRadius: '12px', border: '1px solid #bfdbfe', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ fontSize: '14px', color: '#1e40af', fontWeight: '600' }}>
+        <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', background: 'var(--bg-main, #F6F8FA)', padding: '15px', borderRadius: 'var(--radius-lg, 10px)', border: '1px solid var(--border-light, #D9E1E7)', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span style={{ fontSize: '14px', color: 'var(--primary, #087E8B)', fontWeight: '600' }}>
             Selected <strong>{selectedIds.length}</strong> orders
           </span>
           <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
-            <label style={{ fontSize: '12px', fontWeight: '600', color: '#1e40af' }}>Update Status:</label>
+            <label style={{ fontSize: '12px', fontWeight: '600', color: 'var(--text-primary, #1F2937)' }}>Update Status:</label>
             <select 
               onChange={(e) => {
                 if(e.target.value) {
@@ -611,7 +611,7 @@ export default function Orders({ role, onNavigate }) {
                   e.target.value = '';
                 }
               }}
-              style={{ padding: '6px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', background: '#fff', fontSize: '12px' }}
+              style={{ padding: '6px 12px', borderRadius: '6px', border: '1px solid var(--border-light, #D9E1E7)', background: '#fff', fontSize: '12px' }}
             >
               <option value="">Select...</option>
               <option value="Pending">New Order</option>
@@ -622,7 +622,7 @@ export default function Orders({ role, onNavigate }) {
               <option value="Cancelled">Cancelled</option>
             </select>
 
-            {false && <><label style={{ fontSize: '12px', fontWeight: '600', color: '#1e40af' }}>Assign Staff:</label>
+            {false && <><label style={{ fontSize: '12px', fontWeight: '600', color: 'var(--text-primary, #1F2937)' }}>Assign Staff:</label>
             <select 
               onChange={(e) => {
                 if(e.target.value) {
@@ -640,19 +640,19 @@ export default function Orders({ role, onNavigate }) {
 
             <button 
               onClick={handleBulkExport}
-              style={{ padding: '8px 16px', background: '#10b981', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
+              style={{ padding: '8px 16px', background: 'var(--success, #198754)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
             >
               📥 Export to Excel
             </button>
             <button 
               onClick={handleBulkDelete}
-              style={{ padding: '8px 16px', background: '#ef4444', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
+              style={{ padding: '8px 16px', background: 'var(--danger, #DC3545)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
             >
               🗑️ Bulk Delete
             </button>
             <button 
               onClick={() => setSelectedIds([])}
-              style={{ padding: '8px 16px', background: '#cbd5e1', color: '#1e293b', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
+              style={{ padding: '8px 16px', background: 'var(--border-subtle, #F1F5F9)', color: 'var(--text-primary, #1F2937)', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: 'var(--radius-md, 8px)', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
             >
               Clear Selection
             </button>
@@ -662,12 +662,12 @@ export default function Orders({ role, onNavigate }) {
 
       {/* Recurring Customer Order Loops (Demand Center) Widget */}
       {!loading && (
-        <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '20px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', marginBottom: '15px' }}>
+        <div style={{ background: '#fff', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: 'var(--radius-lg, 10px)', padding: '20px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', marginBottom: '15px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px', marginBottom: '15px' }}>
             <div>
               <h3 style={{ fontSize: '16px', fontWeight: '800', color: '#1e293b', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
                 🔄 Recurring Customer Order Loops (Demand Center)
-                <span style={{ background: '#eff6ff', color: '#1d4ed8', fontSize: '12px', padding: '2px 10px', borderRadius: '12px', fontWeight: 'bold' }}>
+                <span style={{ background: 'var(--primary-light, #E8F5F6)', color: 'var(--primary, #087E8B)', fontSize: '12px', padding: '2px 10px', borderRadius: '12px', fontWeight: 'bold' }}>
                   {filteredLoopAlerts.length} Active Loop(s)
                 </span>
               </h3>
@@ -776,13 +776,13 @@ export default function Orders({ role, onNavigate }) {
                           <div style={{ display: 'flex', gap: '6px', justifyContent: 'flex-end' }}>
                             <button
                               onClick={() => handleTriggerLoopOrder(loop.orderId)}
-                              style={{ padding: '6px 12px', background: '#2563eb', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '12px' }}
+                              style={{ padding: '6px 12px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', cursor: 'pointer', fontWeight: 'bold', fontSize: '12px' }}
                             >
                               ⚡ Generate Order
                             </button>
                             <button
                               onClick={() => onNavigate && onNavigate('purchases')}
-                              style={{ padding: '6px 12px', background: '#16a34a', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '12px' }}
+                              style={{ padding: '6px 12px', background: '#16a34a', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', cursor: 'pointer', fontWeight: 'bold', fontSize: '12px' }}
                             >
                               🛒 Add to PO
                             </button>
@@ -812,8 +812,8 @@ export default function Orders({ role, onNavigate }) {
             gap: '12px', 
             background: '#fff', 
             padding: '12px 16px', 
-            borderRadius: '12px', 
-            border: '1px solid #e2e8f0' 
+            borderRadius: 'var(--radius-lg, 10px)', 
+            border: '1px solid var(--border-light, #D9E1E7)' 
           }}>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
               <span style={{ fontSize: '12px', fontWeight: 'bold', color: '#64748b', marginRight: '4px' }}>📅 Filter by Date:</span>
@@ -823,9 +823,9 @@ export default function Orders({ role, onNavigate }) {
                 style={{
                   padding: '6px 14px',
                   borderRadius: '20px',
-                  border: selectedDateFilter === '' ? '2px solid #2563eb' : '1px solid #cbd5e1',
-                  background: selectedDateFilter === '' ? '#eff6ff' : '#fff',
-                  color: selectedDateFilter === '' ? '#1d4ed8' : '#475569',
+                  border: selectedDateFilter === '' ? '2px solid var(--primary, #087E8B)' : '1px solid var(--border-light, #D9E1E7)',
+                  background: selectedDateFilter === '' ? 'var(--primary-light, #E8F5F6)' : '#fff',
+                  color: selectedDateFilter === '' ? 'var(--primary, #087E8B)' : '#475569',
                   fontWeight: 'bold',
                   fontSize: '12px',
                   cursor: 'pointer',
@@ -842,7 +842,7 @@ export default function Orders({ role, onNavigate }) {
                 style={{
                   padding: '6px 14px',
                   borderRadius: '20px',
-                  border: selectedDateFilter === 'today' ? '2px solid #16a34a' : '1px solid #cbd5e1',
+                  border: selectedDateFilter === 'today' ? '2px solid #16a34a' : '1px solid var(--border-light, #D9E1E7)',
                   background: selectedDateFilter === 'today' ? '#f0fdf4' : '#fff',
                   color: selectedDateFilter === 'today' ? '#15803d' : '#475569',
                   fontWeight: 'bold',
@@ -861,7 +861,7 @@ export default function Orders({ role, onNavigate }) {
                 style={{
                   padding: '6px 14px',
                   borderRadius: '20px',
-                  border: selectedDateFilter === 'tomorrow' ? '2px solid #0284c7' : '1px solid #cbd5e1',
+                  border: selectedDateFilter === 'tomorrow' ? '2px solid #0284c7' : '1px solid var(--border-light, #D9E1E7)',
                   background: selectedDateFilter === 'tomorrow' ? '#f0f9ff' : '#fff',
                   color: selectedDateFilter === 'tomorrow' ? '#0369a1' : '#475569',
                   fontWeight: 'bold',
@@ -880,9 +880,9 @@ export default function Orders({ role, onNavigate }) {
                 style={{
                   padding: '6px 14px',
                   borderRadius: '20px',
-                  border: selectedDateFilter === 'day_after_tomorrow' ? '2px solid #7c3aed' : '1px solid #cbd5e1',
-                  background: selectedDateFilter === 'day_after_tomorrow' ? '#f5f3ff' : '#fff',
-                  color: selectedDateFilter === 'day_after_tomorrow' ? '#6d28d9' : '#475569',
+                  border: selectedDateFilter === 'day_after_tomorrow' ? '2px solid var(--secondary, #17324D)' : '1px solid var(--border-light, #D9E1E7)',
+                  background: selectedDateFilter === 'day_after_tomorrow' ? 'var(--border-subtle, #F1F5F9)' : '#fff',
+                  color: selectedDateFilter === 'day_after_tomorrow' ? 'var(--secondary, #17324D)' : '#475569',
                   fontWeight: 'bold',
                   fontSize: '12px',
                   cursor: 'pointer',
@@ -921,13 +921,15 @@ export default function Orders({ role, onNavigate }) {
             </div>
           </div>
 
-          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden' }}>
+          <div style={{ background: '#fff', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: 'var(--radius-lg, 10px)', overflow: 'hidden' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
             <thead>
-              <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
+              <tr style={{ background: '#f8fafc', borderBottom: '1px solid var(--border-light, #D9E1E7)' }}>
                 <th style={{ padding: '14px 20px', width: '40px' }}>
                   <input 
-                    type="checkbox"
+                    type="checkbox" 
+                    id="select-all-orders"
+                    aria-label="Select all orders"
                     checked={filteredOrders.length > 0 && selectedIds.length === filteredOrders.length}
                     onChange={handleSelectAll}
                   />
@@ -963,7 +965,7 @@ export default function Orders({ role, onNavigate }) {
                     <td style={{ padding: '14px 20px', color: '#1e293b' }}>
                       <div style={{ fontWeight: '700' }}>ORD-{o._id.toString().substring(18).toUpperCase()}</div>
                       {o.isRecurring && (
-                        <div style={{ fontSize: '10px', color: '#3b82f6', fontWeight: 'bold', marginTop: '2px' }}>
+                        <div style={{ fontSize: '10px', color: 'var(--primary, #087E8B)', fontWeight: 'bold', marginTop: '2px' }}>
                           🔁 {formatRecurrenceLabel(o.recurringIntervalDays)}
                         </div>
                       )}
@@ -988,12 +990,12 @@ export default function Orders({ role, onNavigate }) {
                           outline: 'none',
                           border: '1px solid rgba(0,0,0,0.1)',
                           appearance: 'none',
-                          background: o.status === 'Delivered' ? '#d1fae5 url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' fill=\'%23065f46\' viewBox=\'0 0 16 16\'%3E%3Cpath d=\'M4 6l4 4 4-4\'/%3E%3C/svg%3E") no-repeat right 8px center' 
-                                      : o.status === 'Packed' ? '#e0e7ff url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' fill=\'%233730a3\' viewBox=\'0 0 16 16\'%3E%3Cpath d=\'M4 6l4 4 4-4\'/%3E%3C/svg%3E") no-repeat right 8px center'
-                                      : o.status === 'Out for Delivery' ? '#dbeafe url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' fill=\'%231e40af\' viewBox=\'0 0 16 16\'%3E%3Cpath d=\'M4 6l4 4 4-4\'/%3E%3C/svg%3E") no-repeat right 8px center'
-                                      : o.status === 'Cancelled' ? '#fee2e2 url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' fill=\'%23b91c1c\' viewBox=\'0 0 16 16\'%3E%3Cpath d=\'M4 6l4 4 4-4\'/%3E%3C/svg%3E") no-repeat right 8px center' 
-                                      : '#fef3c7 url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' fill=\'%23b45309\' viewBox=\'0 0 16 16\'%3E%3Cpath d=\'M4 6l4 4 4-4\'/%3E%3C/svg%3E") no-repeat right 8px center',
-                          color: o.status === 'Delivered' ? '#065f46' : o.status === 'Packed' ? '#3730a3' : o.status === 'Out for Delivery' ? '#1e40af' : o.status === 'Cancelled' ? '#b91c1c' : '#b45309'
+                          background: o.status === 'Delivered' ? 'var(--success-light, #D1E7DD)' 
+                                      : o.status === 'Packed' ? 'var(--bg-main, #F6F8FA)'
+                                      : o.status === 'Out for Delivery' ? 'var(--primary-light, #E8F5F6)'
+                                      : o.status === 'Cancelled' ? 'var(--danger-light, #F8D7DA)' 
+                                      : 'var(--warning-light, #FEF3C7)',
+                          color: o.status === 'Delivered' ? 'var(--success, #198754)' : o.status === 'Packed' ? 'var(--secondary, #17324D)' : o.status === 'Out for Delivery' ? 'var(--primary, #087E8B)' : o.status === 'Cancelled' ? 'var(--danger, #DC3545)' : 'var(--warning, #D97706)'
                         }}
                       >
                         <option value="Pending">New Order</option>
@@ -1017,7 +1019,7 @@ export default function Orders({ role, onNavigate }) {
                         )}
                         <button 
                           onClick={() => setTrackingOrder(o)}
-                          style={{ padding: '5px 10px', background: '#eff6ff', color: '#1d4ed8', border: '1px solid #bfdbfe', borderRadius: '6px', cursor: 'pointer', fontWeight: '600', fontSize: '11px' }}
+                          style={{ padding: '5px 10px', background: 'var(--primary-light, #E8F5F6)', color: 'var(--primary, #087E8B)', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: '6px', cursor: 'pointer', fontWeight: '600', fontSize: '11px' }}
                         >
                           🚚 Track Run
                         </button>
@@ -1187,7 +1189,7 @@ export default function Orders({ role, onNavigate }) {
                 </button>
                 <button 
                   type="submit" 
-                  style={{ flex: 1, padding: '10px', background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
+                  style={{ flex: 1, padding: '10px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', fontWeight: '600', cursor: 'pointer' }}
                 >
                   Confirm Order
                 </button>
@@ -1277,14 +1279,14 @@ export default function Orders({ role, onNavigate }) {
                         <div key={step} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 2, gap: '8px', flex: 1 }}>
                           <div style={{ 
                             width: '32px', height: '32px', borderRadius: '50%', 
-                            background: isCompleted ? '#3b82f6' : '#fff', 
-                            border: isCompleted ? '2px solid #3b82f6' : '2px solid #cbd5e1',
+                            background: isCompleted ? 'var(--primary, #087E8B)' : '#fff', 
+                            border: isCompleted ? '2px solid var(--primary, #087E8B)' : '2px solid #cbd5e1',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                             color: isCompleted ? '#fff' : '#94a3b8', fontWeight: 'bold', fontSize: '14px'
                           }}>
                             {isCompleted ? '✓' : idx + 1}
                           </div>
-                          <span style={{ fontSize: '11px', fontWeight: '600', color: isCurrent ? '#0f172a' : (isCompleted ? '#3b82f6' : '#64748b'), textAlign: 'center' }}>
+                          <span style={{ fontSize: '11px', fontWeight: '600', color: isCurrent ? '#0f172a' : (isCompleted ? 'var(--primary, #087E8B)' : '#64748b'), textAlign: 'center' }}>
                             {step === 'Pending' ? 'New Order' : step === 'Packed' ? 'Packed' : step}
                           </span>
                         </div>
@@ -1313,7 +1315,7 @@ export default function Orders({ role, onNavigate }) {
                         <div key={hIdx} style={{ display: 'flex', gap: '12px', padding: '10px 14px', background: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0', alignItems: 'center' }}>
                           <div style={{ 
                             width: '28px', height: '28px', borderRadius: '50%', 
-                            background: hist.status === 'Delivered' ? '#10b981' : hist.status === 'Packed' ? '#6366f1' : hist.status === 'Out for Delivery' ? '#3b82f6' : '#f59e0b',
+                            background: hist.status === 'Delivered' ? '#10b981' : hist.status === 'Packed' ? 'var(--secondary, #17324D)' : hist.status === 'Out for Delivery' ? 'var(--primary, #087E8B)' : '#f59e0b',
                             color: '#fff', fontSize: '11px', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center'
                           }}>
                             {hIdx + 1}
@@ -1477,7 +1479,7 @@ export default function Orders({ role, onNavigate }) {
                   <button 
                     type="button" 
                     onClick={() => setEditOrderItems([...editOrderItems, { product: products[0]?._id || '', quantity: 1, price: products[0]?.price || 0 }])}
-                    style={{ padding: '4px 10px', background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe', borderRadius: '6px', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}
+                    style={{ padding: '4px 10px', background: 'var(--primary-light, #E8F5F6)', color: 'var(--primary, #087E8B)', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: '6px', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}
                   >
                     ➕ Add Product
                   </button>
@@ -1543,13 +1545,13 @@ export default function Orders({ role, onNavigate }) {
                 <button 
                   type="button" 
                   onClick={() => setEditingOrder(null)}
-                  style={{ flex: 1, padding: '10px', background: '#e2e8f0', color: '#334155', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
+                  style={{ flex: 1, padding: '10px', background: '#e2e8f0', color: '#334155', border: 'none', borderRadius: 'var(--radius-md, 8px)', fontWeight: '600', cursor: 'pointer' }}
                 >
                   Cancel
                 </button>
                 <button 
                   type="submit" 
-                  style={{ flex: 1, padding: '10px', background: '#2563eb', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
+                  style={{ flex: 1, padding: '10px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', fontWeight: '600', cursor: 'pointer' }}
                 >
                   Save Sales Order Changes
                 </button>

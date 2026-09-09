@@ -1,58 +1,27 @@
-/* Modern SaaS Login Theme */
+/* CleanFlow Enterprise Login Theme */
 .modern-login-container {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #f6f8fb 0%, #e5ebf4 100%);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background: #F6F8FA;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   padding: 20px;
   position: relative;
-  overflow: hidden;
-}
-
-/* Background Abstract Shapes */
-.modern-login-container::before {
-  content: "";
-  position: absolute;
-  top: -150px;
-  right: -150px;
-  width: 500px;
-  height: 500px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, rgba(79, 70, 229, 0.15) 0%, rgba(147, 51, 234, 0.1) 100%);
-  filter: blur(60px);
-  z-index: 0;
-}
-
-.modern-login-container::after {
-  content: "";
-  position: absolute;
-  bottom: -200px;
-  left: -100px;
-  width: 600px;
-  height: 600px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(16, 185, 129, 0.1) 100%);
-  filter: blur(80px);
-  z-index: 0;
 }
 
 .modern-login-card {
   width: 100%;
-  max-width: 380px;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.02);
-  border-radius: 20px;
-  padding: 28px 24px;
+  max-width: 400px;
+  background: #FFFFFF;
+  border: 1px solid #D9E1E7;
+  border-radius: 10px;
+  padding: 32px 28px;
   position: relative;
   z-index: 1;
-  animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(16px);
 }
 
 @keyframes fadeUp {
@@ -73,11 +42,10 @@
   justify-content: center;
   width: 48px;
   height: 48px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  border-radius: 10px;
+  background: #087E8B;
   color: white;
   margin-bottom: 12px;
-  box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.4);
 }
 
 .logo-wrapper svg {
@@ -88,15 +56,36 @@
 .login-header-modern h1 {
   font-size: 20px;
   font-weight: 700;
-  color: #111827;
+  color: #17324D;
   margin: 0 0 4px 0;
   letter-spacing: -0.02em;
 }
 
 .login-header-modern p {
   font-size: 14px;
-  color: #6b7280;
+  color: #64748B;
   margin: 0;
+}
+
+/* Brand lockup above the heading */
+.login-brand-lockup {
+  margin-bottom: 8px;
+}
+
+.login-brand-name {
+  font-size: 16px;
+  font-weight: 800;
+  color: #17324D;
+  letter-spacing: 0.04em;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.login-brand-desc {
+  font-size: 11px;
+  font-weight: 500;
+  color: #64748B;
+  margin: 2px 0 0 0;
 }
 
 /* Form Styles */
@@ -109,7 +98,7 @@
   display: block;
   font-size: 13px;
   font-weight: 600;
-  color: #374151;
+  color: #1F2937;
   margin-bottom: 6px;
 }
 
@@ -122,7 +111,7 @@
 .modern-input-icon {
   position: absolute;
   left: 14px;
-  color: #9ca3af;
+  color: #94A3B8;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -137,10 +126,10 @@
   width: 100%;
   padding: 10px 14px 10px 38px;
   font-size: 14px;
-  color: #1f2937;
-  background-color: rgba(255, 255, 255, 0.7);
-  border: 1px solid #d1d5db;
-  border-radius: 12px;
+  color: #1F2937;
+  background-color: #FFFFFF;
+  border: 1px solid #D9E1E7;
+  border-radius: 8px;
   outline: none;
   transition: all 0.2s ease;
   box-sizing: border-box;
@@ -148,12 +137,12 @@
 
 .modern-input:focus {
   background-color: #fff;
-  border-color: #4f46e5;
-  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+  border-color: #087E8B;
+  box-shadow: 0 0 0 3px rgba(8, 126, 139, 0.12);
 }
 
 .modern-input::placeholder {
-  color: #9ca3af;
+  color: #94A3B8;
 }
 
 select.modern-input {
@@ -166,7 +155,7 @@ select.modern-input {
   position: absolute;
   right: 14px;
   pointer-events: none;
-  color: #9ca3af;
+  color: #94A3B8;
 }
 
 .password-toggle {
@@ -174,7 +163,7 @@ select.modern-input {
   right: 14px;
   background: none;
   border: none;
-  color: #9ca3af;
+  color: #94A3B8;
   cursor: pointer;
   padding: 4px;
   display: flex;
@@ -184,13 +173,13 @@ select.modern-input {
 }
 
 .password-toggle:hover {
-  color: #4b5563;
+  color: #1F2937;
 }
 
 .caps-warning {
   position: absolute;
   right: 44px;
-  color: #eab308;
+  color: #D97706;
   display: flex;
   align-items: center;
 }
@@ -208,7 +197,7 @@ select.modern-input {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #4b5563;
+  color: #64748B;
   cursor: pointer;
 }
 
@@ -216,20 +205,20 @@ select.modern-input {
   width: 16px;
   height: 16px;
   border-radius: 4px;
-  border: 1px solid #d1d5db;
+  border: 1px solid #D9E1E7;
   cursor: pointer;
-  accent-color: #4f46e5;
+  accent-color: #087E8B;
 }
 
 .forgot-link {
-  color: #4f46e5;
+  color: #087E8B;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s;
 }
 
 .forgot-link:hover {
-  color: #4338ca;
+  color: #066a75;
   text-decoration: underline;
 }
 
@@ -237,10 +226,10 @@ select.modern-input {
 .modern-btn {
   width: 100%;
   padding: 10px 16px;
-  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+  background: #087E8B;
   color: white;
   border: none;
-  border-radius: 12px;
+  border-radius: 8px;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
@@ -248,20 +237,16 @@ select.modern-input {
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
   position: relative;
   overflow: hidden;
 }
 
 .modern-btn:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
-  background: linear-gradient(135deg, #4338ca 0%, #4f46e5 100%);
+  background: #066a75;
 }
 
 .modern-btn:active:not(:disabled) {
   transform: translateY(1px);
-  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
 }
 
 .modern-btn:disabled {
@@ -287,7 +272,7 @@ select.modern-input {
 /* Toast */
 .modern-toast {
   background-color: #fee2e2;
-  border-left: 4px solid #ef4444;
+  border-left: 4px solid #DC3545;
   color: #991b1b;
   padding: 12px 16px;
   border-radius: 8px;
@@ -309,29 +294,29 @@ select.modern-input {
   text-align: center;
   margin-top: 32px;
   font-size: 12px;
-  color: #9ca3af;
+  color: #94A3B8;
 }
 
 .modern-footer a {
-  color: #6b7280;
+  color: #64748B;
   text-decoration: none;
   transition: color 0.2s;
 }
 
 .modern-footer a:hover {
-  color: #374151;
+  color: #1F2937;
 }
 
 .test-credentials {
   margin-top: 24px;
   padding-top: 24px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid #D9E1E7;
   font-size: 11px;
-  color: #6b7280;
+  color: #64748B;
   text-align: center;
   line-height: 1.5;
 }
 
 .test-credentials strong {
-  color: #374151;
+  color: #1F2937;
 }

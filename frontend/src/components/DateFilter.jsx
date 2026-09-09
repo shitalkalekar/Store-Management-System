@@ -115,17 +115,17 @@ export default function DateFilter({
   return (
     <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', ...style }} className={className}>
       <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
-        <Calendar size={15} style={{ position: 'absolute', left: '10px', color: '#64748b', pointerEvents: 'none' }} />
+        <Calendar size={15} style={{ position: 'absolute', left: '10px', color: 'var(--text-secondary, #64748B)', pointerEvents: 'none' }} />
         <select
           value={filterType}
           onChange={handleSelectChange}
           style={{
             padding: '8px 12px 8px 32px',
-            borderRadius: '6px',
-            border: '1px solid #cbd5e1',
+            borderRadius: 'var(--radius-md, 8px)',
+            border: '1px solid var(--border-light, #D9E1E7)',
             fontSize: '13px',
-            backgroundColor: '#ffffff',
-            color: '#1e293b',
+            backgroundColor: 'var(--bg-card, #FFFFFF)',
+            color: 'var(--text-primary, #1F2937)',
             cursor: 'pointer',
             fontWeight: 500
           }}
@@ -143,30 +143,32 @@ export default function DateFilter({
 
       {filterType === 'custom' && (
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-          <label style={{ fontSize: '12px', color: '#475569', fontWeight: 500 }}>From:</label>
+          <label style={{ fontSize: '12px', color: 'var(--text-secondary, #64748B)', fontWeight: 500 }}>From:</label>
           <input
             type="date"
             value={customStart}
             onChange={handleCustomStartChange}
             style={{
               padding: '6px 10px',
-              borderRadius: '6px',
-              border: '1px solid #cbd5e1',
+              borderRadius: 'var(--radius-md, 8px)',
+              border: '1px solid var(--border-light, #D9E1E7)',
               fontSize: '13px',
-              color: '#1e293b'
+              color: 'var(--text-primary, #1F2937)',
+              backgroundColor: 'var(--bg-card, #FFFFFF)'
             }}
           />
-          <label style={{ fontSize: '12px', color: '#475569', fontWeight: 500 }}>To:</label>
+          <label style={{ fontSize: '12px', color: 'var(--text-secondary, #64748B)', fontWeight: 500 }}>To:</label>
           <input
             type="date"
             value={customEnd}
             onChange={handleCustomEndChange}
             style={{
               padding: '6px 10px',
-              borderRadius: '6px',
-              border: '1px solid #cbd5e1',
+              borderRadius: 'var(--radius-md, 8px)',
+              border: '1px solid var(--border-light, #D9E1E7)',
               fontSize: '13px',
-              color: '#1e293b'
+              color: 'var(--text-primary, #1F2937)',
+              backgroundColor: 'var(--bg-card, #FFFFFF)'
             }}
           />
         </div>

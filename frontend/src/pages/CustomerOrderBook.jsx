@@ -130,9 +130,9 @@ export default function CustomerOrderBook({ user, onNavigate }) {
         ) : (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '20px' }}>
             {filteredProducts.map((p, idx) => (
-              <div key={p._id} style={{ background: '#fff', borderRadius: '8px', border: '1px solid #e2e8f0', padding: '15px', display: 'flex', flexDirection: 'column' }}>
-                <div style={{ fontWeight: 'bold', color: '#0f172a', marginBottom: '5px' }}>#{idx + 1} - {p.name}</div>
-                <div style={{ fontSize: '12px', color: '#64748b', marginBottom: '10px' }}>{p.category}</div>
+              <div key={p._id} style={{ background: 'var(--bg-card, #FFFFFF)', borderRadius: 'var(--radius-md, 8px)', border: '1px solid var(--border-light, #D9E1E7)', padding: '15px', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ fontWeight: 'bold', color: 'var(--text-primary, #1F2937)', marginBottom: '5px' }}>#{idx + 1} - {p.name}</div>
+                <div style={{ fontSize: '12px', color: 'var(--text-secondary, #64748B)', marginBottom: '10px' }}>{p.category}</div>
                 <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#10b981', marginBottom: '15px' }}>Rs. {p.price.toFixed(2)}</div>
                 
                 <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -151,7 +151,7 @@ export default function CustomerOrderBook({ user, onNavigate }) {
                   ) : (
                     <button 
                       onClick={() => updateQuantity(p._id, 1)}
-                      style={{ width: '100%', padding: '8px', borderRadius: '6px', border: 'none', background: '#3b82f6', color: '#fff', fontWeight: '600', cursor: 'pointer' }}
+                      style={{ width: '100%', padding: '8px', borderRadius: 'var(--radius-md, 8px)', border: 'none', background: 'var(--primary, #087E8B)', color: '#fff', fontWeight: '600', cursor: 'pointer' }}
                     >
                       Add to Cart
                     </button>
@@ -165,8 +165,8 @@ export default function CustomerOrderBook({ user, onNavigate }) {
       </div>
 
       {/* Cart Checkout */}
-      <div style={{ flex: 1, minWidth: '300px', background: '#fff', borderRadius: '12px', border: '1px solid #e2e8f0', padding: '20px', position: 'sticky', top: '20px' }}>
-        <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#1e293b', marginBottom: '20px', borderBottom: '1px solid #e2e8f0', paddingBottom: '10px' }}>Your Order</h3>
+      <div style={{ flex: 1, minWidth: '300px', background: 'var(--bg-card, #FFFFFF)', borderRadius: 'var(--radius-lg, 10px)', border: '1px solid var(--border-light, #D9E1E7)', padding: '20px', position: 'sticky', top: '20px' }}>
+        <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: 'var(--text-primary, #1F2937)', marginBottom: '20px', borderBottom: '1px solid var(--border-light, #D9E1E7)', paddingBottom: '10px' }}>Your Order</h3>
         
         {Object.keys(cart).length === 0 ? (
           <div style={{ color: '#94a3b8', textAlign: 'center', padding: '30px 0' }}>Your cart is empty</div>
@@ -187,8 +187,8 @@ export default function CustomerOrderBook({ user, onNavigate }) {
             })}
             
             <div style={{ borderTop: '1px dashed #cbd5e1', paddingTop: '15px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
-              <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#1e293b' }}>Total Amount</div>
-              <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#3b82f6' }}>Rs. {calculateTotal().toFixed(2)}</div>
+              <div style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--text-primary, #1F2937)' }}>Total Amount</div>
+              <div style={{ fontSize: '20px', fontWeight: 'bold', color: 'var(--primary, #087E8B)' }}>Rs. {calculateTotal().toFixed(2)}</div>
             </div>
           </div>
         )}

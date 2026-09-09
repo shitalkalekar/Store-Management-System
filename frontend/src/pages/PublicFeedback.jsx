@@ -27,29 +27,29 @@ export default function PublicFeedback() {
 
   if (success) {
     return (
-      <div style={{ minHeight: '100vh', background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', fontFamily: 'sans-serif' }}>
-        <div style={{ background: '#fff', padding: '40px', borderRadius: '12px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)', textAlign: 'center', maxWidth: '400px', width: '100%' }}>
+      <div style={{ minHeight: '100vh', background: 'var(--bg-main, #F6F8FA)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', fontFamily: 'sans-serif' }}>
+        <div style={{ background: 'var(--bg-card, #FFFFFF)', padding: '40px', borderRadius: 'var(--radius-lg, 10px)', border: '1px solid var(--border-light, #D9E1E7)', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', textAlign: 'center', maxWidth: '400px', width: '100%' }}>
           <div style={{ fontSize: '48px', marginBottom: '20px' }}>💖</div>
-          <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: '#10b981', marginBottom: '10px' }}>Thank You!</h2>
-          <p style={{ color: '#64748b' }}>Your feedback has been submitted successfully. We appreciate your time.</p>
+          <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--status-success, #198754)', marginBottom: '10px' }}>Thank You!</h2>
+          <p style={{ color: 'var(--text-secondary, #64748B)' }}>Your feedback has been submitted successfully. We appreciate your time.</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', fontFamily: 'sans-serif' }}>
-      <div style={{ background: '#fff', padding: '30px', borderRadius: '12px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)', maxWidth: '400px', width: '100%' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg-main, #F6F8FA)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', fontFamily: 'sans-serif' }}>
+      <div style={{ background: 'var(--bg-card, #FFFFFF)', padding: '30px', borderRadius: 'var(--radius-lg, 10px)', border: '1px solid var(--border-light, #D9E1E7)', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', maxWidth: '400px', width: '100%' }}>
         <div style={{ textAlign: 'center', marginBottom: '25px' }}>
-          <h1 style={{ fontSize: '22px', fontWeight: 'bold', color: '#1e293b' }}>How was your delivery?</h1>
-          <p style={{ fontSize: '13px', color: '#64748b', marginTop: '5px' }}>Order Ref: {orderId.substring(18).toUpperCase()}</p>
+          <h1 style={{ fontSize: '22px', fontWeight: 'bold', color: 'var(--text-primary, #1F2937)' }}>How was your delivery?</h1>
+          <p style={{ fontSize: '13px', color: 'var(--text-secondary, #64748B)', marginTop: '5px' }}>Order Ref: {orderId.substring(18).toUpperCase()}</p>
         </div>
 
         {error && <div style={{ padding: '10px', background: '#fee2e2', color: '#b91c1c', borderRadius: '8px', fontSize: '13px', marginBottom: '15px' }}>{error}</div>}
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           <div>
-            <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', color: '#475569', marginBottom: '10px', textAlign: 'center' }}>Rate your experience</label>
+            <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', color: 'var(--text-secondary, #64748B)', marginBottom: '10px', textAlign: 'center' }}>Rate your experience</label>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
               {[1, 2, 3, 4, 5].map(star => (
                 <button
@@ -72,7 +72,7 @@ export default function PublicFeedback() {
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', color: '#475569', marginBottom: '5px' }}>Additional Comments</label>
+            <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', color: 'var(--text-secondary, #64748B)', marginBottom: '5px' }}>Additional Comments</label>
             <textarea 
               value={comment}
               onChange={(e) => setComment(e.target.value)}
@@ -87,10 +87,10 @@ export default function PublicFeedback() {
             disabled={submitting}
             style={{ 
               padding: '12px', 
-              background: '#3b82f6', 
+              background: 'var(--primary, #087E8B)', 
               color: '#fff', 
               border: 'none', 
-              borderRadius: '8px', 
+              borderRadius: 'var(--radius-md, 8px)', 
               fontWeight: 'bold', 
               fontSize: '15px', 
               cursor: submitting ? 'not-allowed' : 'pointer',

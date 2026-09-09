@@ -173,63 +173,63 @@ export default function Reports() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       
       {/* Tabs Menu */}
-      <div style={{ display: 'flex', borderBottom: '2px solid #e2e8f0', flexWrap: 'wrap', gap: '4px' }}>
+      <div style={{ display: 'flex', borderBottom: '1px solid var(--border-light, #D9E1E7)', flexWrap: 'wrap', gap: '4px' }}>
         <button 
           onClick={() => setActiveTab('sales')}
-          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 20px', background: 'transparent', border: 'none', borderBottom: activeTab === 'sales' ? '3px solid #3b82f6' : '3px solid transparent', fontWeight: '700', fontSize: '13px', color: activeTab === 'sales' ? '#3b82f6' : '#64748b', cursor: 'pointer', transition: 'all 0.15s' }}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 20px', background: 'transparent', border: 'none', borderBottom: activeTab === 'sales' ? '3px solid var(--primary, #087E8B)' : '3px solid transparent', fontWeight: '700', fontSize: '13px', color: activeTab === 'sales' ? 'var(--primary, #087E8B)' : 'var(--text-secondary, #64748B)', cursor: 'pointer', transition: 'all 0.15s' }}
         >
           <DollarSign size={16} /> Sales Report
         </button>
         <button 
           onClick={() => setActiveTab('stock')}
-          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 20px', background: 'transparent', border: 'none', borderBottom: activeTab === 'stock' ? '3px solid #3b82f6' : '3px solid transparent', fontWeight: '700', fontSize: '13px', color: activeTab === 'stock' ? '#3b82f6' : '#64748b', cursor: 'pointer', transition: 'all 0.15s' }}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 20px', background: 'transparent', border: 'none', borderBottom: activeTab === 'stock' ? '3px solid var(--primary, #087E8B)' : '3px solid transparent', fontWeight: '700', fontSize: '13px', color: activeTab === 'stock' ? 'var(--primary, #087E8B)' : 'var(--text-secondary, #64748B)', cursor: 'pointer', transition: 'all 0.15s' }}
         >
           <Package size={16} /> Stock Report
         </button>
         <button 
           onClick={() => setActiveTab('delivery')}
-          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 20px', background: 'transparent', border: 'none', borderBottom: activeTab === 'delivery' ? '3px solid #3b82f6' : '3px solid transparent', fontWeight: '700', fontSize: '13px', color: activeTab === 'delivery' ? '#3b82f6' : '#64748b', cursor: 'pointer', transition: 'all 0.15s' }}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 20px', background: 'transparent', border: 'none', borderBottom: activeTab === 'delivery' ? '3px solid var(--primary, #087E8B)' : '3px solid transparent', fontWeight: '700', fontSize: '13px', color: activeTab === 'delivery' ? 'var(--primary, #087E8B)' : 'var(--text-secondary, #64748B)', cursor: 'pointer', transition: 'all 0.15s' }}
         >
           <Truck size={16} /> Deliveries Report
         </button>
         <button 
           onClick={() => setActiveTab('outstanding')}
-          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 20px', background: 'transparent', border: 'none', borderBottom: activeTab === 'outstanding' ? '3px solid #ef4444' : '3px solid transparent', fontWeight: '700', fontSize: '13px', color: activeTab === 'outstanding' ? '#ef4444' : '#64748b', cursor: 'pointer', transition: 'all 0.15s' }}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 20px', background: 'transparent', border: 'none', borderBottom: activeTab === 'outstanding' ? '3px solid var(--danger, #DC3545)' : '3px solid transparent', fontWeight: '700', fontSize: '13px', color: activeTab === 'outstanding' ? 'var(--danger, #DC3545)' : 'var(--text-secondary, #64748B)', cursor: 'pointer', transition: 'all 0.15s' }}
         >
-          <AlertCircle size={16} color={activeTab === 'outstanding' ? '#ef4444' : '#64748b'} /> Outstanding Dues
+          <AlertCircle size={16} color={activeTab === 'outstanding' ? 'var(--danger, #DC3545)' : 'var(--text-secondary, #64748B)'} /> Outstanding Dues
         </button>
         <button 
           onClick={() => setActiveTab('orders_analysis')}
-          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 20px', background: 'transparent', border: 'none', borderBottom: activeTab === 'orders_analysis' ? '3px solid #3b82f6' : '3px solid transparent', fontWeight: '700', fontSize: '13px', color: activeTab === 'orders_analysis' ? '#3b82f6' : '#64748b', cursor: 'pointer', transition: 'all 0.15s' }}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 20px', background: 'transparent', border: 'none', borderBottom: activeTab === 'orders_analysis' ? '3px solid var(--primary, #087E8B)' : '3px solid transparent', fontWeight: '700', fontSize: '13px', color: activeTab === 'orders_analysis' ? 'var(--primary, #087E8B)' : 'var(--text-secondary, #64748B)', cursor: 'pointer', transition: 'all 0.15s' }}
         >
           <BarChart3 size={16} /> Orders Analysis
         </button>
         <button 
           onClick={() => setActiveTab('upcoming_loops')}
-          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 20px', background: 'transparent', border: 'none', borderBottom: activeTab === 'upcoming_loops' ? '3px solid #3b82f6' : '3px solid transparent', fontWeight: '700', fontSize: '13px', color: activeTab === 'upcoming_loops' ? '#3b82f6' : '#64748b', cursor: 'pointer', transition: 'all 0.15s' }}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 20px', background: 'transparent', border: 'none', borderBottom: activeTab === 'upcoming_loops' ? '3px solid var(--primary, #087E8B)' : '3px solid transparent', fontWeight: '700', fontSize: '13px', color: activeTab === 'upcoming_loops' ? 'var(--primary, #087E8B)' : 'var(--text-secondary, #64748B)', cursor: 'pointer', transition: 'all 0.15s' }}
         >
           <Repeat size={16} /> Upcoming Loops
         </button>
         <button 
           onClick={() => setActiveTab('ledger')}
-          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 20px', background: 'transparent', border: 'none', borderBottom: activeTab === 'ledger' ? '3px solid #3b82f6' : '3px solid transparent', fontWeight: '700', fontSize: '13px', color: activeTab === 'ledger' ? '#3b82f6' : '#64748b', cursor: 'pointer', transition: 'all 0.15s' }}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 20px', background: 'transparent', border: 'none', borderBottom: activeTab === 'ledger' ? '3px solid var(--primary, #087E8B)' : '3px solid transparent', fontWeight: '700', fontSize: '13px', color: activeTab === 'ledger' ? 'var(--primary, #087E8B)' : 'var(--text-secondary, #64748B)', cursor: 'pointer', transition: 'all 0.15s' }}
         >
           <BookOpen size={16} /> Customer Ledger Statement
         </button>
       </div>
 
       {error && (
-        <div style={{ padding: '12px', background: '#fee2e2', border: '1px solid #fca5a5', color: '#b91c1c', borderRadius: '8px' }}>
+        <div style={{ padding: '12px', background: 'var(--danger-light, #F8D7DA)', border: '1px solid var(--danger, #DC3545)', color: 'var(--danger, #DC3545)', borderRadius: 'var(--radius-md, 8px)' }}>
           {error}
         </div>
       )}
 
       {/* Filters Bar */}
-      <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0', display: 'flex', gap: '15px', alignItems: 'center', flexWrap: 'wrap' }}>
+      <div style={{ background: 'var(--bg-card, #FFFFFF)', padding: '16px', borderRadius: 'var(--radius-lg, 10px)', border: '1px solid var(--border-light, #D9E1E7)', display: 'flex', gap: '15px', alignItems: 'center', flexWrap: 'wrap' }}>
         
         {(activeTab === 'sales' || activeTab === 'delivery') && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            <label style={{ fontSize: '11px', fontWeight: '700', color: '#64748b' }}>Date Range</label>
+            <label style={{ fontSize: '11px', fontWeight: '700', color: 'var(--text-secondary, #64748B)' }}>Date Range</label>
             <DateFilter
               startDate={startDate}
               endDate={endDate}
@@ -243,8 +243,8 @@ export default function Reports() {
 
         {activeTab === 'ledger' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            <label style={{ fontSize: '11px', fontWeight: '700', color: '#64748b' }}>Select Customer Profile</label>
-            <select value={selectedCustomerId} onChange={(e) => setSelectedCustomerId(e.target.value)} style={{ padding: '6px 10px', borderRadius: '6px', border: '1px solid #cbd5e1', background: '#fff', width: '220px' }}>
+            <label style={{ fontSize: '11px', fontWeight: '700', color: 'var(--text-secondary, #64748B)' }}>Select Customer Profile</label>
+            <select value={selectedCustomerId} onChange={(e) => setSelectedCustomerId(e.target.value)} style={{ padding: '6px 10px', borderRadius: 'var(--radius-md, 8px)', border: '1px solid var(--border-light, #D9E1E7)', background: 'var(--bg-card, #FFFFFF)', color: 'var(--text-primary, #1F2937)', width: '220px' }}>
               <option value="">Choose Customer</option>
               {customers.map(c => (
                 <option key={c._id} value={c._id}>{c.name}</option>
@@ -273,35 +273,35 @@ export default function Reports() {
 
       {/* Report Output Area */}
       {loading ? (
-        <div style={{ padding: '30px', textAlign: 'center', color: '#64748b' }}>Calculating report records...</div>
+        <div style={{ padding: '30px', textAlign: 'center', color: 'var(--text-secondary, #64748B)' }}>Calculating report records...</div>
       ) : (
-        <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+        <div className="card" style={{ padding: 0, overflow: 'hidden', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: 'var(--radius-lg, 10px)' }}>
           
           {activeTab === 'sales' && (
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
               <thead>
-                <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
-                  <th style={{ padding: '12px 20px', color: '#475569', fontWeight: '700' }}>Sr. No.</th>
-                  <th style={{ padding: '12px 20px', color: '#475569' }}>Invoice Ref</th>
-                  <th style={{ padding: '12px 20px', color: '#475569' }}>Customer</th>
-                  <th style={{ padding: '12px 20px', color: '#475569' }}>Date</th>
-                  <th style={{ padding: '12px 20px', color: '#475569' }}>Subtotal</th>
-                  <th style={{ padding: '12px 20px', color: '#475569' }}>GST (CGST/SGST)</th>
-                  <th style={{ padding: '12px 20px', color: '#475569' }}>Grand Total</th>
-                  <th style={{ padding: '12px 20px', color: '#475569' }}>Status</th>
+                <tr style={{ background: 'var(--bg-main, #F6F8FA)', borderBottom: '1px solid var(--border-light, #D9E1E7)' }}>
+                  <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)', fontWeight: '700' }}>Sr. No.</th>
+                  <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>Invoice Ref</th>
+                  <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>Customer</th>
+                  <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>Date</th>
+                  <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>Subtotal</th>
+                  <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>GST (CGST/SGST)</th>
+                  <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>Grand Total</th>
+                  <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>Status</th>
                 </tr>
               </thead>
               <tbody>
                 {Array.isArray(reportData) && reportData.length > 0 ? (
                   reportData.map((b, idx) => (
-                    <tr key={b._id || idx} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                      <td style={{ padding: '12px 20px', color: '#475569', fontWeight: '700' }}>{idx + 1}</td>
-                      <td style={{ padding: '12px 20px', fontWeight: '700' }}>{b.invoiceNumber || 'N/A'}</td>
-                      <td style={{ padding: '12px 20px' }}>{b.customer?.name || 'N/A'}</td>
-                      <td style={{ padding: '12px 20px' }}>{b.createdAt ? new Date(b.createdAt).toLocaleDateString() : 'N/A'}</td>
-                      <td style={{ padding: '12px 20px' }}>Rs. {(b.subtotal || 0).toFixed(2)}</td>
-                      <td style={{ padding: '12px 20px' }}>Rs. {((b.cgstTotal || 0) + (b.sgstTotal || 0)).toFixed(2)}</td>
-                      <td style={{ padding: '12px 20px', fontWeight: '700', color: '#166534' }}>Rs. {(b.totalAmount || 0).toFixed(2)}</td>
+                    <tr key={b._id || idx} style={{ borderBottom: '1px solid var(--border-subtle, #F1F5F9)' }}>
+                      <td style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)', fontWeight: '700' }}>{idx + 1}</td>
+                      <td style={{ padding: '12px 20px', fontWeight: '700', color: 'var(--text-primary, #1F2937)' }}>{b.invoiceNumber || 'N/A'}</td>
+                      <td style={{ padding: '12px 20px', color: 'var(--text-primary, #1F2937)' }}>{b.customer?.name || 'N/A'}</td>
+                      <td style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>{b.createdAt ? new Date(b.createdAt).toLocaleDateString() : 'N/A'}</td>
+                      <td style={{ padding: '12px 20px', color: 'var(--text-primary, #1F2937)' }}>Rs. {(b.subtotal || 0).toFixed(2)}</td>
+                      <td style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>Rs. {((b.cgstTotal || 0) + (b.sgstTotal || 0)).toFixed(2)}</td>
+                      <td style={{ padding: '12px 20px', fontWeight: '700', color: 'var(--text-primary, #1F2937)' }}>Rs. {(b.totalAmount || 0).toFixed(2)}</td>
                       <td style={{ padding: '12px 20px' }}>
                         <span className={`badge ${b.status === 'Paid' ? 'badge-success' : 'badge-danger'}`}>
                           {b.status || 'N/A'}
@@ -310,7 +310,7 @@ export default function Reports() {
                     </tr>
                   ))
                 ) : (
-                  <tr><td colSpan="8" style={{ padding: '20px', textAlign: 'center', color: '#64748b' }}>No transactions recorded.</td></tr>
+                  <tr><td colSpan="8" style={{ padding: '20px', textAlign: 'center', color: 'var(--text-muted, #94A3B8)' }}>No transactions recorded.</td></tr>
                 )}
               </tbody>
             </table>
@@ -319,33 +319,33 @@ export default function Reports() {
           {activeTab === 'stock' && (
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
               <thead>
-                <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
-                  <th style={{ padding: '12px 20px', color: '#475569', fontWeight: '700' }}>Sr. No.</th>
-                  <th style={{ padding: '12px 20px', color: '#475569' }}>Product Item</th>
-                  <th style={{ padding: '12px 20px', color: '#475569' }}>Category</th>
-                  <th style={{ padding: '12px 20px', color: '#475569' }}>Price</th>
-                  <th style={{ padding: '12px 20px', color: '#475569' }}>Current Stock</th>
-                  <th style={{ padding: '12px 20px', color: '#475569' }}>Low Stock Alert Min</th>
-                  <th style={{ padding: '12px 20px', color: '#475569' }}>Supplier Vendor</th>
+                <tr style={{ background: 'var(--bg-main, #F6F8FA)', borderBottom: '1px solid var(--border-light, #D9E1E7)' }}>
+                  <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)', fontWeight: '700' }}>Sr. No.</th>
+                  <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>Product Item</th>
+                  <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>Category</th>
+                  <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>Price</th>
+                  <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>Current Stock</th>
+                  <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>Low Stock Alert Min</th>
+                  <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>Supplier Vendor</th>
                 </tr>
               </thead>
               <tbody>
                 {Array.isArray(reportData) && reportData.length > 0 ? (
                   reportData.map((p, idx) => (
-                    <tr key={p._id || idx} style={{ borderBottom: '1px solid #f1f5f9', background: (p.currentStock ?? 0) <= (p.lowStockThreshold ?? 0) ? '#fffbeb' : 'transparent' }}>
-                      <td style={{ padding: '12px 20px', color: '#475569', fontWeight: '700' }}>{idx + 1}</td>
-                      <td style={{ padding: '12px 20px', fontWeight: '700' }}>{p.name || 'N/A'}</td>
-                      <td style={{ padding: '12px 20px' }}>{p.category || 'N/A'}</td>
-                      <td style={{ padding: '12px 20px' }}>Rs. {(p.price || 0).toFixed(2)}</td>
-                      <td style={{ padding: '12px 20px', fontWeight: '700', color: (p.currentStock ?? 0) <= (p.lowStockThreshold ?? 0) ? '#ef4444' : '#1e293b' }}>
+                    <tr key={p._id || idx} style={{ borderBottom: '1px solid var(--border-subtle, #F1F5F9)', background: (p.currentStock ?? 0) <= (p.lowStockThreshold ?? 0) ? 'var(--warning-light, #FEF3C7)' : 'transparent' }}>
+                      <td style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)', fontWeight: '700' }}>{idx + 1}</td>
+                      <td style={{ padding: '12px 20px', fontWeight: '700', color: 'var(--text-primary, #1F2937)' }}>{p.name || 'N/A'}</td>
+                      <td style={{ padding: '12px 20px', color: 'var(--text-primary, #1F2937)' }}>{p.category || 'N/A'}</td>
+                      <td style={{ padding: '12px 20px', color: 'var(--text-primary, #1F2937)' }}>Rs. {(p.price || 0).toFixed(2)}</td>
+                      <td style={{ padding: '12px 20px', fontWeight: '700', color: (p.currentStock ?? 0) <= (p.lowStockThreshold ?? 0) ? 'var(--danger, #DC3545)' : 'var(--text-primary, #1F2937)' }}>
                         {p.currentStock ?? 0} {p.unit || ''}
                       </td>
-                      <td style={{ padding: '12px 20px' }}>{p.lowStockThreshold ?? 0} {p.unit || ''}</td>
-                      <td style={{ padding: '12px 20px' }}>{p.linkedVendor?.name || 'N/A'}</td>
+                      <td style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>{p.lowStockThreshold ?? 0} {p.unit || ''}</td>
+                      <td style={{ padding: '12px 20px', color: 'var(--text-primary, #1F2937)' }}>{p.linkedVendor?.name || 'N/A'}</td>
                     </tr>
                   ))
                 ) : (
-                  <tr><td colSpan="7" style={{ padding: '20px', textAlign: 'center', color: '#64748b' }}>No products seeded.</td></tr>
+                  <tr><td colSpan="7" style={{ padding: '20px', textAlign: 'center', color: 'var(--text-muted, #94A3B8)' }}>No products seeded.</td></tr>
                 )}
               </tbody>
             </table>
@@ -354,26 +354,26 @@ export default function Reports() {
           {activeTab === 'delivery' && (
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
               <thead>
-                <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
-                  <th style={{ padding: '12px 20px', color: '#475569', fontWeight: '700' }}>Sr. No.</th>
-                  <th style={{ padding: '12px 20px', color: '#475569' }}>Order Ref</th>
-                  <th style={{ padding: '12px 20px', color: '#475569' }}>Customer</th>
-                  <th style={{ padding: '12px 20px', color: '#475569' }}>Delivery Date</th>
-                  <th style={{ padding: '12px 20px', color: '#475569' }}>Assigned Driver</th>
-                  <th style={{ padding: '12px 20px', color: '#475569' }}>Total Value</th>
-                  <th style={{ padding: '12px 20px', color: '#475569' }}>Status</th>
+                <tr style={{ background: 'var(--bg-main, #F6F8FA)', borderBottom: '1px solid var(--border-light, #D9E1E7)' }}>
+                  <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)', fontWeight: '700' }}>Sr. No.</th>
+                  <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>Order Ref</th>
+                  <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>Customer</th>
+                  <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>Delivery Date</th>
+                  <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>Assigned Driver</th>
+                  <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>Total Value</th>
+                  <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>Status</th>
                 </tr>
               </thead>
               <tbody>
                 {Array.isArray(reportData) && reportData.length > 0 ? (
                   reportData.map((o, idx) => (
-                    <tr key={o._id || idx} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                      <td style={{ padding: '12px 20px', color: '#475569', fontWeight: '700' }}>{idx + 1}</td>
-                      <td style={{ padding: '12px 20px', fontWeight: '700' }}>{o._id ? `ORD-${o._id.substring(Math.max(0, o._id.length - 6)).toUpperCase()}` : 'N/A'}</td>
-                      <td style={{ padding: '12px 20px' }}>{o.customer?.name || 'N/A'}</td>
-                      <td style={{ padding: '12px 20px' }}>{o.deliveryDate ? new Date(o.deliveryDate).toLocaleDateString() : 'N/A'}</td>
-                      <td style={{ padding: '12px 20px' }}>{o.assignedStaff?.name || 'Unassigned'}</td>
-                      <td style={{ padding: '12px 20px', fontWeight: '700' }}>Rs. {(o.totalAmount || 0).toFixed(2)}</td>
+                    <tr key={o._id || idx} style={{ borderBottom: '1px solid var(--border-subtle, #F1F5F9)' }}>
+                      <td style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)', fontWeight: '700' }}>{idx + 1}</td>
+                      <td style={{ padding: '12px 20px', fontWeight: '700', color: 'var(--text-primary, #1F2937)' }}>{o._id ? `ORD-${o._id.substring(Math.max(0, o._id.length - 6)).toUpperCase()}` : 'N/A'}</td>
+                      <td style={{ padding: '12px 20px', color: 'var(--text-primary, #1F2937)' }}>{o.customer?.name || 'N/A'}</td>
+                      <td style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>{o.deliveryDate ? new Date(o.deliveryDate).toLocaleDateString() : 'N/A'}</td>
+                      <td style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>{o.assignedStaff?.name || 'Unassigned'}</td>
+                      <td style={{ padding: '12px 20px', fontWeight: '700', color: 'var(--text-primary, #1F2937)' }}>Rs. {(o.totalAmount || 0).toFixed(2)}</td>
                       <td style={{ padding: '12px 20px' }}>
                         <span className={`badge ${o.status === 'Delivered' ? 'badge-success' : 'badge-info'}`}>
                           {o.status || 'N/A'}
@@ -382,7 +382,7 @@ export default function Reports() {
                     </tr>
                   ))
                 ) : (
-                  <tr><td colSpan="7" style={{ padding: '20px', textAlign: 'center', color: '#64748b' }}>No matching deliveries runs.</td></tr>
+                  <tr><td colSpan="7" style={{ padding: '20px', textAlign: 'center', color: 'var(--text-muted, #94A3B8)' }}>No matching deliveries runs.</td></tr>
                 )}
               </tbody>
             </table>
@@ -391,29 +391,29 @@ export default function Reports() {
           {activeTab === 'outstanding' && (
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
               <thead>
-                <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
-                  <th style={{ padding: '12px 20px', color: '#475569', fontWeight: '700' }}>Sr. No.</th>
-                  <th style={{ padding: '12px 20px', color: '#475569' }}>Customer Name</th>
-                  <th style={{ padding: '12px 20px', color: '#475569' }}>Mobile</th>
-                  <th style={{ padding: '12px 20px', color: '#475569' }}>Total Invoiced Billing</th>
-                  <th style={{ padding: '12px 20px', color: '#475569' }}>Total Payments Received</th>
-                  <th style={{ padding: '12px 20px', color: '#ef4444', fontWeight: '700' }}>Outstanding Dues</th>
+                <tr style={{ background: 'var(--bg-main, #F6F8FA)', borderBottom: '1px solid var(--border-light, #D9E1E7)' }}>
+                  <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)', fontWeight: '700' }}>Sr. No.</th>
+                  <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>Customer Name</th>
+                  <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>Mobile</th>
+                  <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>Total Invoiced Billing</th>
+                  <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>Total Payments Received</th>
+                  <th style={{ padding: '12px 20px', color: 'var(--danger, #DC3545)', fontWeight: '700' }}>Outstanding Dues</th>
                 </tr>
               </thead>
               <tbody>
                 {Array.isArray(reportData) && reportData.length > 0 ? (
                   reportData.map((item, idx) => (
-                    <tr key={item.customer?._id || idx} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                      <td style={{ padding: '12px 20px', color: '#475569', fontWeight: '700' }}>{idx + 1}</td>
-                      <td style={{ padding: '12px 20px', fontWeight: '700' }}>{item.customer?.name || 'N/A'}</td>
-                      <td style={{ padding: '12px 20px' }}>{item.customer?.mobile || 'N/A'}</td>
-                      <td style={{ padding: '12px 20px' }}>Rs. {(item.totalSales || 0).toFixed(2)}</td>
-                      <td style={{ padding: '12px 20px' }}>Rs. {(item.totalPaid || 0).toFixed(2)}</td>
-                      <td style={{ padding: '12px 20px', fontWeight: '700', color: '#ef4444' }}>Rs. {(item.outstandingAmount || 0).toFixed(2)}</td>
+                    <tr key={item.customer?._id || idx} style={{ borderBottom: '1px solid var(--border-subtle, #F1F5F9)' }}>
+                      <td style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)', fontWeight: '700' }}>{idx + 1}</td>
+                      <td style={{ padding: '12px 20px', fontWeight: '700', color: 'var(--text-primary, #1F2937)' }}>{item.customer?.name || 'N/A'}</td>
+                      <td style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>{item.customer?.mobile || 'N/A'}</td>
+                      <td style={{ padding: '12px 20px', color: 'var(--text-primary, #1F2937)' }}>Rs. {(item.totalSales || 0).toFixed(2)}</td>
+                      <td style={{ padding: '12px 20px', color: 'var(--text-primary, #1F2937)' }}>Rs. {(item.totalPaid || 0).toFixed(2)}</td>
+                      <td style={{ padding: '12px 20px', fontWeight: '700', color: 'var(--danger, #DC3545)' }}>Rs. {(item.outstandingAmount || 0).toFixed(2)}</td>
                     </tr>
                   ))
                 ) : (
-                  <tr><td colSpan="6" style={{ padding: '20px', textAlign: 'center', color: '#64748b' }}>No pending balances. Perfect collections status!</td></tr>
+                  <tr><td colSpan="6" style={{ padding: '20px', textAlign: 'center', color: 'var(--text-muted, #94A3B8)' }}>No pending balances. Perfect collections status!</td></tr>
                 )}
               </tbody>
             </table>
@@ -422,43 +422,43 @@ export default function Reports() {
           {activeTab === 'ledger' && (
             <div>
               {ledgerCustomer && (
-                <div style={{ background: '#f8fafc', padding: '15px 20px', borderBottom: '1px solid #e2e8f0', fontSize: '13px', color: '#475569' }}>
+                <div style={{ background: 'var(--bg-main, #F6F8FA)', padding: '15px 20px', borderBottom: '1px solid var(--border-light, #D9E1E7)', fontSize: '13px', color: 'var(--text-secondary, #64748B)' }}>
                   Statement Account Ledger for: <strong>{ledgerCustomer.name}</strong> | Address: {ledgerCustomer.address}
                 </div>
               )}
               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                 <thead>
-                  <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
-                    <th style={{ padding: '12px 20px', color: '#475569', fontWeight: '700' }}>Sr. No.</th>
-                    <th style={{ padding: '12px 20px', color: '#475569' }}>Date</th>
-                    <th style={{ padding: '12px 20px', color: '#475569' }}>Transaction Type</th>
-                    <th style={{ padding: '12px 20px', color: '#475569' }}>Reference Ref ID</th>
-                    <th style={{ padding: '12px 20px', color: '#475569' }}>Debit (+Invoice)</th>
-                    <th style={{ padding: '12px 20px', color: '#475569' }}>Credit (-Payment)</th>
-                    <th style={{ padding: '12px 20px', color: '#475569', fontWeight: '700' }}>Running Balance</th>
+                  <tr style={{ background: 'var(--bg-main, #F6F8FA)', borderBottom: '1px solid var(--border-light, #D9E1E7)' }}>
+                    <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)', fontWeight: '700' }}>Sr. No.</th>
+                    <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>Date</th>
+                    <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>Transaction Type</th>
+                    <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>Reference Ref ID</th>
+                    <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>Debit (+Invoice)</th>
+                    <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>Credit (-Payment)</th>
+                    <th style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)', fontWeight: '700' }}>Running Balance</th>
                   </tr>
                 </thead>
                 <tbody>
                   {Array.isArray(reportData) && reportData.length > 0 ? (
                     reportData.map((item, idx) => (
-                      <tr key={idx} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                        <td style={{ padding: '12px 20px', color: '#475569', fontWeight: '700' }}>{idx + 1}</td>
-                        <td style={{ padding: '12px 20px' }}>{item.date ? new Date(item.date).toLocaleDateString() : 'N/A'}</td>
-                        <td style={{ padding: '12px 20px', fontWeight: '700' }}>{item.type || 'N/A'}</td>
-                        <td style={{ padding: '12px 20px' }}>{item.ref || 'N/A'}</td>
-                        <td style={{ padding: '12px 20px', color: item.debit > 0 ? '#b91c1c' : '#475569' }}>
+                      <tr key={idx} style={{ borderBottom: '1px solid var(--border-subtle, #F1F5F9)' }}>
+                        <td style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)', fontWeight: '700' }}>{idx + 1}</td>
+                        <td style={{ padding: '12px 20px', color: 'var(--text-secondary, #64748B)' }}>{item.date ? new Date(item.date).toLocaleDateString() : 'N/A'}</td>
+                        <td style={{ padding: '12px 20px', fontWeight: '700', color: 'var(--text-primary, #1F2937)' }}>{item.type || 'N/A'}</td>
+                        <td style={{ padding: '12px 20px', color: 'var(--text-primary, #1F2937)' }}>{item.ref || 'N/A'}</td>
+                        <td style={{ padding: '12px 20px', color: item.debit > 0 ? 'var(--danger, #DC3545)' : 'var(--text-secondary, #64748B)' }}>
                           {item.debit > 0 ? `Rs. ${item.debit.toFixed(2)}` : '-'}
                         </td>
-                        <td style={{ padding: '12px 20px', color: item.credit > 0 ? '#166534' : '#475569' }}>
+                        <td style={{ padding: '12px 20px', color: item.credit > 0 ? 'var(--success, #198754)' : 'var(--text-secondary, #64748B)' }}>
                           {item.credit > 0 ? `Rs. ${item.credit.toFixed(2)}` : '-'}
                         </td>
-                        <td style={{ padding: '12px 20px', fontWeight: '700', color: item.runningBalance > 0 ? '#b91c1c' : '#166534' }}>
+                        <td style={{ padding: '12px 20px', fontWeight: '700', color: item.runningBalance > 0 ? 'var(--danger, #DC3545)' : 'var(--success, #198754)' }}>
                           Rs. {(item.runningBalance || 0).toFixed(2)}
                         </td>
                       </tr>
                     ))
                   ) : (
-                    <tr><td colSpan="7" style={{ padding: '20px', textAlign: 'center', color: '#64748b' }}>Select a customer and click "Run Query" to generate ledger.</td></tr>
+                    <tr><td colSpan="7" style={{ padding: '20px', textAlign: 'center', color: 'var(--text-muted, #94A3B8)' }}>Select a customer and click "Run Query" to generate ledger.</td></tr>
                   )}
                 </tbody>
               </table>
@@ -467,24 +467,24 @@ export default function Reports() {
 
           {activeTab === 'orders_analysis' && reportData && (
             <div style={{ padding: '20px' }}>
-              <h2 style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a', marginBottom: '15px' }}>Recent Order Updates</h2>
+              <h2 style={{ fontSize: '16px', fontWeight: '700', color: 'var(--text-primary, #1F2937)', marginBottom: '15px' }}>Recent Order Updates</h2>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '15px' }}>
                 {reportData.recentOrders && Array.isArray(reportData.recentOrders) && reportData.recentOrders.length > 0 ? (
                   reportData.recentOrders.map((order, idx) => (
-                    <div key={order._id || idx} style={{ padding: '15px', background: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                    <div key={order._id || idx} style={{ padding: '15px', background: 'var(--bg-card, #FFFFFF)', borderRadius: 'var(--radius-md, 8px)', border: '1px solid var(--border-light, #D9E1E7)' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-                        <span style={{ fontWeight: '700', color: '#334155' }}>{order.ref || 'N/A'}</span>
+                        <span style={{ fontWeight: '700', color: 'var(--text-primary, #1F2937)' }}>{order.ref || 'N/A'}</span>
                         <span className={`badge ${order.status === 'Delivered' ? 'badge-success' : 'badge-info'}`}>
                           {order.status || 'Pending'}
                         </span>
                       </div>
-                      <div style={{ fontSize: '13px', color: '#475569', marginBottom: '5px' }}>Customer: {order.customerName || 'N/A'}</div>
-                      <div style={{ fontSize: '13px', color: '#475569', marginBottom: '5px' }}>Amount: Rs. {(order.totalAmount || 0).toFixed(2)}</div>
-                      <div style={{ fontSize: '11px', color: '#94a3b8' }}>Updated: {order.updatedAt ? new Date(order.updatedAt).toLocaleString() : 'N/A'}</div>
+                      <div style={{ fontSize: '13px', color: 'var(--text-secondary, #64748B)', marginBottom: '5px' }}>Customer: {order.customerName || 'N/A'}</div>
+                      <div style={{ fontSize: '13px', color: 'var(--text-secondary, #64748B)', marginBottom: '5px' }}>Amount: Rs. {(order.totalAmount || 0).toFixed(2)}</div>
+                      <div style={{ fontSize: '11px', color: 'var(--text-muted, #94A3B8)' }}>Updated: {order.updatedAt ? new Date(order.updatedAt).toLocaleString() : 'N/A'}</div>
                     </div>
                   ))
                 ) : (
-                  <div style={{ color: '#64748b', fontSize: '14px' }}>No recent orders found.</div>
+                  <div style={{ color: 'var(--text-muted, #94A3B8)', fontSize: '14px' }}>No recent orders found.</div>
                 )}
               </div>
             </div>
@@ -493,27 +493,27 @@ export default function Reports() {
           {activeTab === 'upcoming_loops' && reportData && (
             <div style={{ padding: '20px' }}>
               <div style={{ marginBottom: '25px' }}>
-                <h2 style={{ fontSize: '16px', fontWeight: '700', color: '#b91c1c', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <AlertCircle size={18} color="#dc2626" /> Action Required: Due in 1 Day (Create New Order)
+                <h2 style={{ fontSize: '16px', fontWeight: '700', color: 'var(--danger, #DC3545)', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <AlertCircle size={18} color="var(--danger, #DC3545)" /> Action Required: Due in 1 Day (Create New Order)
                 </h2>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '15px' }}>
                   {Array.isArray(reportData.activeLoops) && reportData.activeLoops.filter(loop => !loop.recurringProcessed && loop.status === 'Delivered' && (new Date(loop.nextRun) - new Date()) / (1000 * 60 * 60 * 24) <= 1).length > 0 ? (
                     reportData.activeLoops.filter(loop => !loop.recurringProcessed && loop.status === 'Delivered' && (new Date(loop.nextRun) - new Date()) / (1000 * 60 * 60 * 24) <= 1).map((loop, idx) => (
-                      <div key={loop.orderId || idx} style={{ padding: '15px', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px' }}>
-                        <div style={{ fontWeight: '700', color: '#991b1b', marginBottom: '5px' }}>{loop.customerName || 'N/A'}</div>
-                        <div style={{ fontSize: '13px', color: '#b91c1c', marginBottom: '5px' }}>Mobile: {loop.customerMobile || 'N/A'}</div>
-                        <div style={{ fontSize: '13px', color: '#b91c1c', marginBottom: '5px' }}>Due Date: {loop.nextRun ? new Date(loop.nextRun).toLocaleDateString() : 'N/A'}</div>
-                        <div style={{ fontSize: '13px', color: '#b91c1c', fontWeight: '700' }}>Amount: Rs. {(loop.totalAmount || 0).toFixed(2)}</div>
+                      <div key={loop.orderId || idx} style={{ padding: '15px', background: 'var(--danger-light, #F8D7DA)', border: '1px solid var(--danger, #DC3545)', borderRadius: 'var(--radius-md, 8px)' }}>
+                        <div style={{ fontWeight: '700', color: 'var(--danger, #DC3545)', marginBottom: '5px' }}>{loop.customerName || 'N/A'}</div>
+                        <div style={{ fontSize: '13px', color: 'var(--danger, #DC3545)', marginBottom: '5px' }}>Mobile: {loop.customerMobile || 'N/A'}</div>
+                        <div style={{ fontSize: '13px', color: 'var(--danger, #DC3545)', marginBottom: '5px' }}>Due Date: {loop.nextRun ? new Date(loop.nextRun).toLocaleDateString() : 'N/A'}</div>
+                        <div style={{ fontSize: '13px', color: 'var(--danger, #DC3545)', fontWeight: '700' }}>Amount: Rs. {(loop.totalAmount || 0).toFixed(2)}</div>
                       </div>
                     ))
                   ) : (
-                    <div style={{ color: '#64748b', fontSize: '14px' }}>No orders due within 1 day.</div>
+                    <div style={{ color: 'var(--text-muted, #94A3B8)', fontSize: '14px' }}>No orders due within 1 day.</div>
                   )}
                 </div>
               </div>
 
               <div>
-                <h2 style={{ fontSize: '16px', fontWeight: '700', color: '#b45309', marginBottom: '10px' }}>⏳ Upcoming Renewals: Due in 2-5 Days</h2>
+                <h2 style={{ fontSize: '16px', fontWeight: '700', color: 'var(--warning, #D97706)', marginBottom: '10px' }}>⏳ Upcoming Renewals: Due in 2-5 Days</h2>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '15px' }}>
                   {Array.isArray(reportData.activeLoops) && reportData.activeLoops.filter(loop => {
                     if (loop.recurringProcessed || loop.status !== 'Delivered') return false;
@@ -525,15 +525,15 @@ export default function Reports() {
                       const diffDays = (new Date(loop.nextRun) - new Date()) / (1000 * 60 * 60 * 24);
                       return diffDays > 1 && diffDays <= 5;
                     }).map((loop, idx) => (
-                      <div key={loop.orderId || idx} style={{ padding: '15px', background: '#fffbeb', border: '1px solid #fde68a', borderRadius: '8px' }}>
-                        <div style={{ fontWeight: '700', color: '#92400e', marginBottom: '5px' }}>{loop.customerName || 'N/A'}</div>
-                        <div style={{ fontSize: '13px', color: '#b45309', marginBottom: '5px' }}>Mobile: {loop.customerMobile || 'N/A'}</div>
-                        <div style={{ fontSize: '13px', color: '#b45309', marginBottom: '5px' }}>Due Date: {loop.nextRun ? new Date(loop.nextRun).toLocaleDateString() : 'N/A'}</div>
-                        <div style={{ fontSize: '13px', color: '#b45309', fontWeight: '700' }}>Amount: Rs. {(loop.totalAmount || 0).toFixed(2)}</div>
+                      <div key={loop.orderId || idx} style={{ padding: '15px', background: 'var(--warning-light, #FEF3C7)', border: '1px solid var(--warning-border, #FDE68A)', borderRadius: 'var(--radius-md, 8px)' }}>
+                        <div style={{ fontWeight: '700', color: 'var(--warning, #D97706)', marginBottom: '5px' }}>{loop.customerName || 'N/A'}</div>
+                        <div style={{ fontSize: '13px', color: 'var(--warning, #D97706)', marginBottom: '5px' }}>Mobile: {loop.customerMobile || 'N/A'}</div>
+                        <div style={{ fontSize: '13px', color: 'var(--warning, #D97706)', marginBottom: '5px' }}>Due Date: {loop.nextRun ? new Date(loop.nextRun).toLocaleDateString() : 'N/A'}</div>
+                        <div style={{ fontSize: '13px', color: 'var(--warning, #D97706)', fontWeight: '700' }}>Amount: Rs. {(loop.totalAmount || 0).toFixed(2)}</div>
                       </div>
                     ))
                   ) : (
-                    <div style={{ color: '#64748b', fontSize: '14px' }}>No orders due in 2-5 days.</div>
+                    <div style={{ color: 'var(--text-muted, #94A3B8)', fontSize: '14px' }}>No orders due in 2-5 days.</div>
                   )}
                 </div>
               </div>

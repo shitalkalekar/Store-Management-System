@@ -153,10 +153,10 @@ export default function StaffDashboard({ user }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', maxWidth: '800px', margin: '0 auto' }}>
       
-      <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div style={{ background: 'var(--bg-card, #FFFFFF)', padding: '16px', borderRadius: 'var(--radius-lg, 10px)', border: '1px solid var(--border-light, #D9E1E7)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h2 style={{ fontSize: '15px', fontWeight: 'bold', color: '#334155' }}>Welcome, {user.name} 🚚</h2>
-          <p style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>Here are the order delivery runs assigned to you today.</p>
+          <h2 style={{ fontSize: '15px', fontWeight: 'bold', color: 'var(--text-primary, #1F2937)' }}>Welcome, {user.name} 🚚</h2>
+          <p style={{ fontSize: '12px', color: 'var(--text-secondary, #64748B)', marginTop: '4px' }}>Here are the order delivery runs assigned to you today.</p>
         </div>
         <button 
           onClick={() => {
@@ -194,7 +194,7 @@ export default function StaffDashboard({ user }) {
               alert('Route optimized based on nearest locations!');
             });
           }}
-          style={{ padding: '8px 12px', background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }}
+          style={{ padding: '8px 12px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }}
         >
           📍 Optimize Route
         </button>
@@ -212,29 +212,29 @@ export default function StaffDashboard({ user }) {
           orders.map((o, idx) => {
             const isCompleted = ['Delivered', 'Cancelled'].includes(o.status);
             return (
-              <div key={o._id} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '18px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+              <div key={o._id} style={{ background: 'var(--bg-card, #FFFFFF)', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: 'var(--radius-lg, 10px)', padding: '18px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: '12px', color: '#64748b', fontWeight: 'bold' }}>#{idx + 1} - ORD-{o._id.toString().substring(18).toUpperCase()}</span>
+                  <span style={{ fontSize: '12px', color: 'var(--text-secondary, #64748B)', fontWeight: 'bold' }}>#{idx + 1} - ORD-{o._id.toString().substring(18).toUpperCase()}</span>
                   <span style={{ 
                     fontSize: '11px', 
                     padding: '3px 8px', 
                     borderRadius: '6px', 
                     fontWeight: 'bold',
-                    background: o.status === 'Delivered' ? '#d1fae5' : o.status === 'Assigned' ? '#dbeafe' : '#fef3c7',
-                    color: o.status === 'Delivered' ? '#065f46' : o.status === 'Assigned' ? '#1e40af' : '#b45309'
+                    background: o.status === 'Delivered' ? 'var(--status-success-bg, #D1E7DD)' : o.status === 'Assigned' ? 'var(--primary-light, #E8F5F6)' : 'var(--status-warning-bg, #FEF3C7)',
+                    color: o.status === 'Delivered' ? 'var(--status-success-text, #0F5132)' : o.status === 'Assigned' ? 'var(--primary, #087E8B)' : 'var(--status-warning-text, #92400E)'
                   }}>
                     {o.status}
                   </span>
                 </div>
 
                 <div style={{ marginTop: '12px' }}>
-                  <div style={{ fontSize: '15px', fontWeight: 'bold', color: '#0f172a' }}>{o.customer.name}</div>
+                  <div style={{ fontSize: '15px', fontWeight: 'bold', color: 'var(--text-primary, #1F2937)' }}>{o.customer.name}</div>
                   <div style={{ fontSize: '12px', color: '#475569', marginTop: '4px' }}>📍 {o.customer.address}</div>
                   <div style={{ fontSize: '12px', color: '#475569', marginTop: '2px' }}>📞 Mobile: {o.customer.mobile}</div>
                 </div>
 
                 {/* Items */}
-                <div style={{ marginTop: '12px', borderTop: '1px dashed #e2e8f0', paddingTop: '10px' }}>
+                <div style={{ marginTop: '12px', borderTop: '1px dashed var(--border-light, #D9E1E7)', paddingTop: '10px' }}>
                   <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 'bold', textTransform: 'uppercase' }}>Items to Deliver</div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '6px' }}>
                     {o.items.map((it, idx) => (
@@ -252,7 +252,7 @@ export default function StaffDashboard({ user }) {
                     {o.status === 'Assigned' && (
                       <button 
                         onClick={() => handleUpdateStatus(o._id, 'Packed')}
-                        style={{ flex: 1, padding: '10px', background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
+                        style={{ flex: 1, padding: '10px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', fontWeight: 'bold', cursor: 'pointer' }}
                       >
                         📦 Mark as Packed
                       </button>

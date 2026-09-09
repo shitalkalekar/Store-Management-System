@@ -165,19 +165,17 @@ export default function Payments() {
         <h2 style={{ fontSize: '16px', fontWeight: 'bold', color: '#334155' }}>Payment Collection Register</h2>
         <button 
           onClick={() => {
-            if (window.confirm('This option logs general payment auto-allocating oldest invoice first. Proceed?')) {
-              setPayData({ customerId: '', amountPaid: '', paymentMode: 'UPI', referenceNumber: '', notes: '', autoAllocate: true });
-              setPayModal(true);
-            }
+            setPayData({ customerId: '', amountPaid: '', paymentMode: 'UPI', referenceNumber: '', notes: '', autoAllocate: true });
+            setPayModal(true);
           }}
-          style={{ padding: '8px 16px', background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
+          style={{ padding: '8px 16px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', fontWeight: '600', cursor: 'pointer' }}
         >
-          ➕ Log General Payment (Auto-Allocate)
+          ➕ Log Payment
         </button>
       </div>
 
       {/* Filters Bar */}
-      <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', background: '#fff', padding: '15px', borderRadius: '12px', border: '1px solid #e2e8f0', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', background: '#fff', padding: '15px', borderRadius: 'var(--radius-lg, 10px)', border: '1px solid var(--border-light, #D9E1E7)', alignItems: 'center' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
           <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#475569' }}>Customer</label>
           <select 
@@ -235,26 +233,26 @@ export default function Payments() {
 
       {/* Bulk Actions Bar */}
       {selectedIds.length > 0 && (
-        <div style={{ display: 'flex', gap: '15px', background: '#eff6ff', padding: '15px', borderRadius: '12px', border: '1px solid #bfdbfe', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ fontSize: '14px', color: '#1e40af', fontWeight: '600' }}>
-            Selected <strong>{selectedIds.length}</strong> payments
+        <div style={{ display: 'flex', gap: '15px', background: 'var(--bg-main, #F6F8FA)', padding: '15px', borderRadius: 'var(--radius-lg, 10px)', border: '1px solid var(--border-light, #D9E1E7)', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span style={{ fontSize: '14px', color: 'var(--primary, #087E8B)', fontWeight: '600' }}>
+            Selected <strong>{selectedIds.length}</strong> payment entries
           </span>
           <div style={{ display: 'flex', gap: '10px' }}>
             <button 
               onClick={handleBulkExport}
-              style={{ padding: '8px 16px', background: '#10b981', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
+              style={{ padding: '8px 16px', background: 'var(--success, #198754)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
             >
               📥 Export to Excel
             </button>
             <button 
               onClick={handleBulkDelete}
-              style={{ padding: '8px 16px', background: '#ef4444', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
+              style={{ padding: '8px 16px', background: 'var(--danger, #DC3545)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
             >
               🗑️ Bulk Delete
             </button>
             <button 
               onClick={() => setSelectedIds([])}
-              style={{ padding: '8px 16px', background: '#cbd5e1', color: '#1e293b', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
+              style={{ padding: '8px 16px', background: 'var(--border-subtle, #F1F5F9)', color: 'var(--text-primary, #1F2937)', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: 'var(--radius-md, 8px)', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}
             >
               Clear Selection
             </button>
@@ -262,17 +260,16 @@ export default function Payments() {
         </div>
       )}
 
-      {/* Payments table */}
-      {loading ? (
-        <div>Loading payment records...</div>
-      ) : (
-        <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+      {/* Payments Table */}
+      <div style={{ background: 'var(--bg-card, #FFFFFF)', border: '1px solid var(--border-light, #D9E1E7)', borderRadius: 'var(--radius-lg, 10px)', overflowX: 'auto' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
             <thead>
-              <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
+              <tr style={{ background: '#f8fafc', borderBottom: '1px solid var(--border-light, #D9E1E7)' }}>
                 <th style={{ padding: '14px 20px', width: '40px' }}>
                   <input 
-                    type="checkbox"
+                    type="checkbox" 
+                    id="select-all-payments"
+                    aria-label="Select all payments"
                     checked={filteredPayments.length > 0 && selectedIds.length === filteredPayments.length}
                     onChange={handleSelectAll}
                   />
@@ -300,12 +297,12 @@ export default function Payments() {
                     </td>
                     <td style={{ padding: '14px 20px', color: '#475569', fontWeight: 'bold' }}>{idx + 1}</td>
                     <td style={{ padding: '14px 20px', color: '#475569' }}>
-                      {new Date(p.date).toLocaleString()}
+                      {new Date(p.date).toLocaleDateString()}
                     </td>
                     <td style={{ padding: '14px 20px', fontWeight: '600', color: '#1e293b' }}>
-                      {p.customer?.name}
+                      {p.customer?.name || 'Walk-in / Anonymous'}
                     </td>
-                    <td style={{ padding: '14px 20px', color: '#1e40af', fontWeight: '700' }}>
+                    <td style={{ padding: '14px 20px', color: 'var(--primary, #087E8B)', fontWeight: '700' }}>
                       {p.bill?.invoiceNumber || 'N/A'}
                     </td>
                     <td style={{ padding: '14px 20px', color: '#166534', fontWeight: 'bold' }}>
@@ -340,7 +337,6 @@ export default function Payments() {
             </tbody>
           </table>
         </div>
-      )}
 
       {/* Record General Payment Modal */}
       {payModal && (
@@ -433,7 +429,7 @@ export default function Payments() {
                 </button>
                 <button 
                   type="submit" 
-                  style={{ flex: 1, padding: '10px', background: '#10b981', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
+                  style={{ flex: 1, padding: '10px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', fontWeight: '600', cursor: 'pointer' }}
                 >
                   Submit Payment
                 </button>

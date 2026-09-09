@@ -32,7 +32,7 @@ export default function Login({ onLoginSuccess }) {
       if (err.response?.status === 401) {
         setError('The email or password is incorrect.');
       } else if (!err.response || err.code === 'ECONNABORTED' || err.code === 'ERR_NETWORK') {
-        setError('The pharmacy server may be waking up. Wait a moment, then retry the connection.');
+        setError('The server may be waking up. Wait a moment, then retry the connection.');
         setCanRetry(true);
       } else {
         setError(err.response?.data?.error || 'Unable to sign in right now. Please retry.');
@@ -46,14 +46,18 @@ export default function Login({ onLoginSuccess }) {
     <div className="modern-login-container">
       <div className="modern-login-card" style={{ maxWidth: '400px', width: '100%' }}>
         <div className="login-header-modern">
-          <div className="logo-wrapper" style={{ background: '#3b82f6', color: '#fff' }}>
+          <div className="logo-wrapper" style={{ background: '#087E8B', color: '#fff' }}>
             {/* Shop SVG */}
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} style={{ width: '28px', height: '28px' }}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
             </svg>
           </div>
-          <h1 style={{ color: '#1e3a8a', marginTop: '15px', fontSize: '24px' }}>Shop Manager</h1>
-          <p style={{ color: '#64748b' }}>Sign in to manage stock and orders</p>
+          <div className="login-brand-lockup">
+            <p className="login-brand-name">NARESH ENTERPRISES</p>
+            <p className="login-brand-desc">Distribution Management ERP</p>
+          </div>
+          <h1 style={{ color: '#17324D', marginTop: '12px', fontSize: '20px' }}>Shop Manager</h1>
+          <p style={{ color: '#64748B' }}>Sign in to manage stock and orders</p>
         </div>
 
         {error && (
@@ -98,7 +102,7 @@ export default function Login({ onLoginSuccess }) {
             type="submit" 
             className="login-btn-modern" 
             disabled={loading}
-            style={{ width: '100%', padding: '12px', background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+            style={{ width: '100%', padding: '12px', background: '#087E8B', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
           >
             {loading ? 'Connecting securely...' : canRetry ? 'Retry connection' : 'Sign In'}
           </button>

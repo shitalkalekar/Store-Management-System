@@ -48,50 +48,50 @@ export default function PublicTracking() {
 
   const getStatusColor = (status) => {
     switch(status) {
-      case 'Pending': return '#f59e0b';
-      case 'Assigned': return '#3b82f6';
-      case 'Packed': return '#8b5cf6';
-      case 'Out for Delivery': return '#f97316';
-      case 'Delivered': return '#10b981';
-      case 'Cancelled': return '#ef4444';
-      default: return '#64748b';
+      case 'Pending': return 'var(--status-warning, #D97706)';
+      case 'Assigned': return 'var(--primary, #087E8B)';
+      case 'Packed': return 'var(--secondary, #17324D)';
+      case 'Out for Delivery': return 'var(--status-warning, #D97706)';
+      case 'Delivered': return 'var(--status-success, #198754)';
+      case 'Cancelled': return 'var(--status-danger, #DC3545)';
+      default: return 'var(--text-muted, #94A3B8)';
     }
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f8fafc', padding: '40px 20px', fontFamily: 'sans-serif' }}>
-      <div style={{ maxWidth: '600px', margin: '0 auto', background: '#fff', borderRadius: '12px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)', padding: '30px' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg-main, #F6F8FA)', padding: '40px 20px', fontFamily: 'sans-serif' }}>
+      <div style={{ maxWidth: '600px', margin: '0 auto', background: 'var(--bg-card, #FFFFFF)', borderRadius: 'var(--radius-lg, 10px)', border: '1px solid var(--border-light, #D9E1E7)', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', padding: '30px' }}>
         
-        <div style={{ textAlign: 'center', marginBottom: '30px', borderBottom: '1px solid #e2e8f0', paddingBottom: '20px' }}>
-          <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#1e293b', marginBottom: '5px' }}>Delivery Tracking</h1>
-          <p style={{ color: '#64748b' }}>Order ID: {data.id.substring(18).toUpperCase()}</p>
+        <div style={{ textAlign: 'center', marginBottom: '30px', borderBottom: '1px solid var(--border-light, #D9E1E7)', paddingBottom: '20px' }}>
+          <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--text-primary, #1F2937)', marginBottom: '5px' }}>Delivery Tracking</h1>
+          <p style={{ color: 'var(--text-secondary, #64748B)' }}>Order ID: {data.id.substring(18).toUpperCase()}</p>
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
           <div>
-            <div style={{ fontSize: '12px', color: '#64748b' }}>Customer</div>
-            <div style={{ fontWeight: 'bold', color: '#1e293b' }}>{data.customer}</div>
+            <div style={{ fontSize: '12px', color: 'var(--text-secondary, #64748B)' }}>Customer</div>
+            <div style={{ fontWeight: 'bold', color: 'var(--text-primary, #1F2937)' }}>{data.customer}</div>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: '12px', color: '#64748b' }}>Expected Delivery</div>
-            <div style={{ fontWeight: 'bold', color: '#1e293b' }}>{new Date(data.deliveryDate).toLocaleDateString()}</div>
+            <div style={{ fontSize: '12px', color: 'var(--text-secondary, #64748B)' }}>Expected Delivery</div>
+            <div style={{ fontWeight: 'bold', color: 'var(--text-primary, #1F2937)' }}>{new Date(data.deliveryDate).toLocaleDateString()}</div>
           </div>
         </div>
 
-        <div style={{ padding: '15px', background: '#f1f5f9', borderRadius: '8px', marginBottom: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px' }}>
-          <div style={{ fontSize: '14px', color: '#475569', fontWeight: 'bold' }}>Current Status:</div>
+        <div style={{ padding: '15px', background: 'var(--bg-main, #F6F8FA)', borderRadius: 'var(--radius-md, 8px)', marginBottom: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px' }}>
+          <div style={{ fontSize: '14px', color: 'var(--text-secondary, #64748B)', fontWeight: 'bold' }}>Current Status:</div>
           <div style={{ padding: '6px 16px', borderRadius: '20px', background: getStatusColor(data.status), color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', fontSize: '12px' }}>
             {data.status}
           </div>
         </div>
 
-        <h3 style={{ fontSize: '16px', fontWeight: 'bold', color: '#334155', marginBottom: '15px' }}>Tracking History</h3>
-        <div style={{ marginLeft: '10px', borderLeft: '2px solid #e2e8f0', paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <h3 style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--text-primary, #1F2937)', marginBottom: '15px' }}>Tracking History</h3>
+        <div style={{ marginLeft: '10px', borderLeft: '2px solid var(--border-light, #D9E1E7)', paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {data.statusHistory && data.statusHistory.map((h, i) => (
             <div key={i} style={{ position: 'relative' }}>
               <div style={{ position: 'absolute', left: '-27px', top: '0', width: '12px', height: '12px', borderRadius: '50%', background: getStatusColor(h.status), border: '2px solid #fff' }}></div>
-              <div style={{ fontWeight: 'bold', color: '#1e293b', fontSize: '14px' }}>{h.status}</div>
-              <div style={{ fontSize: '12px', color: '#64748b' }}>{new Date(h.timestamp).toLocaleString()}</div>
+              <div style={{ fontWeight: 'bold', color: 'var(--text-primary, #1F2937)', fontSize: '14px' }}>{h.status}</div>
+              <div style={{ fontSize: '12px', color: 'var(--text-secondary, #64748B)' }}>{new Date(h.timestamp).toLocaleString()}</div>
             </div>
           ))}
         </div>
