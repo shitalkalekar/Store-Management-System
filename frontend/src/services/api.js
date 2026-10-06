@@ -37,6 +37,9 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       clearAccessToken();
       window.dispatchEvent(new Event(AUTH_EXPIRED_EVENT));
+    } else if (error.response?.status === 429) {
+      error.message = error.response?.data?.error || 'Too many requests. Please wait a moment and try again.';
+      error.isRateLimited = true;
     }
     return Promise.reject(error);
   },

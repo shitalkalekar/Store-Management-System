@@ -43,13 +43,13 @@ export default function Customers() {
   const [profileData, setProfileData] = useState(null);
   const [profileLoading, setProfileLoading] = useState(false);
 
-  const fetchCustomers = async () => {
+  const fetchCustomers = async (searchQuery = search) => {
     try {
-      const res = await api.get(`/customers?search=${search}`);
+      const res = await api.get(`/customers?search=${encodeURIComponent(searchQuery)}`);
       setCustomers(res.data);
     } catch (err) {
       console.error(err);
-      setError('Failed to fetch customers');
+      setError(err.message || 'Failed to fetch customers');
     } finally {
       setLoading(false);
     }
@@ -65,8 +65,31 @@ export default function Customers() {
   };
 
   useEffect(() => {
-    fetchCustomers();
     fetchBranches();
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    const timer = setTimeout(async () => {
+      try {
+        const res = await api.get(`/customers?search=${encodeURIComponent(search)}`);
+        if (!cancelled) {
+          setCustomers(res.data);
+          setLoading(false);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          console.error(err);
+          setError(err.message || 'Failed to fetch customers');
+          setLoading(false);
+        }
+      }
+    }, search ? 300 : 0);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
   }, [search]);
 
   const handleOpenAdd = () => {
@@ -247,7 +270,7 @@ export default function Customers() {
           </button>
           <button 
             onClick={handleOpenAdd}
-            style={{ padding: '10px 20px', background: '#087E8B', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
+            style={{ padding: '10px 20px', background: 'var(--primary)', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
           >
             ➕ Add Customer
           </button>
@@ -303,8 +326,8 @@ export default function Customers() {
 
       {/* Bulk Actions Bar */}
       {selectedIds.length > 0 && (
-        <div style={{ display: 'flex', gap: '15px', background: '#E8F5F6', padding: '15px', borderRadius: '10px', border: '1px solid #B2DFE3', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ fontSize: '14px', color: '#087E8B', fontWeight: '600' }}>
+        <div style={{ display: 'flex', gap: '15px', background: 'var(--primary-light)', padding: '15px', borderRadius: '10px', border: '1px solid var(--primary-border)', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span style={{ fontSize: '14px', color: 'var(--primary)', fontWeight: '600' }}>
             Selected <strong>{selectedIds.length}</strong> customers
           </span>
           <div style={{ display: 'flex', gap: '10px' }}>
@@ -368,7 +391,7 @@ export default function Customers() {
                     </td>
                     <td style={{ padding: '14px 20px', color: '#64748B', fontWeight: 'bold' }}>{idx + 1}</td>
                     <td style={{ padding: '14px 20px', fontWeight: '600', color: '#1F2937' }}>
-                      <span onClick={() => handleOpenProfile(c)} style={{ color: '#087E8B', cursor: 'pointer', textDecoration: 'underline' }}>{c.name}</span>
+                      <span onClick={() => handleOpenProfile(c)} style={{ color: 'var(--primary)', cursor: 'pointer', textDecoration: 'underline' }}>{c.name}</span>
                     </td>
                     <td style={{ padding: '14px 20px', color: '#1F2937' }}>{c.mobile}</td>
                     <td style={{ padding: '14px 20px', color: '#64748B' }}>{c.gstNumber || 'N/A'}</td>
@@ -386,7 +409,7 @@ export default function Customers() {
                     <td style={{ padding: '14px 20px', textAlign: 'right', display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
                       <button 
                         onClick={() => handleOpenProfile(c)}
-                        style={{ padding: '6px 12px', background: '#E8F5F6', color: '#087E8B', border: '1px solid #B2DFE3', borderRadius: '6px', cursor: 'pointer', fontWeight: '600', fontSize: '12px' }}
+                        style={{ padding: '6px 12px', background: 'var(--primary-light)', color: 'var(--primary)', border: '1px solid var(--primary-border)', borderRadius: '6px', cursor: 'pointer', fontWeight: '600', fontSize: '12px' }}
                       >
                         📂 Ledger
                       </button>
@@ -524,7 +547,7 @@ export default function Customers() {
                 </button>
                 <button 
                   type="submit" 
-                  style={{ flex: 1, padding: '10px', background: '#087E8B', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
+                  style={{ flex: 1, padding: '10px', background: 'var(--primary)', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
                 >
                   Save
                 </button>
@@ -557,7 +580,7 @@ export default function Customers() {
                       setError('Failed to download the customer statement');
                     }
                   }}
-                  style={{ padding: '8px 16px', background: '#087E8B', color: '#fff', border: 'none', borderRadius: '6px', fontWeight: '600', cursor: 'pointer', fontSize: '12px' }}
+                  style={{ padding: '8px 16px', background: 'var(--primary)', color: '#fff', border: 'none', borderRadius: '6px', fontWeight: '600', cursor: 'pointer', fontSize: '12px' }}
                 >
                   📋 Download Statement PDF
                 </button>
@@ -665,8 +688,8 @@ export default function Customers() {
                                   fontSize: '10px', 
                                   padding: '2px 6px', 
                                   borderRadius: '4px', 
-                                  background: item.status === 'Delivered' || item.status === 'Completed' ? '#dcfce7' : '#E8F5F6',
-                                  color: item.status === 'Delivered' || item.status === 'Completed' ? '#198754' : '#087E8B',
+                                  background: item.status === 'Delivered' || item.status === 'Completed' ? '#dcfce7' : 'var(--primary-light)',
+                                  color: item.status === 'Delivered' || item.status === 'Completed' ? '#198754' : 'var(--primary)',
                                   fontWeight: '600'
                                 }}>
                                   {item.status}

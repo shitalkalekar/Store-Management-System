@@ -50,14 +50,18 @@ export default function Expenses() {
       }
     } catch (err) {
       console.error(err);
-      setError('Failed to fetch expenses directory');
+      setError(err.message || 'Failed to fetch expenses directory');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
+    let cancelled = false;
     fetchData();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const handleImageUpload = (e) => {

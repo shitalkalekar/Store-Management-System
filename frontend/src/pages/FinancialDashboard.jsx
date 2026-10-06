@@ -92,8 +92,8 @@ export default function FinancialDashboard() {
         
         <div className="stat-card" style={{ background: '#FFFFFF', borderColor: '#D9E1E7' }}>
           <div className="stat-header">
-            <span className="stat-title" style={{ color: '#087E8B' }}>Total Sales</span>
-            <div className="stat-icon-wrapper" style={{ background: '#E8F5F6', color: '#087E8B' }}>
+            <span className="stat-title" style={{ color: 'var(--primary)' }}>Total Sales</span>
+            <div className="stat-icon-wrapper" style={{ background: 'var(--primary-light)', color: 'var(--primary)' }}>
               <TrendingUp size={20} />
             </div>
           </div>
@@ -140,7 +140,7 @@ export default function FinancialDashboard() {
       <div className="card">
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
           <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#17324D', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <TrendingUp size={18} color="#087E8B" /> Sales vs Expenses Trend
+            <TrendingUp size={18} color="var(--primary)" /> Sales vs Expenses Trend
           </h3>
           <span style={{ fontSize: '12px', color: '#64748B' }}>6 Months Comparison</span>
         </div>
@@ -150,7 +150,7 @@ export default function FinancialDashboard() {
               <XAxis dataKey="month" stroke="#94A3B8" fontSize={11} tickLine={false} />
               <YAxis stroke="#94A3B8" fontSize={11} tickLine={false} />
               <Tooltip formatter={(value) => `Rs. ${Number(value).toFixed(2)}`} />
-              <Area type="monotone" dataKey="Sales" stroke="#087E8B" fillOpacity={0.15} fill="#087E8B" />
+              <Area type="monotone" dataKey="Sales" stroke="var(--primary)" fillOpacity={0.15} fill="var(--primary)" />
               <Area type="monotone" dataKey="Expenses" stroke="#DC3545" fillOpacity={0.08} fill="#DC3545" />
             </AreaChart>
           </ResponsiveContainer>

@@ -148,7 +148,7 @@ export default function Settings() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      
+
       {/* Alert Messages */}
       {success && (
         <div style={{ padding: '12px 16px', background: 'var(--success-light, #D1E7DD)', border: '1px solid var(--success, #198754)', color: 'var(--success, #198754)', borderRadius: 'var(--radius-md, 8px)', fontSize: '13px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -164,43 +164,43 @@ export default function Settings() {
 
       {/* Tabs Menu */}
       <div style={{ display: 'flex', borderBottom: '1px solid var(--border-light, #D9E1E7)', flexWrap: 'wrap', gap: '6px' }}>
-        <button 
+        <button
           onClick={() => setActiveTab('shop')}
           style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 20px', background: 'transparent', border: 'none', borderBottom: activeTab === 'shop' ? '3px solid var(--primary, #087E8B)' : '3px solid transparent', fontWeight: '700', fontSize: '13px', color: activeTab === 'shop' ? 'var(--primary, #087E8B)' : 'var(--text-secondary, #64748B)', cursor: 'pointer' }}
         >
           <Building2 size={16} /> Shop Details
         </button>
-        <button 
+        <button
           onClick={() => setActiveTab('bank')}
           style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 20px', background: 'transparent', border: 'none', borderBottom: activeTab === 'bank' ? '3px solid var(--primary, #087E8B)' : '3px solid transparent', fontWeight: '700', fontSize: '13px', color: activeTab === 'bank' ? 'var(--primary, #087E8B)' : 'var(--text-secondary, #64748B)', cursor: 'pointer' }}
         >
           <Landmark size={16} /> Bank Details
         </button>
-        <button 
+        <button
           onClick={() => setActiveTab('pdf')}
           style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 20px', background: 'transparent', border: 'none', borderBottom: activeTab === 'pdf' ? '3px solid var(--primary, #087E8B)' : '3px solid transparent', fontWeight: '700', fontSize: '13px', color: activeTab === 'pdf' ? 'var(--primary, #087E8B)' : 'var(--text-secondary, #64748B)', cursor: 'pointer' }}
         >
           <FileText size={16} /> Bill Formats & Paper
         </button>
-        <button 
+        <button
           onClick={() => setActiveTab('messages')}
           style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 20px', background: 'transparent', border: 'none', borderBottom: activeTab === 'messages' ? '3px solid var(--primary, #087E8B)' : '3px solid transparent', fontWeight: '700', fontSize: '13px', color: activeTab === 'messages' ? 'var(--primary, #087E8B)' : 'var(--text-secondary, #64748B)', cursor: 'pointer' }}
         >
           <MessageSquare size={16} /> Payment Messages
         </button>
-        <button 
+        <button
           onClick={() => setActiveTab('branches')}
           style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 20px', background: 'transparent', border: 'none', borderBottom: activeTab === 'branches' ? '3px solid var(--primary, #087E8B)' : '3px solid transparent', fontWeight: '700', fontSize: '13px', color: activeTab === 'branches' ? 'var(--primary, #087E8B)' : 'var(--text-secondary, #64748B)', cursor: 'pointer' }}
         >
           <Store size={16} /> Branches
         </button>
-        <button 
+        <button
           onClick={() => setActiveTab('backup')}
           style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 20px', background: 'transparent', border: 'none', borderBottom: activeTab === 'backup' ? '3px solid var(--primary, #087E8B)' : '3px solid transparent', fontWeight: '700', fontSize: '13px', color: activeTab === 'backup' ? 'var(--primary, #087E8B)' : 'var(--text-secondary, #64748B)', cursor: 'pointer' }}
         >
           <Database size={16} /> Data Backup
         </button>
-        <button 
+        <button
           onClick={() => setActiveTab('security')}
           style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 20px', background: 'transparent', border: 'none', borderBottom: activeTab === 'security' ? '3px solid var(--primary, #087E8B)' : '3px solid transparent', fontWeight: '700', fontSize: '13px', color: activeTab === 'security' ? 'var(--primary, #087E8B)' : 'var(--text-secondary, #64748B)', cursor: 'pointer' }}
         >
@@ -217,11 +217,11 @@ export default function Settings() {
           <h3 style={{ fontSize: '16px', fontWeight: '700', color: 'var(--text-primary, #1F2937)', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Building2 size={18} color="var(--primary, #087E8B)" /> Shop Profile & GST Configuration
           </h3>
-          
+
           <form onSubmit={handleUpdateSettings} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div>
               <label style={{ fontSize: '12px', fontWeight: '700', color: 'var(--text-secondary, #64748B)', display: 'block', marginBottom: '6px' }}>Shop Name</label>
-              <input 
+              <input
                 type="text"
                 value={settings?.companyName || ''}
                 onChange={(e) => setSettings({ ...settings, companyName: e.target.value })}
@@ -231,7 +231,7 @@ export default function Settings() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
               <div>
                 <label style={{ fontSize: '12px', fontWeight: '700', color: 'var(--text-secondary, #64748B)', display: 'block', marginBottom: '6px' }}>GSTIN Number</label>
-                <input 
+                <input
                   type="text"
                   value={settings?.gstNumber || ''}
                   onChange={(e) => setSettings({ ...settings, gstNumber: e.target.value })}
@@ -239,7 +239,7 @@ export default function Settings() {
               </div>
               <div>
                 <label style={{ fontSize: '12px', fontWeight: '700', color: 'var(--text-secondary, #64748B)', display: 'block', marginBottom: '6px' }}>State</label>
-                <input 
+                <input
                   type="text"
                   value={settings?.state || 'Maharashtra'}
                   onChange={(e) => setSettings({ ...settings, state: e.target.value })}
@@ -250,7 +250,7 @@ export default function Settings() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
               <div>
                 <label style={{ fontSize: '12px', fontWeight: '700', color: 'var(--text-secondary, #64748B)', display: 'block', marginBottom: '6px' }}>Contact Phone</label>
-                <input 
+                <input
                   type="text"
                   value={settings?.contact || ''}
                   onChange={(e) => setSettings({ ...settings, contact: e.target.value })}
@@ -258,7 +258,7 @@ export default function Settings() {
               </div>
               <div>
                 <label style={{ fontSize: '12px', fontWeight: '700', color: 'var(--text-secondary, #64748B)', display: 'block', marginBottom: '6px' }}>Official Email</label>
-                <input 
+                <input
                   type="email"
                   value={settings?.email || ''}
                   onChange={(e) => setSettings({ ...settings, email: e.target.value })}
@@ -268,7 +268,7 @@ export default function Settings() {
 
             <div>
               <label style={{ fontSize: '12px', fontWeight: '700', color: 'var(--text-secondary, #64748B)', display: 'block', marginBottom: '6px' }}>Shop Address</label>
-              <textarea 
+              <textarea
                 value={settings?.address || ''}
                 onChange={(e) => setSettings({ ...settings, address: e.target.value })}
                 rows="3"
@@ -288,11 +288,11 @@ export default function Settings() {
           <h3 style={{ fontSize: '16px', fontWeight: '700', color: 'var(--text-primary, #1F2937)', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Landmark size={18} color="var(--primary, #087E8B)" /> Bank Account Details for Invoices
           </h3>
-          
+
           <form onSubmit={handleUpdateSettings} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div>
               <label style={{ fontSize: '12px', fontWeight: '700', color: 'var(--text-secondary, #64748B)', display: 'block', marginBottom: '6px' }}>Bank Name</label>
-              <input 
+              <input
                 type="text"
                 value={settings?.bankDetails?.bankName || ''}
                 onChange={(e) => setSettings({ ...settings, bankDetails: { ...settings?.bankDetails, bankName: e.target.value } })}
@@ -302,7 +302,7 @@ export default function Settings() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
               <div>
                 <label style={{ fontSize: '12px', fontWeight: '700', color: 'var(--text-secondary, #64748B)', display: 'block', marginBottom: '6px' }}>Account Number</label>
-                <input 
+                <input
                   type="text"
                   value={settings?.bankDetails?.accountNo || ''}
                   onChange={(e) => setSettings({ ...settings, bankDetails: { ...settings?.bankDetails, accountNo: e.target.value } })}
@@ -310,7 +310,7 @@ export default function Settings() {
               </div>
               <div>
                 <label style={{ fontSize: '12px', fontWeight: '700', color: 'var(--text-secondary, #64748B)', display: 'block', marginBottom: '6px' }}>IFSC Code</label>
-                <input 
+                <input
                   type="text"
                   value={settings?.bankDetails?.ifscCode || ''}
                   onChange={(e) => setSettings({ ...settings, bankDetails: { ...settings?.bankDetails, ifscCode: e.target.value } })}
@@ -328,7 +328,7 @@ export default function Settings() {
       {/* Tab 3: Bill Formats & PDF Page Size Settings */}
       {activeTab === 'pdf' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-          
+
           {/* Bill Format Selection Cards */}
           <div className="card">
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
@@ -344,14 +344,14 @@ export default function Settings() {
 
             {/* Template Selection Grid */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', marginTop: '16px' }}>
-              
+
               {/* Option 1: Classic Retail Memo Book */}
-              <div 
+              <div
                 onClick={() => setSettings({
                   ...settings,
                   pdfSettings: { ...(settings?.pdfSettings || {}), billTemplate: 'CLASSIC_MEMO_BOOK' }
                 })}
-                style={{ 
+                style={{
                   border: currentTemplate === 'CLASSIC_MEMO_BOOK' ? '2px solid #b91c1c' : '1px solid var(--border-light, #D9E1E7)',
                   borderRadius: 'var(--radius-lg, 10px)', padding: '18px', cursor: 'pointer', background: currentTemplate === 'CLASSIC_MEMO_BOOK' ? '#fff5f5' : 'var(--bg-card, #FFFFFF)',
                   boxShadow: currentTemplate === 'CLASSIC_MEMO_BOOK' ? '0 4px 12px rgba(185, 28, 28, 0.15)' : 'none',
@@ -371,12 +371,12 @@ export default function Settings() {
               </div>
 
               {/* Option 2: Modern Corporate Tax Invoice */}
-              <div 
+              <div
                 onClick={() => setSettings({
                   ...settings,
                   pdfSettings: { ...(settings?.pdfSettings || {}), billTemplate: 'MODERN_TAX_INVOICE' }
                 })}
-                style={{ 
+                style={{
                   border: currentTemplate === 'MODERN_TAX_INVOICE' ? '2px solid var(--primary, #087E8B)' : '1px solid var(--border-light, #D9E1E7)',
                   borderRadius: 'var(--radius-lg, 10px)', padding: '18px', cursor: 'pointer', background: currentTemplate === 'MODERN_TAX_INVOICE' ? 'var(--primary-light, #E8F5F6)' : 'var(--bg-card, #FFFFFF)',
                   boxShadow: currentTemplate === 'MODERN_TAX_INVOICE' ? '0 4px 12px rgba(8, 126, 139, 0.15)' : 'none',
@@ -396,12 +396,12 @@ export default function Settings() {
               </div>
 
               {/* Option 3: Elegant Minimalist Invoice */}
-              <div 
+              <div
                 onClick={() => setSettings({
                   ...settings,
                   pdfSettings: { ...(settings?.pdfSettings || {}), billTemplate: 'ELEGANT_MINIMAL' }
                 })}
-                style={{ 
+                style={{
                   border: currentTemplate === 'ELEGANT_MINIMAL' ? '2px solid var(--secondary, #17324D)' : '1px solid var(--border-light, #D9E1E7)',
                   borderRadius: 'var(--radius-lg, 10px)', padding: '18px', cursor: 'pointer', background: currentTemplate === 'ELEGANT_MINIMAL' ? 'var(--bg-main, #F6F8FA)' : 'var(--bg-card, #FFFFFF)',
                   boxShadow: currentTemplate === 'ELEGANT_MINIMAL' ? '0 4px 12px rgba(23, 50, 77, 0.15)' : 'none',
@@ -421,12 +421,12 @@ export default function Settings() {
               </div>
 
               {/* Option 4: Thermal Receipt POS */}
-              <div 
+              <div
                 onClick={() => setSettings({
                   ...settings,
                   pdfSettings: { ...(settings?.pdfSettings || {}), billTemplate: 'THERMAL_POS' }
                 })}
-                style={{ 
+                style={{
                   border: currentTemplate === 'THERMAL_POS' ? '2px solid var(--success, #198754)' : '1px solid var(--border-light, #D9E1E7)',
                   borderRadius: 'var(--radius-lg, 10px)', padding: '18px', cursor: 'pointer', background: currentTemplate === 'THERMAL_POS' ? 'var(--success-light, #D1E7DD)' : 'var(--bg-card, #FFFFFF)',
                   boxShadow: currentTemplate === 'THERMAL_POS' ? '0 4px 12px rgba(25, 135, 84, 0.15)' : 'none',
@@ -459,12 +459,12 @@ export default function Settings() {
             </h3>
 
             <form onSubmit={handleUpdateSettings} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              
+
               <div style={{ background: 'var(--bg-main, #F6F8FA)', padding: '16px', borderRadius: 'var(--radius-lg, 10px)', border: '1px solid var(--border-light, #D9E1E7)' }}>
                 <label style={{ fontSize: '13px', fontWeight: '700', color: 'var(--text-primary, #1F2937)', display: 'block', marginBottom: '6px' }}>
                   📄 Bill Page Paper Size
                 </label>
-                <select 
+                <select
                   value={settings?.pdfSettings?.billPageSize || 'A4'}
                   onChange={(e) => setSettings({
                     ...settings,
@@ -483,7 +483,7 @@ export default function Settings() {
                 <label style={{ fontSize: '13px', fontWeight: '700', color: 'var(--text-primary, #1F2937)', display: 'block', marginBottom: '6px' }}>
                   📄 Quotation Page Paper Size
                 </label>
-                <select 
+                <select
                   value={settings?.pdfSettings?.quotationPageSize || 'A4'}
                   onChange={(e) => setSettings({
                     ...settings,
@@ -512,11 +512,11 @@ export default function Settings() {
           <h3 style={{ fontSize: '16px', fontWeight: '700', color: 'var(--text-primary, #1F2937)', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <MessageSquare size={18} color="var(--primary, #087E8B)" /> Payment Reminder Message Templates
           </h3>
-          
+
           <form onSubmit={handleUpdateSettings} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div>
               <label style={{ fontSize: '12px', fontWeight: '700', color: 'var(--text-secondary, #64748B)', display: 'block', marginBottom: '6px' }}>English Message Template</label>
-              <textarea 
+              <textarea
                 value={settings?.smsTemplates?.english || ''}
                 onChange={(e) => setSettings({ ...settings, smsTemplates: { ...settings?.smsTemplates, english: e.target.value } })}
                 rows="3"
@@ -525,7 +525,7 @@ export default function Settings() {
 
             <div>
               <label style={{ fontSize: '12px', fontWeight: '700', color: 'var(--text-secondary, #64748B)', display: 'block', marginBottom: '6px' }}>Marathi Message Template (मराठी)</label>
-              <textarea 
+              <textarea
                 value={settings?.smsTemplates?.marathi || ''}
                 onChange={(e) => setSettings({ ...settings, smsTemplates: { ...settings?.smsTemplates, marathi: e.target.value } })}
                 rows="3"
@@ -550,7 +550,7 @@ export default function Settings() {
             <h3 style={{ fontSize: '16px', fontWeight: '700', color: 'var(--text-primary, #1F2937)', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Store size={18} color="var(--primary, #087E8B)" /> Multi-Branch Registry
             </h3>
-            <button 
+            <button
               onClick={() => setShowAddBranch(true)}
               className="btn btn-primary"
             >
@@ -584,7 +584,7 @@ export default function Settings() {
       {/* Tab 6: Data Backup & Restore */}
       {activeTab === 'backup' && (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
-          
+
           <div className="card">
             <h3 style={{ fontSize: '16px', fontWeight: '700', color: 'var(--text-primary, #1F2937)', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Download size={18} color="var(--success, #198754)" /> System Database Export
@@ -592,8 +592,8 @@ export default function Settings() {
             <p style={{ fontSize: '13px', color: 'var(--text-secondary, #64748B)', marginBottom: '16px' }}>
               Download a complete JSON snapshot of all system records (Products, Customers, Bills, Orders, Expenses, and Settings).
             </p>
-            <button 
-              onClick={handleDownloadBackup} 
+            <button
+              onClick={handleDownloadBackup}
               disabled={backupLoading}
               className="btn btn-success"
             >
@@ -608,16 +608,16 @@ export default function Settings() {
             <p style={{ fontSize: '13px', color: 'var(--text-secondary, #64748B)', marginBottom: '16px' }}>
               Restore database state from a previously exported backup file.
             </p>
-            
+
             <form onSubmit={handleRestoreSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <input 
-                type="file" 
+              <input
+                type="file"
                 accept=".json"
                 onChange={(e) => setRestoreFile(e.target.files[0])}
                 style={{ fontSize: '13px' }}
               />
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 disabled={!restoreFile || backupLoading}
                 className="btn btn-primary"
                 style={{ alignSelf: 'flex-start' }}
@@ -635,11 +635,11 @@ export default function Settings() {
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(23, 50, 77, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '15px' }}>
           <div className="card" style={{ width: '100%', maxWidth: '420px', boxShadow: 'var(--shadow-card, 0 1px 3px rgba(0,0,0,0.06))' }}>
             <h3 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--text-primary, #1F2937)', marginBottom: '16px' }}>Register New Branch</h3>
-            
+
             <form onSubmit={handleAddBranchSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div>
                 <label style={{ fontSize: '12px', fontWeight: '700', color: 'var(--text-secondary, #64748B)', display: 'block', marginBottom: '6px' }}>Branch Name*</label>
-                <input 
+                <input
                   type="text"
                   value={branchForm.name}
                   onChange={(e) => setBranchForm({ ...branchForm, name: e.target.value })}
@@ -649,7 +649,7 @@ export default function Settings() {
 
               <div>
                 <label style={{ fontSize: '12px', fontWeight: '700', color: 'var(--text-secondary, #64748B)', display: 'block', marginBottom: '6px' }}>Contact Phone*</label>
-                <input 
+                <input
                   type="text"
                   value={branchForm.contact}
                   onChange={(e) => setBranchForm({ ...branchForm, contact: e.target.value })}
@@ -659,7 +659,7 @@ export default function Settings() {
 
               <div>
                 <label style={{ fontSize: '12px', fontWeight: '700', color: 'var(--text-secondary, #64748B)', display: 'block', marginBottom: '6px' }}>Full Address*</label>
-                <textarea 
+                <textarea
                   value={branchForm.address}
                   onChange={(e) => setBranchForm({ ...branchForm, address: e.target.value })}
                   rows="3"
@@ -668,16 +668,16 @@ export default function Settings() {
               </div>
 
               <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   onClick={() => setShowAddBranch(false)}
                   className="btn btn-secondary"
                   style={{ flex: 1 }}
                 >
                   Cancel
                 </button>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   className="btn btn-primary"
                   style={{ flex: 1 }}
                 >

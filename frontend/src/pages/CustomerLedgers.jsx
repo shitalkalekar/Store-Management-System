@@ -176,7 +176,7 @@ export default function CustomerLedgers({ onNavigate }) {
               setPaymentRef('');
               setPaymentNotes('');
             }}
-            style={{ padding: '8px 14px', background: '#087E8B', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+            style={{ padding: '8px 14px', background: 'var(--primary)', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
           >
             💳 + Add Manual Payment
           </button>
@@ -201,7 +201,7 @@ export default function CustomerLedgers({ onNavigate }) {
         <div style={{ background: '#FFFFFF', padding: '18px', borderRadius: '10px', border: '1px solid #D9E1E7' }}>
           <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#64748B' }}>TOTAL CUSTOMERS</div>
           <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#17324D', marginTop: '6px' }}>{summaryMetrics.totalCustomers}</div>
-          <div style={{ fontSize: '11px', color: '#087E8B', marginTop: '4px' }}>Active Account Directory</div>
+          <div style={{ fontSize: '11px', color: 'var(--primary)', marginTop: '4px' }}>Active Account Directory</div>
         </div>
 
         <div style={{ background: '#FFFFFF', padding: '18px', borderRadius: '10px', border: '1px solid #D9E1E7' }}>
@@ -277,11 +277,11 @@ export default function CustomerLedgers({ onNavigate }) {
           </div>
 
           <div style={{ 
-            fontSize: '12px', color: '#17324D', fontWeight: '600', 
-            background: '#E8F5F6', padding: '8px 14px', borderRadius: '20px', border: '1px solid #B2DFE3',
+            fontSize: '12px', color: 'var(--text-primary)', fontWeight: '600', 
+            background: 'var(--primary-light)', padding: '8px 14px', borderRadius: '20px', border: '1px solid var(--primary-border)',
             whiteSpace: 'nowrap'
           }}>
-            Showing <strong style={{ color: '#087E8B' }}>{filteredLedgers.length}</strong> of <strong>{ledgers.length}</strong> customer(s)
+            Showing <strong style={{ color: 'var(--primary)' }}>{filteredLedgers.length}</strong> of <strong>{ledgers.length}</strong> customer(s)
           </div>
 
         </div>
@@ -321,7 +321,7 @@ export default function CustomerLedgers({ onNavigate }) {
                     <tr 
                       key={cust._id || idx}
                       style={{ borderBottom: '1px solid #F1F5F9', transition: 'background 0.2s' }}
-                      onMouseEnter={(e) => e.currentTarget.style.background = '#E8F5F6'}
+                      onMouseEnter={(e) => e.currentTarget.style.background = 'var(--primary-light)'}
                       onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                     >
                       <td style={{ padding: '14px 18px', fontSize: '13px', color: '#64748B', fontWeight: 'bold' }}>{idx + 1}</td>
@@ -334,7 +334,7 @@ export default function CustomerLedgers({ onNavigate }) {
                         <div style={{ fontSize: '11px', color: '#64748B', marginTop: '2px' }}>📍 {cust.address || 'N/A'}</div>
                       </td>
                       <td style={{ padding: '14px 18px' }}>
-                        <span style={{ padding: '4px 10px', background: '#E8F5F6', color: '#087E8B', borderRadius: '12px', fontSize: '12px', fontWeight: 'bold' }}>
+                        <span style={{ padding: '4px 10px', background: 'var(--primary-light)', color: 'var(--primary)', borderRadius: '12px', fontSize: '12px', fontWeight: 'bold' }}>
                           📦 {item.completedOrdersCount} Delivered
                         </span>
                       </td>
@@ -373,7 +373,7 @@ export default function CustomerLedgers({ onNavigate }) {
                         <div style={{ display: 'flex', gap: '6px', justifyContent: 'flex-end' }}>
                           <button
                             onClick={() => { setSelectedLedger(item); setActiveTab('statement'); }}
-                            style={{ padding: '6px 12px', background: '#E8F5F6', color: '#087E8B', border: '1px solid #B2DFE3', borderRadius: '6px', cursor: 'pointer', fontWeight: '600', fontSize: '12px' }}
+                            style={{ padding: '6px 12px', background: 'var(--primary-light)', color: 'var(--primary)', border: '1px solid var(--primary-border)', borderRadius: '6px', cursor: 'pointer', fontWeight: '600', fontSize: '12px' }}
                           >
                             📜 Ledger
                           </button>
@@ -449,9 +449,9 @@ export default function CustomerLedgers({ onNavigate }) {
                 style={{
                   padding: '8px 16px',
                   border: 'none',
-                  borderBottom: activeTab === 'statement' ? '2px solid #087E8B' : 'none',
+                  borderBottom: activeTab === 'statement' ? '2px solid var(--primary)' : 'none',
                   background: 'transparent',
-                  color: activeTab === 'statement' ? '#087E8B' : '#64748B',
+                  color: activeTab === 'statement' ? 'var(--primary)' : '#64748B',
                   fontWeight: 'bold',
                   fontSize: '13px',
                   cursor: 'pointer'
@@ -464,9 +464,9 @@ export default function CustomerLedgers({ onNavigate }) {
                 style={{
                   padding: '8px 16px',
                   border: 'none',
-                  borderBottom: activeTab === 'orders' ? '2px solid #087E8B' : 'none',
+                  borderBottom: activeTab === 'orders' ? '2px solid var(--primary)' : 'none',
                   background: 'transparent',
-                  color: activeTab === 'orders' ? '#087E8B' : '#64748B',
+                  color: activeTab === 'orders' ? 'var(--primary)' : '#64748B',
                   fontWeight: 'bold',
                   fontSize: '13px',
                   cursor: 'pointer'
@@ -479,9 +479,9 @@ export default function CustomerLedgers({ onNavigate }) {
                 style={{
                   padding: '8px 16px',
                   border: 'none',
-                  borderBottom: activeTab === 'payments' ? '2px solid #087E8B' : 'none',
+                  borderBottom: activeTab === 'payments' ? '2px solid var(--primary)' : 'none',
                   background: 'transparent',
-                  color: activeTab === 'payments' ? '#087E8B' : '#64748B',
+                  color: activeTab === 'payments' ? 'var(--primary)' : '#64748B',
                   fontWeight: 'bold',
                   fontSize: '13px',
                   cursor: 'pointer'
@@ -607,7 +607,7 @@ export default function CustomerLedgers({ onNavigate }) {
             <div style={{ borderTop: '1px solid #D9E1E7', marginTop: '24px', paddingTop: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <button
                 onClick={() => { setPaymentModalCustomer(selectedLedger); setPaymentAmount(selectedLedger.pendingBalance); }}
-                style={{ padding: '8px 16px', background: '#087E8B', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+                style={{ padding: '8px 16px', background: 'var(--primary)', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
               >
                 💳 Record Payment Settlement
               </button>
@@ -763,7 +763,7 @@ export default function CustomerLedgers({ onNavigate }) {
                 <button
                   type="submit"
                   disabled={submittingPayment}
-                  style={{ flex: 1, padding: '10px', background: '#087E8B', border: 'none', color: '#fff', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
+                  style={{ flex: 1, padding: '10px', background: 'var(--primary)', border: 'none', color: '#fff', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
                 >
                   {submittingPayment ? 'Recording...' : 'Submit Payment'}
                 </button>

@@ -1472,6 +1472,11 @@ exports.recordPayment = async (req, res) => {
       return res.status(400).json({ error: 'Amount paid and payment mode are required' });
     }
 
+    const numAmount = Number(amountPaid);
+    if (isNaN(numAmount) || numAmount <= 0) {
+      return res.status(400).json({ error: 'Amount paid must be greater than zero' });
+    }
+
     if (autoAllocate && customerId) {
       // Auto-reconciliation (FIFO)
       const bills = await Bill.find({ 
@@ -1479,7 +1484,7 @@ exports.recordPayment = async (req, res) => {
         status: { $in: ['Unpaid', 'Partially Paid'] } 
       }).sort({ createdAt: 1 });
 
-      let remainingAmount = Number(amountPaid);
+      let remainingAmount = numAmount;
       const allocatedPayments = [];
 
       for (let b of bills) {
@@ -1500,8 +1505,9 @@ exports.recordPayment = async (req, res) => {
           customer: b.customer,
           amountPaid: amountToAllocate,
           paymentMode,
-          referenceNumber,
-          notes: (notes || '') + ' (Auto-allocated)'
+          referenceNumber: referenceNumber ? String(referenceNumber).trim() : '',
+          notes: (notes || '') + ' (Auto-allocated)',
+          date: new Date()
         });
         await payment.save();
         allocatedPayments.push(payment);
@@ -1510,13 +1516,61 @@ exports.recordPayment = async (req, res) => {
         b.status = grandPaid >= b.totalAmount ? 'Paid' : 'Partially Paid';
         await b.save();
       }
+
+      // If no bills were eligible OR if there is leftover amount (unallocated on-account payment)
+      if (remainingAmount > 0) {
+        const unallocatedPayment = new Payment({
+          bill: null,
+          order: null,
+          customer: customerId,
+          amountPaid: remainingAmount,
+          paymentMode,
+          referenceNumber: referenceNumber ? String(referenceNumber).trim() : '',
+          notes: allocatedPayments.length > 0 
+            ? ((notes ? `${notes} ` : '') + '(On-account excess balance)')
+            : (notes || 'On-account general payment'),
+          date: new Date()
+        });
+        await unallocatedPayment.save();
+        allocatedPayments.push(unallocatedPayment);
+      }
+
+      // Update customer outstanding balance if tracked
+      const cust = await Customer.findById(customerId);
+      if (cust && typeof cust.outstanding === 'number') {
+        cust.outstanding = Math.max(0, cust.outstanding - numAmount);
+        await cust.save();
+      }
       
-      return res.status(201).json({ message: 'Auto-allocated successfully', allocatedPayments, unallocatedAmount: remainingAmount });
+      return res.status(201).json({ message: 'Payment recorded successfully', allocatedPayments, unallocatedAmount: remainingAmount });
+    }
+
+    // Direct payment without auto-allocation
+    if (!billId && customerId) {
+      const payment = new Payment({
+        bill: null,
+        order: null,
+        customer: customerId,
+        amountPaid: numAmount,
+        paymentMode,
+        referenceNumber: referenceNumber ? String(referenceNumber).trim() : '',
+        notes: notes || 'Direct Customer Payment',
+        date: new Date()
+      });
+      await payment.save();
+
+      const cust = await Customer.findById(customerId);
+      if (cust && typeof cust.outstanding === 'number') {
+        cust.outstanding = Math.max(0, cust.outstanding - numAmount);
+        await cust.save();
+      }
+
+      return res.status(201).json({ message: 'Payment recorded successfully', payment });
     }
 
     // Normal single-bill payment
     if (!billId) {
-      return res.status(400).json({ error: 'Bill ID is required for direct payment' });
+      return res.status(400).json({ error: 'Bill ID or Customer ID is required for direct payment' });
     }
 
     const bill = await Bill.findById(billId);
@@ -1530,9 +1584,9 @@ exports.recordPayment = async (req, res) => {
       bill: bill._id,
       order: bill.order,
       customer: bill.customer,
-      amountPaid: Number(amountPaid),
+      amountPaid: numAmount,
       paymentMode,
-      referenceNumber,
+      referenceNumber: referenceNumber ? String(referenceNumber).trim() : '',
       notes,
       date: new Date()
     });
@@ -1547,7 +1601,7 @@ exports.recordPayment = async (req, res) => {
     }
 
     // Update bill payment status
-    const grandPaid = totalPaidSoFar + Number(amountPaid);
+    const grandPaid = totalPaidSoFar + numAmount;
     if (grandPaid >= bill.totalAmount) {
       bill.status = 'Paid';
     } else if (grandPaid > 0) {
@@ -1568,7 +1622,7 @@ exports.getPayments = async (req, res) => {
     const payments = await Payment.find({})
       .populate('customer')
       .populate('bill')
-      .sort({ date: -1 });
+      .sort({ createdAt: -1, date: -1 });
     res.json(payments);
   } catch (err) {
     res.status(500).json({ error: err.message });

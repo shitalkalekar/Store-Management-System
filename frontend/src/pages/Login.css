@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #F6F8FA;
+  background: var(--bg-main);
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   padding: 20px;
   position: relative;
@@ -43,7 +43,7 @@
   width: 48px;
   height: 48px;
   border-radius: 10px;
-  background: #087E8B;
+  background: var(--primary);
   color: white;
   margin-bottom: 12px;
 }
@@ -137,8 +137,8 @@
 
 .modern-input:focus {
   background-color: #fff;
-  border-color: #087E8B;
-  box-shadow: 0 0 0 3px rgba(8, 126, 139, 0.12);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-shadow);
 }
 
 .modern-input::placeholder {
@@ -205,20 +205,20 @@ select.modern-input {
   width: 16px;
   height: 16px;
   border-radius: 4px;
-  border: 1px solid #D9E1E7;
+  border: 1px solid var(--border-light);
   cursor: pointer;
-  accent-color: #087E8B;
+  accent-color: var(--primary);
 }
 
 .forgot-link {
-  color: #087E8B;
+  color: var(--primary);
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s;
 }
 
 .forgot-link:hover {
-  color: #066a75;
+  color: var(--primary-hover);
   text-decoration: underline;
 }
 
@@ -226,7 +226,7 @@ select.modern-input {
 .modern-btn {
   width: 100%;
   padding: 10px 16px;
-  background: #087E8B;
+  background: var(--primary);
   color: white;
   border: none;
   border-radius: 8px;
@@ -242,7 +242,7 @@ select.modern-input {
 }
 
 .modern-btn:hover:not(:disabled) {
-  background: #066a75;
+  background: var(--primary-hover);
 }
 
 .modern-btn:active:not(:disabled) {

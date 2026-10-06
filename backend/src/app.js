@@ -66,7 +66,7 @@ app.use((req, res, next) => {
 
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  limit: 300,
+  limit: env.NODE_ENV === 'production' ? 300 : 1500,
   standardHeaders: 'draft-7',
   legacyHeaders: false,
   message: { error: 'Too many requests; try again later' },

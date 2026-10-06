@@ -1,29 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import api, { AUTH_EXPIRED_EVENT, clearAccessToken } from './services/api.js';
-import {
-  LayoutDashboard,
-  TrendingUp,
-  Users,
-  BookOpen,
-  Building2,
-  Package,
-  Truck,
-  Receipt,
-  CreditCard,
-  FileText,
-  Settings,
-  MessageSquare,
-  BarChart3,
-  ShieldAlert,
-  DollarSign,
-  LogOut,
-  Loader2,
-  UserCheck,
-  Activity,
-  ShoppingBag,
-  Home,
-  CheckCircle2
-} from 'lucide-react';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import api, { AUTH_EXPIRED_EVENT, clearAccessToken, setAccessToken } from './services/api.js';
+import { Loader2 } from 'lucide-react';
 
 // Import Pages
 import Login from './pages/Login.jsx';
@@ -46,248 +24,147 @@ import AuditLogs from './pages/AuditLogs.jsx';
 import CustomerLedgers from './pages/CustomerLedgers.jsx';
 import InvoiceGenerator from './pages/InvoiceGenerator.jsx';
 
-export default function App() {
+// Layouts & Routes
+import ProtectedRoute from './components/ProtectedRoute.jsx';
+import PublicRoute from './components/PublicRoute.jsx';
+import DashboardLayout from './layouts/DashboardLayout.jsx';
+
+const NotFound = () => (
+  <div style={{ display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
+    <h2 style={{ color: '#1e293b' }}>404 - Page Not Found</h2>
+    <p style={{ color: '#64748b' }}>The page you are looking for does not exist.</p>
+  </div>
+);
+
+// Map old page keys → URL routes
+const PAGE_KEY_TO_URL = {
+  dashboard: '/dashboard',
+  financial_dashboard: '/sales-dashboard',
+  customers: '/customers',
+  customer_ledgers: '/customer-ledgers',
+  vendors: '/suppliers',
+  products: '/products',
+  purchases: '/purchase-orders',
+  expenses: '/expenses',
+  orders: '/orders',
+  quotations: '/quotes',
+  bills: '/bills',
+  checkout_invoice: '/checkout-invoice',
+  payments: '/payments',
+  reports: '/reports',
+  audit_logs: '/audit-logs',
+  settings: '/settings',
+};
+
+// Wrapper for pages that expect onNavigate
+const PageWrapper = ({ children }) => {
+  const navigate = useNavigate();
+  const handleNavigate = (page) => {
+    const route = PAGE_KEY_TO_URL[page] || ('/' + page.replace(/_/g, '-'));
+    navigate(route);
+  };
+  return React.cloneElement(children, { onNavigate: handleNavigate });
+};
+
+function AppContent() {
   const [user, setUser] = useState(null);
-  const [activePage, setActivePage] = useState('dashboard');
   const [checkingAuth, setCheckingAuth] = useState(true);
+  const navigate = useNavigate();
 
-  // Multi-branch state
-  const [branches, setBranches] = useState([]);
-  const [selectedBranch, setSelectedBranch] = useState(localStorage.getItem('selected_branch_id') || '');
-
-  // Authentication is memory-only. Refreshing the page requires a new login,
-  // and any credentials left by older builds are removed on startup.
   useEffect(() => {
-    clearAccessToken();
-    sessionStorage.removeItem('sis_jwt_token');
-    sessionStorage.removeItem('sis_user_role');
-    sessionStorage.removeItem('sis_user_name');
-    localStorage.removeItem('sis_jwt_token');
-    localStorage.removeItem('sis_user_role');
-    localStorage.removeItem('sis_user_name');
-    setUser(null);
-    setCheckingAuth(false);
+    const initAuth = async () => {
+      const token = localStorage.getItem('sis_jwt_token') || sessionStorage.getItem('sis_jwt_token');
+      if (token) {
+        setAccessToken(token);
+        try {
+          const res = await api.get('/auth/me');
+          setUser(res.data.user || res.data);
+        } catch (err) {
+          if (err.response?.status === 401) {
+            clearAccessToken();
+            localStorage.removeItem('sis_jwt_token');
+            sessionStorage.removeItem('sis_jwt_token');
+          } else {
+            console.warn('Auth check skipped or rate limited:', err.message);
+          }
+        }
+      }
+      setCheckingAuth(false);
+    };
+    initAuth();
 
-    const handleExpiredAuth = () => setUser(null);
+    const handleExpiredAuth = () => {
+      setUser(null);
+      clearAccessToken();
+      localStorage.removeItem('sis_jwt_token');
+      sessionStorage.removeItem('sis_jwt_token');
+      navigate('/login', { replace: true });
+    };
+    
     window.addEventListener(AUTH_EXPIRED_EVENT, handleExpiredAuth);
     return () => window.removeEventListener(AUTH_EXPIRED_EVENT, handleExpiredAuth);
-  }, []);
-
-  // Load branches list on admin login
-  useEffect(() => {
-    if (user && user.role === 'admin') {
-      api.get('/branches')
-        .then(res => setBranches(Array.isArray(res.data) ? res.data : []))
-        .catch(err => console.error('Failed to load branches:', err));
-    }
-  }, [user]);
+  }, [navigate]);
 
   const handleLoginSuccess = (userData) => {
     setUser(userData);
-    setActivePage('dashboard');
+    navigate('/dashboard', { replace: true });
   };
 
   const handleLogout = () => {
-    clearAccessToken();
-    sessionStorage.removeItem('sis_jwt_token');
-    sessionStorage.removeItem('sis_user_role');
-    sessionStorage.removeItem('sis_user_name');
-    localStorage.removeItem('sis_jwt_token');
-    localStorage.removeItem('sis_user_role');
-    localStorage.removeItem('sis_user_name');
     setUser(null);
-  };
-
-  const handleBranchChange = (e) => {
-    const val = e.target.value;
-    setSelectedBranch(val);
-    localStorage.setItem('selected_branch_id', val);
-    window.location.reload();
+    clearAccessToken();
+    localStorage.removeItem('sis_jwt_token');
+    sessionStorage.removeItem('sis_jwt_token');
+    navigate('/login', { replace: true });
   };
 
   if (checkingAuth) {
     return (
-      <div style={{ display: 'flex', height: '100vh', width: '100vw', alignItems: 'center', justifyContent: 'center', background: '#F6F8FA', fontFamily: 'Inter, sans-serif' }}>
+      <div style={{ display: 'flex', height: '100vh', width: '100vw', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-main, #F6F8FA)', fontFamily: 'Inter, sans-serif' }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
-          <Loader2 size={36} color="#087E8B" className="animate-spin" />
-          <div style={{ fontSize: '14px', fontWeight: '600', color: '#64748B' }}>Authenticating user session...</div>
+          <Loader2 size={36} color="var(--primary, #6C3EB8)" className="animate-spin" />
+          <div style={{ fontSize: '14px', fontWeight: '600', color: 'var(--text-secondary, #64748B)' }}>Authenticating user session...</div>
         </div>
       </div>
     );
   }
 
-  if (!user) {
-    return <Login onLoginSuccess={handleLoginSuccess} />;
-  }
-
-  // Render Sidebar based on user role
-  const renderSidebar = () => {
-    if (user.role === 'admin') {
-      return (
-        <aside className="sidebar no-print">
-          <div className="sidebar-header">
-            <div className="logo-circle">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <text x="2" y="18" fontFamily="Inter, sans-serif" fontSize="15" fontWeight="800" fill="white">NE</text>
-              </svg>
-            </div>
-            <div>
-              <div className="sidebar-title">NARESH ENTERPRISES</div>
-              <div className="sidebar-subtitle">Distribution Management ERP</div>
-            </div>
-          </div>
-
-          <div className="sidebar-menu">
-            <div className="sidebar-section-label">Overview</div>
-            <div className={`menu-item ${activePage === 'dashboard' ? 'active' : ''}`} onClick={() => setActivePage('dashboard')}>
-              <span className="menu-icon"><LayoutDashboard size={18} /></span> Dashboard
-            </div>
-            <div className={`menu-item ${activePage === 'financial_dashboard' ? 'active' : ''}`} onClick={() => setActivePage('financial_dashboard')}>
-              <span className="menu-icon"><TrendingUp size={18} /></span> Sales Dashboard
-            </div>
-
-            <div className="sidebar-section-label">Parties & People</div>
-            <div className={`menu-item ${activePage === 'customers' ? 'active' : ''}`} onClick={() => setActivePage('customers')}>
-              <span className="menu-icon"><Users size={18} /></span> Customers
-            </div>
-            <div className={`menu-item ${activePage === 'customer_ledgers' ? 'active' : ''}`} onClick={() => setActivePage('customer_ledgers')}>
-              <span className="menu-icon"><BookOpen size={18} /></span> Customer Ledgers
-            </div>
-            <div className={`menu-item ${activePage === 'vendors' ? 'active' : ''}`} onClick={() => setActivePage('vendors')}>
-              <span className="menu-icon"><Building2 size={18} /></span> Suppliers
-            </div>
-
-            <div className="sidebar-section-label">Inventory & Logistics</div>
-            <div className={`menu-item ${activePage === 'products' ? 'active' : ''}`} onClick={() => setActivePage('products')}>
-              <span className="menu-icon"><Package size={18} /></span> Products
-            </div>
-            <div className={`menu-item ${activePage === 'purchases' ? 'active' : ''}`} onClick={() => setActivePage('purchases')}>
-              <span className="menu-icon"><Truck size={18} /></span> Purchase Orders
-            </div>
-            <div className={`menu-item ${activePage === 'expenses' ? 'active' : ''}`} onClick={() => setActivePage('expenses')}>
-              <span className="menu-icon"><DollarSign size={18} /></span> Expenses
-            </div>
-
-            <div className="sidebar-section-label">Sales & Billing</div>
-            <div className={`menu-item ${activePage === 'orders' ? 'active' : ''}`} onClick={() => setActivePage('orders')}>
-              <span className="menu-icon"><Receipt size={18} /></span> Orders
-            </div>
-            <div className={`menu-item ${activePage === 'quotations' ? 'active' : ''}`} onClick={() => setActivePage('quotations')}>
-              <span className="menu-icon"><FileText size={18} /></span> Quotes
-            </div>
-            <div className={`menu-item ${activePage === 'bills' ? 'active' : ''}`} onClick={() => setActivePage('bills')}>
-              <span className="menu-icon"><Receipt size={18} /></span> Bills
-            </div>
-            <div className={`menu-item ${activePage === 'checkout_invoice' ? 'active' : ''}`} onClick={() => setActivePage('checkout_invoice')}>
-              <span className="menu-icon"><FileText size={18} /></span> Checkout Invoice
-            </div>
-            <div className={`menu-item ${activePage === 'payments' ? 'active' : ''}`} onClick={() => setActivePage('payments')}>
-              <span className="menu-icon"><CreditCard size={18} /></span> Payments
-            </div>
-
-            <div className="sidebar-section-label">Analytics & Comm</div>
-            <div className={`menu-item ${activePage === 'reports' ? 'active' : ''}`} onClick={() => setActivePage('reports')}>
-              <span className="menu-icon"><BarChart3 size={18} /></span> Reports
-            </div>
-            <div className={`menu-item ${activePage === 'audit_logs' ? 'active' : ''}`} onClick={() => setActivePage('audit_logs')}>
-              <span className="menu-icon"><ShieldAlert size={18} /></span> Audit Logs
-            </div>
-            <div className={`menu-item ${activePage === 'settings' ? 'active' : ''}`} onClick={() => setActivePage('settings')}>
-              <span className="menu-icon"><Settings size={18} /></span> Settings
-            </div>
-          </div>
-
-          <div className="sidebar-footer">
-            <div className="user-info">
-              <div className="user-avatar">
-                {user.name ? user.name.charAt(0).toUpperCase() : 'A'}
-              </div>
-              <div>
-                <strong style={{ fontSize: '13px', color: '#0f172a' }}>{user.name}</strong>
-                <div style={{ fontSize: '10px', color: '#64748b' }}>Administrator</div>
-              </div>
-            </div>
-            <button className="logout-btn" onClick={handleLogout}>
-              <LogOut size={14} /> Logout
-            </button>
-          </div>
-        </aside>
-      );
-    }
-  };
-
-  // Render Page Content Component
-  const renderContent = () => {
-    switch (activePage) {
-      case 'dashboard':
-        return <Dashboard role={user.role} onNavigate={(page) => setActivePage(page)} />;
-      case 'customers':
-        return <Customers />;
-      case 'vendors':
-        return <Vendors />;
-      case 'products':
-        return <Products />;
-      case 'orders':
-        return <Orders onNavigate={(page) => setActivePage(page)} />;
-      case 'quotations':
-        return <Quotations />;
-      case 'bills':
-        return <Bills />;
-      case 'payments':
-        return <Payments />;
-      case 'reports':
-        return <Reports />;
-      case 'settings':
-        return <SettingsPage />;
-      
-      // Advanced Modules Case mappings
-      case 'financial_dashboard':
-        return <FinancialDashboard />;
-      case 'purchases':
-        return <Purchases onNavigate={(page) => setActivePage(page)} />;
-      case 'expenses':
-        return <Expenses />;
-      case 'audit_logs':
-        return <AuditLogs />;
-      case 'customer_ledgers':
-        return <CustomerLedgers onNavigate={(page) => setActivePage(page)} />;
-      case 'checkout_invoice':
-        return <InvoiceGenerator onNavigate={(page) => setActivePage(page)} />;
-
-      default:
-        return <Dashboard role={user.role} onNavigate={(page) => setActivePage(page)} />;
-    }
-  };
-
   return (
-    <div className="app-container">
-      {renderSidebar()}
-      <div className="content-area">
-        <header className="top-navbar no-print">
-          <div className="page-title">
-            <span style={{ color: '#94a3b8', fontWeight: '500' }}>Shop &raquo; </span>
-            <span style={{ textTransform: 'capitalize', color: '#1e293b' }}>{activePage.replace(/_/g, ' ')}</span>
-          </div>
+    <Routes>
+      <Route element={<PublicRoute user={user} />}>
+        <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
+      </Route>
 
-          <div className="nav-actions">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', background: '#E8F5F6', padding: '4px 12px', borderRadius: '9999px', border: '1px solid #D9E1E7' }}>
-              <Activity size={14} color="#087E8B" />
-              <span style={{ color: '#17324D', fontWeight: '600' }}>System Online</span>
-            </div>
+      <Route element={<ProtectedRoute user={user} />}>
+        <Route element={<DashboardLayout user={user} onLogout={handleLogout} />}>
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/dashboard" element={<PageWrapper><Dashboard role={user?.role} /></PageWrapper>} />
+          <Route path="/sales-dashboard" element={<FinancialDashboard />} />
+          <Route path="/customers" element={<Customers />} />
+          <Route path="/customer-ledgers" element={<PageWrapper><CustomerLedgers /></PageWrapper>} />
+          <Route path="/suppliers" element={<Vendors />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/purchase-orders" element={<PageWrapper><Purchases /></PageWrapper>} />
+          <Route path="/expenses" element={<Expenses />} />
+          <Route path="/orders" element={<PageWrapper><Orders /></PageWrapper>} />
+          <Route path="/quotes" element={<Quotations />} />
+          <Route path="/bills" element={<Bills />} />
+          <Route path="/checkout-invoice" element={<PageWrapper><InvoiceGenerator /></PageWrapper>} />
+          <Route path="/payments" element={<Payments />} />
+          <Route path="/reports" element={<Reports />} />
+          <Route path="/audit-logs" element={<AuditLogs />} />
+          <Route path="/settings" element={<SettingsPage />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Route>
+    </Routes>
+  );
+}
 
-            <div className="nav-profile" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span className={`badge ${user.role === 'admin' ? 'badge-info' : 'badge-success'}`}>
-                {user.role}
-              </span>
-              <strong style={{ fontSize: '13px', color: '#0f172a' }}>{user.name}</strong>
-            </div>
-          </div>
-        </header>
-
-        <main className="main-content">
-          {renderContent()}
-        </main>
-      </div>
-    </div>
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
   );
 }

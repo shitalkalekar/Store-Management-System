@@ -118,14 +118,18 @@ export default function Products() {
       }
     } catch (err) {
       console.error(err);
-      setError('Failed to fetch product information');
+      setError(err.message || 'Failed to fetch product information');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
+    let cancelled = false;
     fetchData();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {

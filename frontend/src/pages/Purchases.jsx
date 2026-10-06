@@ -61,14 +61,18 @@ export default function Purchases() {
       if (supRes.data.length > 0) setSelectedSupplierId(supRes.data[0]._id);
     } catch (err) {
       console.error(err);
-      setError('Failed to load purchase orders registry');
+      setError(err.message || 'Failed to load purchase orders registry');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
+    let cancelled = false;
     fetchData();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const handleOpenAdd = () => {

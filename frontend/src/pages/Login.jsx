@@ -26,6 +26,7 @@ export default function Login({ onLoginSuccess }) {
       const { token, user } = response.data;
       
       setAccessToken(token);
+      localStorage.setItem('sis_jwt_token', token);
       onLoginSuccess(user);
     } catch (err) {
       console.error(err);
@@ -46,7 +47,7 @@ export default function Login({ onLoginSuccess }) {
     <div className="modern-login-container">
       <div className="modern-login-card" style={{ maxWidth: '400px', width: '100%' }}>
         <div className="login-header-modern">
-          <div className="logo-wrapper" style={{ background: '#087E8B', color: '#fff' }}>
+          <div className="logo-wrapper" style={{ background: 'var(--primary)', color: '#fff' }}>
             {/* Shop SVG */}
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} style={{ width: '28px', height: '28px' }}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
@@ -102,7 +103,7 @@ export default function Login({ onLoginSuccess }) {
             type="submit" 
             className="login-btn-modern" 
             disabled={loading}
-            style={{ width: '100%', padding: '12px', background: '#087E8B', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+            style={{ width: '100%', padding: '12px', background: 'var(--primary)', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
           >
             {loading ? 'Connecting securely...' : canRetry ? 'Retry connection' : 'Sign In'}
           </button>

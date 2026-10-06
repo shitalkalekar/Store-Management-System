@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, PieChart, Pie, Legend } from 'recharts';
+import { BarChart, Bar, AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, PieChart, Pie, Legend } from 'recharts';
 import Toast from '../components/Toast.jsx';
 import { downloadAuthenticatedFile, openAuthenticatedFile } from '../utils/authenticatedDownload.js';
+import { RefreshCw, TrendingUp, Package, AlertCircle, ArrowRight, Clock } from 'lucide-react';
 
 export default function Dashboard({ role, onNavigate }) {
   const [stats, setStats] = useState(null);
@@ -14,6 +15,12 @@ export default function Dashboard({ role, onNavigate }) {
   const [loopProcessing, setLoopProcessing] = useState(false);
   const [loopFilterMode, setLoopFilterMode] = useState('before_5_days');
   const [customDaysWindow, setCustomDaysWindow] = useState(5);
+
+  // Sales Analytics & Real Bills State
+  const [bills, setBills] = useState([]);
+  const [salesPeriod, setSalesPeriod] = useState('week'); // 'today' | 'week' | 'month' | 'year'
+  const [refreshing, setRefreshing] = useState(false);
+  const [lastRefreshedAt, setLastRefreshedAt] = useState(new Date());
 
   // Products & Stock Alerts State for Dashboard
   const [products, setProducts] = useState([]);
@@ -191,7 +198,7 @@ export default function Dashboard({ role, onNavigate }) {
       setError('');
     } catch (err) {
       console.error(err);
-      setError('Failed to fetch dashboard metrics');
+      setError(err.message || 'Failed to fetch dashboard metrics');
     }
   };
 
@@ -306,17 +313,44 @@ export default function Dashboard({ role, onNavigate }) {
     }
   };
 
+  const fetchBills = async () => {
+    try {
+      const res = await api.get('/bills');
+      setBills(Array.isArray(res.data) ? res.data : []);
+    } catch (err) {
+      console.error('Failed to fetch bills for sales analytics', err);
+    }
+  };
+
+  const handleRefresh = async () => {
+    try {
+      setRefreshing(true);
+      await Promise.all([
+        fetchStats(),
+        fetchNotifications(),
+        fetchProductsAndVendors(),
+        fetchBills()
+      ]);
+      setLastRefreshedAt(new Date());
+    } catch (err) {
+      console.error('Refresh dashboard error:', err);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   useEffect(() => {
     // Load settings from backend
     api.get('/settings').then(res => setSettings(res.data)).catch(err => console.error(err));
 
     // Initial fetch
     setLoading(true);
-    Promise.all([fetchStats(), fetchNotifications()]).finally(() => setLoading(false));
-  }, []);
-
-  useEffect(() => {
-    fetchProductsAndVendors();
+    Promise.all([
+      fetchStats(),
+      fetchNotifications(),
+      fetchProductsAndVendors(),
+      fetchBills()
+    ]).finally(() => setLoading(false));
   }, []);
 
 
@@ -387,10 +421,6 @@ export default function Dashboard({ role, onNavigate }) {
     }
   };
 
-  if (loading && !stats) {
-    return <div style={{ padding: '40px', textLight: 'center', color: '#64748b' }}>Loading dashboard details...</div>;
-  }
-
   // Prepping Chart Data
   const chartData = stats?.customerDues?.slice(0, 5).map(item => ({
     name: item.name.substring(0, 12),
@@ -399,12 +429,123 @@ export default function Dashboard({ role, onNavigate }) {
 
   const pieData = stats?.orderStatusCounts ? [
     { name: 'Pending', value: stats.orderStatusCounts.Pending || 0, color: '#f59e0b' },
-    { name: 'Assigned', value: stats.orderStatusCounts.Assigned || 0, color: 'var(--primary, #087E8B)' },
+    { name: 'Assigned', value: stats.orderStatusCounts.Assigned || 0, color: 'var(--primary, #6C3EB8)' },
     { name: 'Packed', value: stats.orderStatusCounts.Packed || 0, color: '#8b5cf6' },
     { name: 'Out for Delivery', value: stats.orderStatusCounts['Out for Delivery'] || 0, color: '#06b6d4' },
     { name: 'Delivered', value: stats.orderStatusCounts.Delivered || 0, color: '#10b981' },
     { name: 'Cancelled', value: stats.orderStatusCounts.Cancelled || 0, color: '#ef4444' }
   ].filter(d => d.value > 0) : [];
+
+  // Real Sales Analytics Calculation from ERP Bills
+  const salesChartData = React.useMemo(() => {
+    const now = new Date();
+
+    if (salesPeriod === 'today') {
+      const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+      const todayBills = (bills || [])
+        .filter(b => b && b.createdAt && new Date(b.createdAt) >= startOfToday)
+        .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+
+      if (todayBills.length === 0) {
+        return [
+          { label: 'Morning', sales: 0 },
+          { label: 'Afternoon', sales: 0 },
+          { label: 'Evening', sales: Number((stats?.todaySales || 0).toFixed(2)) }
+        ];
+      }
+
+      const timeBuckets = [
+        { label: '8-11 AM', start: 8, end: 11, sales: 0 },
+        { label: '11-2 PM', start: 11, end: 14, sales: 0 },
+        { label: '2-5 PM', start: 14, end: 17, sales: 0 },
+        { label: '5-8 PM', start: 17, end: 20, sales: 0 },
+        { label: '8 PM+', start: 20, end: 24, sales: 0 }
+      ];
+      todayBills.forEach(b => {
+        const hour = new Date(b.createdAt).getHours();
+        const bucket = timeBuckets.find(bk => hour >= bk.start && hour < bk.end) || timeBuckets[timeBuckets.length - 1];
+        bucket.sales += Number(b.totalAmount) || 0;
+      });
+      return timeBuckets.map(b => ({ label: b.label, sales: Number(b.sales.toFixed(2)) }));
+    }
+
+    if (salesPeriod === 'week') {
+      const days = [];
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date(now);
+        d.setDate(d.getDate() - i);
+        d.setHours(0, 0, 0, 0);
+        const nextD = new Date(d);
+        nextD.setDate(nextD.getDate() + 1);
+
+        const dayName = d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric' });
+        const dayTotal = (bills || [])
+          .filter(b => {
+            if (!b || !b.createdAt) return false;
+            const bt = new Date(b.createdAt);
+            return bt >= d && bt < nextD;
+          })
+          .reduce((sum, b) => sum + (Number(b.totalAmount) || 0), 0);
+
+        days.push({ label: dayName, sales: Number(dayTotal.toFixed(2)) });
+      }
+      return days;
+    }
+
+    if (salesPeriod === 'month') {
+      const weeks = [
+        { label: 'Days 1-7', start: 1, end: 7, sales: 0 },
+        { label: 'Days 8-14', start: 8, end: 14, sales: 0 },
+        { label: 'Days 15-21', start: 15, end: 21, sales: 0 },
+        { label: 'Days 22-28', start: 22, end: 28, sales: 0 },
+        { label: 'Days 29-31', start: 29, end: 31, sales: 0 }
+      ];
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      const monthBills = (bills || []).filter(b => b && b.createdAt && new Date(b.createdAt) >= startOfMonth);
+
+      monthBills.forEach(b => {
+        const day = new Date(b.createdAt).getDate();
+        const amt = Number(b.totalAmount) || 0;
+        const target = weeks.find(w => day >= w.start && day <= w.end);
+        if (target) target.sales += amt;
+      });
+      return weeks.map(w => ({ label: w.label, sales: Number(w.sales.toFixed(2)) }));
+    }
+
+    if (salesPeriod === 'year') {
+      const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const currentYear = now.getFullYear();
+      return monthNames.map((m, idx) => {
+        const mSales = (bills || [])
+          .filter(b => {
+            if (!b || !b.createdAt) return false;
+            const d = new Date(b.createdAt);
+            return d.getFullYear() === currentYear && d.getMonth() === idx;
+          })
+          .reduce((sum, b) => sum + (Number(b.totalAmount) || 0), 0);
+        return { label: m, sales: Number(mSales.toFixed(2)) };
+      });
+    }
+
+    return [];
+  }, [bills, salesPeriod, stats]);
+
+  const selectedPeriodSalesTotal = React.useMemo(() => {
+    return salesChartData.reduce((sum, item) => sum + (item.sales || 0), 0);
+  }, [salesChartData]);
+
+  // Inventory Summary from Real Product Data
+  const inventorySummary = React.useMemo(() => {
+    const total = products ? products.length : 0;
+    const low = lowStockProducts ? lowStockProducts.length : 0;
+    const out = outOfStockProducts ? outOfStockProducts.length : 0;
+    const healthy = Math.max(0, total - low);
+    const criticalList = lowStockProducts
+      ? [...lowStockProducts].sort((a, b) => (a.currentStock || 0) - (b.currentStock || 0)).slice(0, 4)
+      : [];
+
+    return { total, low, out, healthy, criticalList };
+  }, [products, lowStockProducts, outOfStockProducts]);
 
   const upcomingLoops = stats?.activeLoops?.filter(loop => {
     if (loop.recurringProcessed || loop.status === 'Cancelled') return false;
@@ -442,12 +583,75 @@ export default function Dashboard({ role, onNavigate }) {
     return diffDays <= 5;
   }).sort((a, b) => new Date(a.nextRun) - new Date(b.nextRun)) || [];
 
+  if (loading && !stats) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        {/* Skeleton KPI row */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
+          {[1,2,3,4].map(i => (
+            <div key={i} className="kpi-card" style={{ cursor: 'default', pointerEvents: 'none' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                <div className="skeleton" style={{ height: '12px', width: '80px' }} />
+                <div className="skeleton" style={{ width: '44px', height: '44px', borderRadius: '8px' }} />
+              </div>
+              <div className="skeleton" style={{ height: '32px', width: '120px', marginBottom: '10px' }} />
+              <div className="skeleton" style={{ height: '10px', width: '160px' }} />
+            </div>
+          ))}
+        </div>
+        <div className="quick-panel">
+          <div className="skeleton" style={{ height: '16px', width: '200px', marginBottom: '16px' }} />
+          <div className="skeleton" style={{ height: '40px', width: '100%' }} />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       
+      {/* ── Top Dashboard Header & Interactive Controls ────────────────── */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+        <div>
+          <h1 style={{ fontSize: '20px', fontWeight: '800', color: 'var(--text-primary)', margin: 0, letterSpacing: '-0.02em' }}>
+            Store & Distribution Dashboard
+          </h1>
+          <p style={{ fontSize: '13px', color: 'var(--text-secondary)', margin: '4px 0 0 0' }}>
+            Real-time sales, order fulfillment, and inventory analytics
+          </p>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <span style={{ fontSize: '12px', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <Clock size={13} />
+            Updated {lastRefreshedAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+          </span>
+          <button
+            type="button"
+            onClick={handleRefresh}
+            disabled={refreshing}
+            className="btn-erp-primary"
+            style={{ fontSize: '12px', padding: '7px 14px' }}
+          >
+            <RefreshCw size={13} className={refreshing ? 'animate-spin' : ''} />
+            {refreshing ? 'Refreshing...' : 'Refresh Data'}
+          </button>
+        </div>
+      </div>
+
       {error && (
-        <div style={{ padding: '12px', background: '#fee2e2', border: '1px solid #fca5a5', color: '#b91c1c', borderRadius: '8px' }}>
-          {error}
+        <div style={{ padding: '14px 18px', background: '#fee2e2', border: '1px solid #fca5a5', color: '#b91c1c', borderRadius: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <AlertCircle size={18} color="#b91c1c" />
+            <span style={{ fontSize: '13px', fontWeight: '600' }}>{error}</span>
+          </div>
+          <button 
+            type="button"
+            onClick={handleRefresh}
+            style={{ padding: '6px 14px', background: '#b91c1c', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}
+          >
+            Try Again
+          </button>
         </div>
       )}
 
@@ -462,7 +666,7 @@ export default function Dashboard({ role, onNavigate }) {
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '10px' }}>
           <div>
-            <h3 style={{ fontSize: '16px', fontWeight: '800', margin: 0, color: '#087E8B', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <h3 style={{ fontSize: '16px', fontWeight: '800', margin: 0, color: 'var(--primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
               🛍️ Quick Express Sale / Issue Item (Counter Sale)
             </h3>
             <p style={{ fontSize: '12px', color: '#64748b', margin: '4px 0 0 0' }}>
@@ -472,19 +676,7 @@ export default function Dashboard({ role, onNavigate }) {
           <button 
             type="button"
             onClick={() => setShowMultiIssueModal(true)}
-            style={{ 
-              padding: '9px 16px', 
-              background: '#087E8B', 
-              color: '#ffffff', 
-              border: 'none', 
-              borderRadius: '8px', 
-              cursor: 'pointer', 
-              fontWeight: '700', 
-              fontSize: '13px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
+            className="btn-erp-primary"
           >
             🛒 POS Multi-Item Quick Issue (+ Multiple Items)
           </button>
@@ -549,7 +741,7 @@ export default function Dashboard({ role, onNavigate }) {
           <button 
             type="submit"
             disabled={issueLoading}
-            style={{ padding: '9px 20px', background: '#087E8B', color: '#ffffff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px', whiteSpace: 'nowrap' }}
+            className="btn-erp-primary"
           >
             {issueLoading ? 'Processing...' : '⚡ Issue Item & Receipt'}
           </button>
@@ -567,7 +759,7 @@ export default function Dashboard({ role, onNavigate }) {
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '10px' }}>
           <div>
-            <h3 style={{ fontSize: '16px', fontWeight: '800', margin: 0, color: '#087E8B', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <h3 style={{ fontSize: '16px', fontWeight: '800', margin: 0, color: 'var(--primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
               ⚡ Quick Stock In (Fast Inventory Addition)
             </h3>
             <p style={{ fontSize: '12px', color: '#64748b', margin: '4px 0 0 0' }}>
@@ -577,19 +769,7 @@ export default function Dashboard({ role, onNavigate }) {
           <button 
             type="button"
             onClick={() => setShowBulkStockModal(true)}
-            style={{ 
-              padding: '9px 16px', 
-              background: '#087E8B', 
-              color: '#ffffff', 
-              border: 'none', 
-              borderRadius: '8px', 
-              cursor: 'pointer', 
-              fontWeight: '700', 
-              fontSize: '13px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
+            className="btn-erp-primary"
           >
             📦 Bulk Multi-Item Stock In (+ Multiple Products)
           </button>
@@ -638,7 +818,7 @@ export default function Dashboard({ role, onNavigate }) {
           <button 
             type="submit"
             disabled={quickStockLoading}
-            style={{ padding: '9px 20px', background: '#087E8B', color: '#ffffff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px', whiteSpace: 'nowrap' }}
+            className="btn-erp-primary"
           >
             {quickStockLoading ? 'Updating...' : '⚡ Add Stock Now'}
           </button>
@@ -647,48 +827,54 @@ export default function Dashboard({ role, onNavigate }) {
 
 
 
-      {/* Top Stats Cards */}
+      {/* ── KPI Cards ─────────────────────────────────────────────────────── */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
-        <div 
-          onClick={() => onNavigate && onNavigate('bills')}
-          style={{ background: '#FFFFFF', border: '1px solid #D9E1E7', borderRadius: '10px', padding: '20px', cursor: 'pointer', transition: 'transform 0.2s' }}
-          onMouseOver={e => e.currentTarget.style.transform = 'scale(1.02)'}
-          onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
-        >
-          <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#087E8B', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total Sales</div>
-          <div style={{ fontSize: '28px', fontWeight: '800', color: '#17324D', marginTop: '10px' }}>Rs. {stats?.totalSales?.toFixed(2) || '0.00'}</div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#64748B', marginTop: '10px' }}>
-            <span>Today: <strong>Rs. {stats?.todaySales?.toFixed(2) || '0.00'}</strong></span>
-            <span>This Month: <strong>Rs. {stats?.thisMonthSales?.toFixed(2) || '0.00'}</strong></span>
+
+        {/* Total Sales */}
+        <div className="kpi-card" onClick={() => onNavigate && onNavigate('bills')}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+            <div style={{ fontSize: '11px', fontWeight: '700', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Total Sales</div>
+            <div className="kpi-icon-box purple">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+            </div>
+          </div>
+          <div style={{ fontSize: '26px', fontWeight: '800', color: 'var(--text-primary)', letterSpacing: '-0.03em', marginBottom: '8px' }}>₹{stats?.totalSales?.toFixed(2) || '0.00'}</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: 'var(--text-secondary)' }}>
+            <span>Today: <strong style={{ color: 'var(--text-primary)' }}>₹{stats?.todaySales?.toFixed(2) || '0.00'}</strong></span>
+            <span>Month: <strong style={{ color: 'var(--text-primary)' }}>₹{stats?.thisMonthSales?.toFixed(2) || '0.00'}</strong></span>
           </div>
         </div>
 
-        <div 
-          onClick={() => onNavigate && onNavigate('customers')}
-          style={{ background: '#FFFFFF', border: '1px solid #D9E1E7', borderRadius: '10px', padding: '20px', cursor: 'pointer', transition: 'transform 0.2s' }}
-          onMouseOver={e => e.currentTarget.style.transform = 'scale(1.02)'}
-          onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
-        >
-          <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#DC3545', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Outstanding Amount</div>
-          <div style={{ fontSize: '28px', fontWeight: '800', color: '#17324D', marginTop: '10px' }}>Rs. {stats?.totalOutstanding?.toFixed(2) || '0.00'}</div>
-          <div style={{ fontSize: '11px', color: '#64748B', marginTop: '10px' }}>Outstanding credit balance from invoices</div>
+        {/* Outstanding Amount */}
+        <div className="kpi-card" onClick={() => onNavigate && onNavigate('customer_ledgers')}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+            <div style={{ fontSize: '11px', fontWeight: '700', color: 'var(--danger)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Outstanding</div>
+            <div className="kpi-icon-box red">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+          </div>
+          <div style={{ fontSize: '26px', fontWeight: '800', color: 'var(--text-primary)', letterSpacing: '-0.03em', marginBottom: '8px' }}>₹{stats?.totalOutstanding?.toFixed(2) || '0.00'}</div>
+          <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Credit balance from invoices → collect</div>
         </div>
 
-        <div 
-          onClick={() => onNavigate && onNavigate('orders')}
-          style={{ background: '#FFFFFF', border: '1px solid #D9E1E7', borderRadius: '10px', padding: '20px', cursor: 'pointer', transition: 'transform 0.2s' }}
-          onMouseOver={e => e.currentTarget.style.transform = 'scale(1.02)'}
-          onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
-        >
-          <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#198754', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Today's Deliveries</div>
-          <div style={{ fontSize: '28px', fontWeight: '800', color: '#17324D', marginTop: '10px' }}>{stats?.todayDeliveries || 0}</div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#64748B', marginTop: '10px' }}>
-            <span>Tomorrow: <strong>{stats?.tomorrowDeliveries}</strong></span>
-            <span>Total Pending: <strong>{stats?.pendingDeliveries}</strong></span>
+        {/* Today's Deliveries */}
+        <div className="kpi-card" onClick={() => onNavigate && onNavigate('orders')}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+            <div style={{ fontSize: '11px', fontWeight: '700', color: 'var(--success)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Deliveries</div>
+            <div className="kpi-icon-box green">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            </div>
+          </div>
+          <div style={{ fontSize: '26px', fontWeight: '800', color: 'var(--text-primary)', letterSpacing: '-0.03em', marginBottom: '8px' }}>{stats?.todayDeliveries || 0}</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: 'var(--text-secondary)' }}>
+            <span>Tomorrow: <strong style={{ color: 'var(--text-primary)' }}>{stats?.tomorrowDeliveries ?? 0}</strong></span>
+            <span>Pending: <strong style={{ color: 'var(--text-primary)' }}>{stats?.pendingDeliveries ?? 0}</strong></span>
           </div>
         </div>
 
-        <div 
+        {/* Low Stock */}
+        <div
+          className={`kpi-card${stats?.lowStockCount > 0 ? ' warning-card' : ''}`}
           onClick={() => {
             if (lowStockProducts.length > 0) {
               setRemainingSeconds(alertSettings.displayTimeSeconds > 0 ? alertSettings.displayTimeSeconds : 10);
@@ -699,16 +885,163 @@ export default function Dashboard({ role, onNavigate }) {
               onNavigate('products');
             }
           }}
-          style={{ background: '#FFFFFF', border: stats?.lowStockCount > 0 ? '1px solid #fef3c7' : '1px solid #D9E1E7', borderRadius: '10px', padding: '20px', cursor: 'pointer', transition: 'transform 0.2s' }}
-          onMouseOver={e => e.currentTarget.style.transform = 'scale(1.02)'}
-          onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
         >
-          <div style={{ fontSize: '12px', fontWeight: 'bold', color: stats?.lowStockCount > 0 ? '#D97706' : '#64748B', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Low Stock Items</div>
-          <div style={{ fontSize: '28px', fontWeight: '800', color: '#17324D', marginTop: '10px' }}>{stats?.lowStockCount || 0}</div>
-          <div style={{ fontSize: '11px', color: '#64748B', marginTop: '10px' }}>
-            {stats?.lowStockCount > 0 ? '⚠️ Immediate restock required' : '✅ Stock levels are normal'}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+            <div style={{ fontSize: '11px', fontWeight: '700', color: stats?.lowStockCount > 0 ? 'var(--warning)' : 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Low Stock</div>
+            <div className={`kpi-icon-box ${stats?.lowStockCount > 0 ? 'amber' : 'green'}`}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+            </div>
+          </div>
+          <div style={{ fontSize: '26px', fontWeight: '800', color: 'var(--text-primary)', letterSpacing: '-0.03em', marginBottom: '8px' }}>{stats?.lowStockCount || 0}</div>
+          <div style={{ fontSize: '11px', color: stats?.lowStockCount > 0 ? 'var(--warning)' : 'var(--success)' }}>
+            {stats?.lowStockCount > 0 ? '⚠️ Immediate restock required — click to review' : '✅ All stock levels are healthy'}
           </div>
         </div>
+
+      </div>
+
+      {/* ── Row 1.5: Interactive Sales Analytics & Inventory Overview ─────── */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '20px' }}>
+        
+        {/* Interactive Sales Analytics */}
+        <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-light)', borderRadius: 'var(--radius-lg, 12px)', padding: '20px', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '10px', marginBottom: '16px' }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <TrendingUp size={18} color="var(--primary)" />
+                <h3 style={{ fontSize: '15px', fontWeight: '700', color: 'var(--text-primary)', margin: 0 }}>
+                  Sales Performance Overview
+                </h3>
+              </div>
+              <div style={{ fontSize: '20px', fontWeight: '800', color: 'var(--text-primary)', marginTop: '6px' }}>
+                ₹{selectedPeriodSalesTotal.toFixed(2)}
+                <span style={{ fontSize: '11px', fontWeight: '500', color: 'var(--text-secondary)', marginLeft: '6px' }}>
+                  ({salesPeriod === 'today' ? "Today's Revenue" : salesPeriod === 'week' ? 'Last 7 Days Revenue' : salesPeriod === 'month' ? 'This Month' : 'This Year'})
+                </span>
+              </div>
+            </div>
+
+            {/* Time Period Selector Tabs */}
+            <div style={{ display: 'flex', gap: '4px', background: 'var(--bg-main)', padding: '3px', borderRadius: 'var(--radius-md, 8px)', border: '1px solid var(--border-light)' }}>
+              {[
+                { id: 'today', label: 'Today' },
+                { id: 'week', label: 'This Week' },
+                { id: 'month', label: 'This Month' },
+                { id: 'year', label: 'This Year' }
+              ].map(tab => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setSalesPeriod(tab.id)}
+                  style={{
+                    padding: '5px 10px',
+                    border: 'none',
+                    borderRadius: '6px',
+                    fontSize: '11px',
+                    fontWeight: '700',
+                    cursor: 'pointer',
+                    background: salesPeriod === tab.id ? 'var(--primary)' : 'transparent',
+                    color: salesPeriod === tab.id ? '#ffffff' : 'var(--text-secondary)',
+                    transition: 'all 0.15s ease'
+                  }}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Area Chart */}
+          <div style={{ width: '100%', height: '220px', flex: 1, minHeight: '220px' }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={salesChartData} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="purpleSalesGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#6C3EB8" stopOpacity={0.35} />
+                    <stop offset="95%" stopColor="#6C3EB8" stopOpacity={0.0} />
+                  </linearGradient>
+                </defs>
+                <XAxis dataKey="label" stroke="#94a3b8" fontSize={11} tickLine={false} />
+                <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} />
+                <Tooltip 
+                  formatter={(val) => [`₹${Number(val).toFixed(2)}`, 'Sales']}
+                  contentStyle={{ background: '#ffffff', borderRadius: '8px', border: '1px solid #E2DCF5', fontSize: '12px' }}
+                />
+                <Area type="monotone" dataKey="sales" stroke="#6C3EB8" strokeWidth={2.5} fill="url(#purpleSalesGrad)" />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Interactive Inventory Health Summary */}
+        <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-light)', borderRadius: 'var(--radius-lg, 12px)', padding: '20px', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Package size={18} color="var(--primary)" />
+              <h3 style={{ fontSize: '15px', fontWeight: '700', color: 'var(--text-primary)', margin: 0 }}>
+                Inventory Overview
+              </h3>
+            </div>
+            <button
+              type="button"
+              onClick={() => onNavigate && onNavigate('products')}
+              style={{ background: 'transparent', border: 'none', color: 'var(--primary)', fontWeight: '700', fontSize: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+            >
+              View Products <ArrowRight size={13} />
+            </button>
+          </div>
+
+          {/* Metric Badges Grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', marginBottom: '16px' }}>
+            <div style={{ background: 'var(--bg-main)', border: '1px solid var(--border-light)', borderRadius: '8px', padding: '10px 8px', textAlign: 'center' }}>
+              <div style={{ fontSize: '10px', color: 'var(--text-secondary)', fontWeight: '600', textTransform: 'uppercase' }}>Total</div>
+              <div style={{ fontSize: '18px', fontWeight: '800', color: 'var(--text-primary)', marginTop: '2px' }}>{inventorySummary.total}</div>
+            </div>
+            <div style={{ background: '#dcfce7', border: '1px solid #bbf7d0', borderRadius: '8px', padding: '10px 8px', textAlign: 'center' }}>
+              <div style={{ fontSize: '10px', color: '#166534', fontWeight: '600', textTransform: 'uppercase' }}>Healthy</div>
+              <div style={{ fontSize: '18px', fontWeight: '800', color: '#166534', marginTop: '2px' }}>{inventorySummary.healthy}</div>
+            </div>
+            <div style={{ background: '#fef3c7', border: '1px solid #fde68a', borderRadius: '8px', padding: '10px 8px', textAlign: 'center' }}>
+              <div style={{ fontSize: '10px', color: '#92400e', fontWeight: '600', textTransform: 'uppercase' }}>Low Stock</div>
+              <div style={{ fontSize: '18px', fontWeight: '800', color: '#92400e', marginTop: '2px' }}>{inventorySummary.low}</div>
+            </div>
+            <div style={{ background: '#fee2e2', border: '1px solid #fecaca', borderRadius: '8px', padding: '10px 8px', textAlign: 'center' }}>
+              <div style={{ fontSize: '10px', color: '#991b1b', fontWeight: '600', textTransform: 'uppercase' }}>Out</div>
+              <div style={{ fontSize: '18px', fontWeight: '800', color: '#991b1b', marginTop: '2px' }}>{inventorySummary.out}</div>
+            </div>
+          </div>
+
+          {/* Actionable Restock List */}
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px', overflowY: 'auto', maxHeight: '150px' }}>
+            <div style={{ fontSize: '11px', fontWeight: '700', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              Priority Restock Required
+            </div>
+            {inventorySummary.criticalList.length > 0 ? (
+              inventorySummary.criticalList.map(prod => (
+                <div 
+                  key={prod._id}
+                  onClick={() => onNavigate && onNavigate('products')}
+                  style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 10px', background: '#fffbeb', border: '1px solid #fef3c7', borderRadius: '6px', cursor: 'pointer', transition: 'background 0.15s' }}
+                  onMouseEnter={(e) => e.currentTarget.style.background = '#fef3c7'}
+                  onMouseLeave={(e) => e.currentTarget.style.background = '#fffbeb'}
+                >
+                  <div>
+                    <div style={{ fontSize: '12px', fontWeight: '700', color: '#92400e' }}>{prod.name}</div>
+                    <div style={{ fontSize: '10px', color: '#b45309' }}>Min threshold: {prod.lowStockThreshold || alertSettings.globalLowThreshold}</div>
+                  </div>
+                  <span style={{ fontSize: '11px', fontWeight: '700', padding: '2px 8px', borderRadius: '4px', background: prod.currentStock === 0 ? '#fee2e2' : '#fde68a', color: prod.currentStock === 0 ? '#991b1b' : '#78350f' }}>
+                    {prod.currentStock === 0 ? 'Out of stock' : `${prod.currentStock} left`}
+                  </span>
+                </div>
+              ))
+            ) : (
+              <div style={{ textAlign: 'center', padding: '24px 0', color: 'var(--text-muted)', fontSize: '12px' }}>
+                ✅ All products are adequately stocked.
+              </div>
+            )}
+          </div>
+        </div>
+
       </div>
 
       {/* Order Loops Banner */}
@@ -730,9 +1063,8 @@ export default function Dashboard({ role, onNavigate }) {
           <button 
             onClick={handleProcessLoops}
             disabled={loopProcessing}
-            style={{ padding: '10px 20px', background: loopProcessing ? 'var(--text-muted, #94A3B8)' : 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md, 8px)', cursor: loopProcessing ? 'wait' : 'pointer', fontWeight: 'bold', fontSize: '14px', transition: 'background 0.2s', boxShadow: '0 4px 6px -1px rgba(8, 126, 139, 0.2)' }}
-            onMouseOver={(e) => e.target.style.background = 'var(--primary-hover, #066a75)'}
-            onMouseOut={(e) => e.target.style.background = 'var(--primary, #087E8B)'}
+            className="btn-erp-primary"
+            style={{ opacity: loopProcessing ? 0.65 : 1 }}
           >
             {loopProcessing ? 'Processing...' : 'Process Due Loops'}
           </button>
@@ -861,13 +1193,21 @@ export default function Dashboard({ role, onNavigate }) {
             {stats?.recentOrders && stats.recentOrders.length > 0 ? (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {stats.recentOrders.map(order => (
-                  <div key={order._id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', background: '#f8fafc', borderRadius: '8px', border: '1px solid #f1f5f9' }}>
+                  <div 
+                    key={order._id} 
+                    onClick={(e) => { e.stopPropagation(); onNavigate && onNavigate('orders'); }}
+                    style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 12px', background: 'var(--bg-main, #f8fafc)', borderRadius: '8px', border: '1px solid var(--border-light, #f1f5f9)', cursor: 'pointer', transition: 'all 0.15s ease' }}
+                    onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--primary-border, #C4B0EC)'}
+                    onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border-light, #f1f5f9)'}
+                  >
                     <div>
-                      <div style={{ fontSize: '13px', fontWeight: 'bold', color: '#334155' }}>{order.ref}</div>
-                      <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>{order.customerName}</div>
+                      <div style={{ fontSize: '13px', fontWeight: 'bold', color: 'var(--text-primary, #334155)' }}>{order.ref}</div>
+                      <div style={{ fontSize: '11px', color: 'var(--text-secondary, #64748b)', marginTop: '2px' }}>
+                        {order.customerName} {order.createdAt && <span>• {new Date(order.createdAt).toLocaleDateString([], { month: 'short', day: 'numeric' })}</span>}
+                      </div>
                     </div>
                     <div style={{ textAlign: 'right' }}>
-                      <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#0f172a' }}>Rs. {order.totalAmount.toFixed(2)}</div>
+                      <div style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--text-primary, #0f172a)' }}>Rs. {order.totalAmount.toFixed(2)}</div>
                       <div style={{ fontSize: '10px', padding: '2px 6px', borderRadius: '4px', display: 'inline-block', marginTop: '4px',
                         background: order.status === 'Delivered' ? '#dcfce7' : order.status === 'Cancelled' ? '#fee2e2' : '#e0f2fe',
                         color: order.status === 'Delivered' ? '#166534' : order.status === 'Cancelled' ? '#991b1b' : '#0369a1',
@@ -973,7 +1313,7 @@ export default function Dashboard({ role, onNavigate }) {
                     {!n.read && (
                       <button 
                         onClick={() => handleMarkAsRead(n._id)}
-                        style={{ marginTop: '8px', padding: '2px 8px', fontSize: '10px', background: 'var(--primary, #087E8B)', color: '#fff', border: 'none', borderRadius: 'var(--radius-sm, 4px)', cursor: 'pointer', fontWeight: '600' }}
+                      style={{ marginTop: '8px', padding: '2px 8px', fontSize: '10px', background: 'var(--primary)', color: '#fff', border: 'none', borderRadius: 'var(--radius-sm)', cursor: 'pointer', fontWeight: '600' }}
                       >
                         Acknowledge
                       </button>

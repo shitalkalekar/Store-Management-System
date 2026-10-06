@@ -31,11 +31,11 @@ export default function Payments() {
         api.get('/payments'),
         api.get('/branches')
       ]);
-      setPayments(payRes.data);
-      setBranches(branchRes.data);
+      setPayments(Array.isArray(payRes.data) ? payRes.data : []);
+      setBranches(Array.isArray(branchRes.data) ? branchRes.data : []);
     } catch (err) {
       console.error(err);
-      setError('Failed to fetch payment collections');
+      setError(err.message || 'Failed to fetch payment collections');
     } finally {
       setLoading(false);
     }
@@ -44,7 +44,7 @@ export default function Payments() {
   const fetchCustomers = async () => {
     try {
       const res = await api.get('/customers');
-      setCustomers(res.data);
+      setCustomers(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       console.error(err);
     }
@@ -82,12 +82,13 @@ export default function Payments() {
       };
 
       await api.post('/payments', payload);
+      await fetchPayments();
       setToast({ type: 'success', message: 'Payment recorded successfully! ✅' });
       setPayModal(false);
-      fetchPayments();
+      setPayData({ customerId: '', amountPaid: '', paymentMode: 'UPI', referenceNumber: '', notes: '', autoAllocate: true });
     } catch (err) {
       console.error(err);
-      const msg = err.response?.data?.error || 'Failed to log payment';
+      const msg = err.response?.data?.error || err.message || 'Failed to log payment';
       setError(msg);
       setToast({ type: 'error', message: msg });
     }
@@ -96,12 +97,24 @@ export default function Payments() {
   const filteredPayments = payments.filter(p => {
     if (selectedCustomer) {
       const cId = p.customer?._id || p.customer;
-      if (cId !== selectedCustomer) return false;
+      if (cId && cId.toString() !== selectedCustomer.toString()) return false;
     }
-    if (selectedPaymentMode && p.paymentMode !== selectedPaymentMode) return false;
+    if (selectedPaymentMode) {
+      const pMode = (p.paymentMode || '').trim().toLowerCase();
+      const sMode = selectedPaymentMode.trim().toLowerCase();
+      if (pMode !== sMode) return false;
+    }
     if (selectedBranch) {
       const bId = p.branch?._id || p.branch;
-      if (bId !== selectedBranch) return false;
+      if (bId && bId.toString() !== selectedBranch.toString()) return false;
+    }
+    if (dateRange.startDate && dateRange.endDate) {
+      const pDate = new Date(p.date || p.createdAt);
+      const start = new Date(dateRange.startDate);
+      start.setHours(0, 0, 0, 0);
+      const end = new Date(dateRange.endDate);
+      end.setHours(23, 59, 59, 999);
+      if (pDate < start || pDate > end) return false;
     }
     return true;
   });
@@ -297,16 +310,16 @@ export default function Payments() {
                     </td>
                     <td style={{ padding: '14px 20px', color: '#475569', fontWeight: 'bold' }}>{idx + 1}</td>
                     <td style={{ padding: '14px 20px', color: '#475569' }}>
-                      {new Date(p.date).toLocaleDateString()}
+                      {new Date(p.date || p.createdAt || Date.now()).toLocaleDateString()}
                     </td>
                     <td style={{ padding: '14px 20px', fontWeight: '600', color: '#1e293b' }}>
                       {p.customer?.name || 'Walk-in / Anonymous'}
                     </td>
                     <td style={{ padding: '14px 20px', color: 'var(--primary, #087E8B)', fontWeight: '700' }}>
-                      {p.bill?.invoiceNumber || 'N/A'}
+                      {p.bill?.invoiceNumber || (p.notes?.includes('Auto-allocated') ? 'Auto-allocated' : 'On-Account')}
                     </td>
                     <td style={{ padding: '14px 20px', color: '#166534', fontWeight: 'bold' }}>
-                      Rs. {p.amountPaid.toFixed(2)}
+                      Rs. {Number(p.amountPaid || 0).toFixed(2)}
                     </td>
                     <td style={{ padding: '14px 20px' }}>
                       <span style={{ 
@@ -381,9 +394,9 @@ export default function Payments() {
                   style={{ width: '100%', padding: '8px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', outline: 'none', background: '#fff' }}
                 >
                   <option value="UPI">UPI (GPay / PhonePe / Paytm)</option>
-                  <option value="cash">Cash Payment</option>
-                  <option value="bank transfer">Bank IMPS / NEFT Transfer</option>
-                  <option value="cheque">Bank Cheque</option>
+                  <option value="Cash">Cash Payment</option>
+                  <option value="Bank Transfer">Bank IMPS / NEFT Transfer</option>
+                  <option value="Cheque">Bank Cheque</option>
                 </select>
               </div>
 

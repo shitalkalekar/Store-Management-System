@@ -66,16 +66,28 @@ export default function Orders({ role, onNavigate }) {
   const [reassigningOrder, setReassigningOrder] = useState(null);
   const [reassignEmployeeId, setReassignEmployeeId] = useState('');
 
-  const fetchData = async () => {
+  const fetchOrdersList = async (status = filterStatus) => {
     try {
-      const [ordRes, custRes, prodRes, branchRes, statsRes] = await Promise.all([
-        api.get(`/orders${filterStatus ? `?status=${filterStatus}` : ''}`),
+      setLoading(true);
+      const ordRes = await api.get(`/orders${status ? `?status=${status}` : ''}`);
+      setOrders(ordRes.data);
+      setError('');
+    } catch (err) {
+      console.error(err);
+      setError(err.message || 'Failed to fetch orders');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchMasterData = async () => {
+    try {
+      const [custRes, prodRes, branchRes, statsRes] = await Promise.all([
         api.get('/customers'),
         api.get('/products'),
         api.get('/branches'),
         api.get('/dashboard/stats')
       ]);
-      setOrders(ordRes.data);
       setCustomers(custRes.data);
       setProducts(prodRes.data);
       setBranches(branchRes.data);
@@ -83,16 +95,47 @@ export default function Orders({ role, onNavigate }) {
         setActiveLoops(statsRes.data.activeLoops);
       }
     } catch (err) {
-      console.error(err);
-      setError(err.message || 'Failed to fetch orders or master directories');
-    } finally {
-      setLoading(false);
+      console.error('Failed to fetch master directories:', err);
     }
   };
 
+  // Initial load of master directories once
   useEffect(() => {
-    fetchData();
+    fetchMasterData();
+  }, []);
+
+  // Fetch orders whenever filterStatus changes
+  useEffect(() => {
+    let cancelled = false;
+    const loadOrders = async () => {
+      try {
+        setLoading(true);
+        const ordRes = await api.get(`/orders${filterStatus ? `?status=${filterStatus}` : ''}`);
+        if (!cancelled) {
+          setOrders(ordRes.data);
+          setError('');
+        }
+      } catch (err) {
+        if (!cancelled) {
+          console.error(err);
+          setError(err.message || 'Failed to fetch orders');
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+    loadOrders();
+    return () => {
+      cancelled = true;
+    };
   }, [filterStatus]);
+
+  // Backward-compatible helper for action mutations
+  const fetchData = async () => {
+    await fetchOrdersList(filterStatus);
+  };
 
   const filteredLoopAlerts = activeLoops.filter(loop => {
     if (loop.status === 'Cancelled') return false;
