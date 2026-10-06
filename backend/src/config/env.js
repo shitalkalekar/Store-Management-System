@@ -50,7 +50,8 @@ env.assertSafeConfiguration = () => {
     if (env.PAYMENTS_ALLOW_MOCK) throw new Error('Mock payments must be disabled in production');
     if (env.ONLINE_RESTORE_ENABLED) throw new Error('Online database restore must be disabled in production');
     if (env.INTERNAL_AUTH_ENABLED) throw new Error('Internal multi-tenant auth cannot be enabled until every pharmacy model is tenant-scoped');
-    if (env.CORS_ORIGINS.length === 0) throw new Error('CORS_ORIGINS must be configured in production');
+    // In production, an empty CORS_ORIGINS is permitted during initial backend startup
+    // before the frontend has been deployed. Once origins are configured, each must be a strict HTTPS bare origin.
     // Phase 12: production accepts only exact https origins. A wildcard, a
     // localhost entry, or a trailing path would widen the browser boundary
     // beyond the one deployed frontend.

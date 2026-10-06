@@ -114,7 +114,6 @@ test('production refuses a shared or development database name', () => {
 });
 
 test('production refuses a wildcard, insecure, or localhost CORS origin', () => {
-  assertRefuses({ CORS_ORIGINS: undefined }, /CORS_ORIGINS must be configured/);
   assertRefuses({ CORS_ORIGINS: '*' }, /wildcard/);
   assertRefuses({ CORS_ORIGINS: 'https://*.pages.dev' }, /wildcard/);
   assertRefuses({ CORS_ORIGINS: 'http://tammewar-pharmacy.pages.dev' }, /https/);
@@ -130,6 +129,13 @@ test('production refuses a wildcard, insecure, or localhost CORS origin', () => 
     { CORS_ORIGINS: 'https://tammewar-pharmacy.pages.dev,http://localhost:3009' },
     /https/,
   );
+});
+
+test('production permits empty CORS_ORIGINS before frontend deployment', () => {
+  withEnv({ CORS_ORIGINS: undefined }, (env) => {
+    assert.doesNotThrow(() => env.assertSafeConfiguration());
+    assert.deepEqual(env.CORS_ORIGINS, []);
+  });
 });
 
 test('a custom production domain alongside the Pages origin is accepted', () => {
