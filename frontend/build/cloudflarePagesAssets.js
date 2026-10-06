@@ -19,9 +19,15 @@ export default function cloudflarePagesAssets({ apiBaseUrl }) {
       const robotsContent = `User-agent: *\nDisallow: /\n`;
       fs.writeFileSync(path.join(destination, 'robots.txt'), robotsContent, 'utf8');
 
-      // 2. Generate _redirects (SPA fallback)
-      const redirectsContent = `/*    /index.html   200\n`;
-      fs.writeFileSync(path.join(destination, '_redirects'), redirectsContent, 'utf8');
+      // 2. Remove unsafe _redirects if present and provide 200.html SPA fallback
+      const redirectsPath = path.join(destination, '_redirects');
+      if (fs.existsSync(redirectsPath)) {
+        fs.unlinkSync(redirectsPath);
+      }
+      const indexPath = path.join(destination, 'index.html');
+      if (fs.existsSync(indexPath)) {
+        fs.copyFileSync(indexPath, path.join(destination, '200.html'));
+      }
 
       // 3. Derive connect-src from apiBaseUrl
       let connectSrc = "'self'";
