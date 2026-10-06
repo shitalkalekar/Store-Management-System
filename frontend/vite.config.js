@@ -4,10 +4,23 @@ import cloudflarePagesAssets from './build/cloudflarePagesAssets.js';
 
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), 'VITE_');
-  const apiBaseUrl = process.env.VITE_API_BASE_URL || env.VITE_API_BASE_URL;
+  let rawApiBase = process.env.VITE_API_BASE_URL || env.VITE_API_BASE_URL || '';
+  if (rawApiBase.startsWith('VITE_API_BASE_URL=')) {
+    rawApiBase = rawApiBase.slice('VITE_API_BASE_URL='.length).trim();
+  }
+  rawApiBase = rawApiBase.replace(/^["']|["']$/g, '').trim();
+  if (rawApiBase && (rawApiBase.startsWith('http://') || rawApiBase.startsWith('https://'))) {
+    rawApiBase = rawApiBase.replace(/\/+$/, '');
+    if (!rawApiBase.endsWith('/result-analysis')) {
+      rawApiBase = `${rawApiBase}/result-analysis`;
+    }
+  }
+  const apiBaseUrl = rawApiBase;
   if (command === 'build' && !apiBaseUrl) {
     throw new Error('VITE_API_BASE_URL is required for production builds');
   }
+
+  process.env.VITE_API_BASE_URL = apiBaseUrl;
 
   return {
     plugins: [

@@ -2,7 +2,28 @@ import axios from 'axios';
 
 export const AUTH_EXPIRED_EVENT = 'tammewar:auth-expired';
 
-const configuredApiBase = import.meta.env.VITE_API_BASE_URL?.trim();
+const sanitizeApiBase = (url) => {
+  if (!url || typeof url !== 'string') return '';
+  let clean = url.trim();
+  // Strip accidental "VITE_API_BASE_URL=" prefix if pasted into variable value
+  if (clean.startsWith('VITE_API_BASE_URL=')) {
+    clean = clean.slice('VITE_API_BASE_URL='.length).trim();
+  }
+  // Strip surrounding quotes
+  clean = clean.replace(/^["']|["']$/g, '').trim();
+  // Strip trailing slashes
+  clean = clean.replace(/\/+$/, '');
+  
+  if (clean.startsWith('http://') || clean.startsWith('https://')) {
+    // If backend URL does not already end in /result-analysis, append it
+    if (!clean.endsWith('/result-analysis')) {
+      clean = `${clean}/result-analysis`;
+    }
+  }
+  return clean;
+};
+
+const configuredApiBase = sanitizeApiBase(import.meta.env.VITE_API_BASE_URL);
 const apiBase = configuredApiBase || (import.meta.env.DEV ? '/api' : '');
 
 if (!apiBase) {
